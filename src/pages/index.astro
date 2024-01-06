@@ -15,14 +15,16 @@ const posts = await getCollection("blog");
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 
+const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+
 const socialCount = SOCIALS.filter(social => social.active).length;
 ---
 
 <Layout>
-  <Header />
+  <Header activeNav="home" />
   <main id="main-content">
     <section id="hero">
-      <h1>Mingalaba</h1>
+      <h1>hey, I'm Emil</h1>
       <a
         target="_blank"
         href="/rss.xml"
@@ -40,19 +42,13 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       </a>
 
       <p>
-        AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro
-        blog theme. This theme follows best practices and provides accessibility
-        out of the box. Light and dark mode are supported by default. Moreover,
-        additional color schemes can also be configured.
-      </p>
-      <p>
-        Read the blog posts or check
-        <LinkButton
+        I specialize in building things for the web. I am currently working as a
+        Software engineer at <LinkButton
           className="underline decoration-dashed underline-offset-4 hover:text-skin-accent"
-          href="https://github.com/satnaing/astro-paper#readme"
+          href="https://sigtech.io"
         >
-          README
-        </LinkButton> for more info.
+          Sigtech,
+        </LinkButton> working on refining their product in the fintech domain.
       </p>
       {
         // only display if at least one social link is enabled
@@ -91,18 +87,16 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       <h2>Recent Posts</h2>
       <ul>
         {
-          sortedPosts
-            .filter(({ data }) => !data.featured)
-            .map(
-              ({ data, slug }, index) =>
-                index < 4 && (
-                  <Card
-                    href={`/posts/${slug}`}
-                    frontmatter={data}
-                    secHeading={false}
-                  />
-                )
-            )
+          recentPosts.map(
+            ({ data, slug }, index) =>
+              index < 4 && (
+                <Card
+                  href={`/posts/${slug}`}
+                  frontmatter={data}
+                  secHeading={false}
+                />
+              )
+          )
         }
       </ul>
       <div class="all-posts-btn-wrapper">
@@ -127,7 +121,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     @apply pb-6 pt-8;
   }
   #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-2xl;
   }
   #hero .rss-link {
     @apply mb-6;
