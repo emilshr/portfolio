@@ -1,6 +1,7 @@
 ---
 import { LOCALE, SITE } from "@config";
 import "@styles/base.css";
+import "@fontsource-variable/inter";
 import { ViewTransitions } from "astro:transitions";
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
@@ -12,7 +13,7 @@ export interface Props {
   ogImage?: string;
   canonicalURL?: string;
   pubDatetime?: Date;
-  modDatetime?: Date;
+  modDatetime?: Date | null;
   scrollSmooth?: boolean;
 }
 
@@ -46,7 +47,7 @@ const socialImageURL = new URL(
     <meta name="generator" content={Astro.generator} />
 
     <!-- General Meta Tags -->
-    <title>{title}</title>
+    <title>{title} - Software engineer</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />

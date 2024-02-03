@@ -7,15 +7,12 @@ import LinkButton from "@components/LinkButton.astro";
 import Hr from "@components/Hr.astro";
 import Card from "@components/Card";
 import Socials from "@components/Socials.astro";
-import getSortedPosts from "@utils/getSortedPosts";
+import getSortedArticles from "@utils/getSortedArticles";
 import { SOCIALS } from "@config";
 
-const posts = await getCollection("blog");
+const articles = await getCollection("blog");
 
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const sortedArticles = getSortedArticles(articles);
 
 const socialCount = SOCIALS.filter(social => social.active).length;
 ---
@@ -24,23 +21,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   <Header activeNav="home" />
   <main id="main-content">
     <section id="hero">
-      <h1>hey, I'm Emil</h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="rss-link"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="rss-icon"
-          ><path
-            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
-          ></path><path
-            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
-          ></path><circle cx="6" cy="18" r="2"></circle>
-        </svg>
-      </a>
-
+      <h1>About</h1>
       <p>
         I specialize in building things for the web. I am currently working as a
         Software engineer at <LinkButton
@@ -63,35 +44,15 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
     <Hr />
 
-    {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured">
-            <h2>Featured</h2>
-            <ul>
-              {featuredPosts.map(({ data, slug }) => (
-                <Card
-                  href={`/posts/${slug}`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
-              ))}
-            </ul>
-          </section>
-          <Hr />
-        </>
-      )
-    }
-
-    <section id="recent-posts">
-      <h2>Recent Posts</h2>
+    <section id="recent-articles">
+      <h1>Articles</h1>
       <ul>
         {
-          recentPosts.map(
+          sortedArticles.map(
             ({ data, slug }, index) =>
               index < 4 && (
                 <Card
-                  href={`/posts/${slug}`}
+                  href={`/articles/${slug}`}
                   frontmatter={data}
                   secHeading={false}
                 />
@@ -100,8 +61,8 @@ const socialCount = SOCIALS.filter(social => social.active).length;
         }
       </ul>
       <div class="all-posts-btn-wrapper">
-        <LinkButton href="/posts">
-          All Posts
+        <LinkButton href="/articles">
+          All articles
           <svg xmlns="http://www.w3.org/2000/svg"
             ><path
               d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
@@ -118,10 +79,10 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 <style>
   /* ===== Hero Section ===== */
   #hero {
-    @apply pb-6 pt-8;
+    @apply pb-6;
   }
   #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-2xl;
+    @apply my-4 inline-block text-3xl font-bold sm:my-6 sm:text-4xl;
   }
   #hero .rss-link {
     @apply mb-6;
@@ -130,7 +91,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
   }
   #hero p {
-    @apply my-2;
+    @apply mb-2;
   }
   .social-wrapper {
     @apply mt-4 flex flex-col sm:flex-row sm:items-center;
@@ -141,14 +102,15 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
   /* ===== Featured & Recent Posts Sections ===== */
   #featured,
-  #recent-posts {
-    @apply pb-6 pt-12;
+  #recent-articles {
+    @apply pb-6 pt-6;
   }
-  #featured h2,
-  #recent-posts h2 {
-    @apply text-2xl font-semibold tracking-wide;
+
+  #recent-articles h1 {
+    @apply text-3xl font-bold tracking-wide sm:text-4xl;
   }
   .all-posts-btn-wrapper {
     @apply my-8 text-center;
   }
 </style>
+@utils/getSortedArticles
