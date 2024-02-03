@@ -3,7 +3,6 @@ title: Enhancing developer productivity
 author: Emil Sharier
 pubDatetime: 2024-01-06T07:48:18Z
 slug: enhancing-developer-productivity
-featured: false
 draft: false
 tags:
   - productivity

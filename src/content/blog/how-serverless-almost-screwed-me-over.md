@@ -1,12 +1,14 @@
 ---
-title: Nest.js is interesting
+title: I'm not sure I like serverless
 author: Emil Sharier
-pubDatetime: 2024-01-11T19:21:40.810Z
-slug: nestjs-is-interesting
-draft: false
+pubDatetime: 2024-02-03T08:05:08.995Z
+slug: how-serverless-almost-screwed-me-over
+draft: true
 tags:
-  - Nest.js
-  - typescript
+  - serverless
+  - web-dev
+  - AWS
+  - rant
 ogImage: "https://blog.entrostat.com/content/images/size/w2000/2018/09/nestjs-2.jpg"
 description: Some thoughts after trying out Nest.js for a couple of weeks
 ---
