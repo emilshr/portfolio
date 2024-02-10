@@ -19,6 +19,10 @@
     "@astrojs/check": "^0.3.4",
     "@astrojs/rss": "^4.0.1",
     "@fontsource-variable/inter": "^5.0.16",
+    "@notion-render/bookmark-plugin": "^0.0.2",
+    "@notion-render/client": "^0.0.2",
+    "@notion-render/hljs-plugin": "^0.0.2",
+    "@notionhq/client": "^2.2.14",
     "@resvg/resvg-js": "^2.6.0",
     "astro": "^4.0.8",
     "fuse.js": "^7.0.0",
@@ -49,7 +53,8 @@
     "prettier-plugin-astro": "^0.12.3",
     "prettier-plugin-tailwindcss": "^0.5.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sass": "^1.70.0"
   },
   "config": {
     "commitizen": {
