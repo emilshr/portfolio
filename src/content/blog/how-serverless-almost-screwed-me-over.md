@@ -21,7 +21,7 @@ Serverless is a tool that has multiple AWS templates for bootstrapping Node and 
 
 Here are a few of the templates that you get with the serverless CLI
 
-![Serverless CLI](/public/assets/serverless-cli.png)
+![Serverless CLI](@assets/images/serverless-cli.png)
 
 As you can see, there are a quite a lot of templates available for writing apps with Node and/or Python connecting different AWS resources. This is specifically helpful when you aren't experienced in AWS. For a start-up, these sort of tools can even replace the need to hire a dev-ops focused engineer ( ⚠️ Trust me, this is so not right. Please invest and hire a good dev-ops engineer and you won't regret this choice further down the line)
 
