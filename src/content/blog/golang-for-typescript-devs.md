@@ -8,7 +8,7 @@ draft: false
 tags:
   - golang
   - web-dev
-  - ts-for-golang
+  - golang-for-ts-dev
 ogImage: "https://miro.medium.com/v2/resize:fit:1400/0*SoqCeEz9EctJBXKw.png"
 description: A series containing the common and silly mistakes that I have made while learning Golang as a Typescript dev
 ---
