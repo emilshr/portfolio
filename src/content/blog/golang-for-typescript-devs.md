@@ -13,6 +13,10 @@ ogImage: "https://miro.medium.com/v2/resize:fit:1400/0*SoqCeEz9EctJBXKw.png"
 description: A series containing the common and silly mistakes that I have made while learning Golang as a Typescript dev
 ---
 
+## Hey all 👋🏽
+
+This is a small series that I would be regularly updating as I have started learning [Golang](https://go.dev/). This isn't an actual tutorial or anything but rather a small collection of mistakes I made and things I overlooked.
+
 ### Functions have to start with a capital letter if you're looking to export them from modules
 
 ```go
