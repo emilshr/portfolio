@@ -16,15 +16,15 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@astrojs/check": "^0.3.4",
-    "@astrojs/rss": "^4.0.1",
+    "@astrojs/check": "0.7.0",
+    "@astrojs/rss": "4.0.7",
     "@fontsource-variable/inter": "^5.0.16",
     "@notion-render/bookmark-plugin": "^0.0.2",
     "@notion-render/client": "^0.0.2",
     "@notion-render/hljs-plugin": "^0.0.2",
     "@notionhq/client": "^2.2.14",
     "@resvg/resvg-js": "^2.6.0",
-    "astro": "^4.0.8",
+    "astro": "4.11.5",
     "fuse.js": "^7.0.0",
     "github-slugger": "^2.0.0",
     "remark-collapse": "^0.1.2",
@@ -34,8 +34,8 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@astrojs/react": "^3.0.9",
-    "@astrojs/sitemap": "^3.0.4",
+    "@astrojs/react": "3.6.0",
+    "@astrojs/sitemap": "3.1.6",
     "@astrojs/tailwind": "^5.1.0",
     "@divriots/jampack": "^0.23.1",
     "@tailwindcss/typography": "^0.5.10",
