@@ -56,11 +56,11 @@ package my_module
 
 import "log"
 
-func PrintMe() { // 👈🏽 This is wrong
+func PrintMe() { // ✅ This is correct
   log.Printf("Hello world v1")
 }
 
-func AnotherPrint() { // 👈🏽 This is wrong
+func AnotherPrint() { // ✅ This is correct
   log.Printf("New world")
 }
 
