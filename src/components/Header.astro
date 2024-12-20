@@ -1,5 +1,5 @@
 ---
-import { LOGO_IMAGE, SITE } from "@config";
+import { SITE } from "@config";
 import Hr from "./Hr.astro";
 import LinkButton from "./LinkButton.astro";
 
@@ -70,16 +70,6 @@ const { activeNav } = Astro.props;
             <li>
               <a href="/tags" class={activeNav === "tags" ? "active" : ""}>
                 Tags
-              </a>
-            </li>
-            <li>
-              <a
-                target="_blank"
-                href="https://thoughts.emilshr.com"
-                aria-label="My completely random thoughts"
-                title="My completely random thoughts"
-              >
-                Thoughts
               </a>
             </li>
             <li>
