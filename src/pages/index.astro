@@ -1,5 +1,6 @@
 ---
 import About from '@/components/widgets/About.astro'
+import ContactCTA from '@/components/widgets/ContactCTA.astro'
 import OpenToWorkBanner from '@/components/widgets/OpenToWorkBanner.astro'
 import PostList from '@/components/widgets/PostList.astro'
 import WorkExperience from '@/components/widgets/WorkExperience.astro'
@@ -16,5 +17,6 @@ const posts = await getSortedFilteredPosts()
   <main>
     <PostList posts={posts} />
     <WorkExperience />
+    <ContactCTA />
   </main>
 </IndexLayout>
