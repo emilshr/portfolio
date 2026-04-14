@@ -13,7 +13,7 @@
       }
 
       this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      this.svgUrl = '/favicon.svg'
+      this.svgUrl = '/favicon.ico'
       this.currentColor = null
       this.svgContent = null
 
@@ -27,7 +27,7 @@
           const res = await fetch(this.svgUrl)
           this.svgContent = await res.text()
         } catch (e) {
-          console.warn('Failed to fetch favicon.svg:', e)
+          console.warn('Failed to fetch favicon.ico:', e)
           return
         }
       }
