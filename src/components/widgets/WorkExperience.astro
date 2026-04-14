@@ -1,0 +1,152 @@
+---
+import { themeConfig } from '@/config'
+
+const experiences = [
+  { role: "Senior Software Engineer", company: "Acme Corp", url: "https://example.com", from: "Jan 2023", to: "Present" },
+  { role: "Software Engineer", company: "TechStart Inc", url: "https://example.com", from: "Mar 2021", to: "Dec 2022" },
+  { role: "Junior Developer", company: "WebDev Agency", url: "https://example.com", from: "Jun 2019", to: "Feb 2021" },
+]
+---
+
+<section class="work-experience">
+  <h2 class="section-heading">Work</h2>
+  <ul>
+    {
+      experiences.map((exp) => (
+        <li>
+          <div class="experience-item">
+            <div class="role-group">
+              <p class="role">{exp.role}</p>
+              <a href={exp.url} target="_blank" rel="noopener noreferrer" class="company">{exp.company}</a>
+            </div>
+            <div class={themeConfig.general.postListDottedDivider ? 'dotted-divider' : 'divider'} />
+            <p class="dates">{exp.from} &ndash; {exp.to}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .section-heading {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-m);
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  li {
+    transition: opacity 0.15s ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    ul:hover li {
+      opacity: 0.4;
+    }
+
+    ul:hover li:hover {
+      opacity: 1;
+    }
+
+    ul:hover li:hover .divider {
+      background-color: var(--text-tertiary);
+      opacity: 0.75;
+    }
+
+    ul:hover li:hover .dotted-divider {
+      color: var(--text-secondary);
+    }
+
+    ul:hover li:hover .dates {
+      color: var(--text-secondary);
+      opacity: 1;
+    }
+  }
+
+  .experience-item {
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .role-group {
+    flex-shrink: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .role {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .company {
+    font-size: var(--font-size-s);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease-out;
+  }
+
+  .company:hover {
+    color: var(--text-primary);
+  }
+
+  .dates {
+    margin: 0;
+    color: var(--text-secondary);
+    opacity: 0.75;
+    letter-spacing: var(--spacing-s);
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-weight: var(--font-weight-light);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings:
+      "tnum" 1,
+      "zero" 0,
+      "cv01" 1,
+      "cv02" 1,
+      "calt" 1,
+      "ss03" 1,
+      "ordn" 1;
+  }
+
+  .divider {
+    flex: 1 1 auto;
+    min-width: 3rem;
+    margin: 0 0.25rem;
+    height: 0.5px;
+    background-color: var(--border);
+  }
+
+  .dotted-divider {
+    flex: 1 1 3rem;
+    min-width: 3rem;
+    max-width: 100%;
+    text-align: end;
+    letter-spacing: 5px;
+    height: 1.675rem;
+    overflow: hidden;
+    color: var(--text-tertiary);
+    opacity: 0.75;
+  }
+
+  .dotted-divider::after {
+    content: '·····························································································································································';
+    pointer-events: none;
+  }
+</style>

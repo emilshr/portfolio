@@ -1,16 +1,20 @@
 ---
-import IndexLayout from '@/layouts/IndexLayout.astro'
 import About from '@/components/widgets/About.astro'
+import OpenToWorkBanner from '@/components/widgets/OpenToWorkBanner.astro'
 import PostList from '@/components/widgets/PostList.astro'
+import WorkExperience from '@/components/widgets/WorkExperience.astro'
 import { themeConfig } from '@/config'
+import IndexLayout from '@/layouts/IndexLayout.astro'
 import { getSortedFilteredPosts } from '@/utils/draft'
 
 const posts = await getSortedFilteredPosts()
 ---
 
 <IndexLayout title={themeConfig.site.title} description={themeConfig.site.description}>
+  <OpenToWorkBanner />
   <About />
   <main>
     <PostList posts={posts} />
+    <WorkExperience />
   </main>
 </IndexLayout>

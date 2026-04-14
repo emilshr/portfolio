@@ -3,7 +3,7 @@ title: How serverless almost screwed me over
 pubDate: "2024-02-15"
 ---
 
-# I do not like serverless
+## I do not like serverless
 
 This is a rant about the [Serverless](https://www.serverless.com/) CLI tool that the existing product at the company that I'm working at is using.
 

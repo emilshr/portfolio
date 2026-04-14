@@ -3,8 +3,6 @@ title: NestJs is interesting
 pubDate: "2024-11-01"
 ---
 
-# Nest.js is interesting
-
 ## A little background
 
 Our engineering team at [Sigtech](https://sigtech.com) has decided to rewrite all our microservices as a part of the second iteration. Why a rewrite, you say? Because the tech stack heavily relied on [Serverless](https://www.serverless.com/) as a solution and it came to bite the team back after 3 years. How did this happen? As and when the user base increases, you realize something which is painful. **Lambdas aren't cheap,** _in fact they're bloody expensive_.

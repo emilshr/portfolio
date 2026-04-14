@@ -3,8 +3,6 @@ title: Enhancing developer productivity
 pubDate: "2024-01-06"
 ---
 
-# Enhancing developer productivity
-
 As an engineer, I am always thinking of ways that would enhance my productivity. I have read multiple articles online & watched way too many day in the life vlogs of other engineers (Before you judge me. I know! most of them are pointless). However, none of them seemed to help me "optimize" my time nor my productivity.
 
 However, this post is nothing but a rant. I am sick and tired of listening to other engineers complain about how they need a bigger or more screen(s) so that they can contemplate their life choices by viewing their shitty code on a bigger screen
