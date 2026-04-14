@@ -348,10 +348,7 @@
   opacity: 0.75;
 }
 
-.prose
-  ul.contains-task-list
-  li.task-list-item
-  input[type="checkbox"]:checked::after {
+.prose ul.contains-task-list li.task-list-item input[type="checkbox"]:checked::after {
   content: "✓";
   position: absolute;
   top: 50%;
