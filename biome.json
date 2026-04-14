@@ -1,0 +1,48 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": false
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none"
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!dist",
+      "!.output",
+      "!node_modules",
+      "!.astro",
+      "!.cache",
+      "!coverage",
+      "!*.log",
+      "!.env*",
+      "!.DS_Store",
+      "!*.png",
+      "!*.jpg",
+      "!*.jpeg",
+      "!*.gif",
+      "!*.svg",
+      "!*.ico",
+      "!*.webp",
+      "!*.mp4",
+      "!*.webm",
+      "!*.mp3",
+      "!*.wav",
+      "!*.pdf"
+    ]
+  }
+}

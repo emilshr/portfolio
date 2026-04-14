@@ -11,18 +11,18 @@
     "typecheck:ts": "tsc --noEmit",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "new": "tsx scripts/new-post.ts",
     "update-theme": "tsx scripts/update-theme.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
-    "@astrojs/netlify": "^7.0.6",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/vercel": "^10.0.4",
     "astro": "^6.1.5",
     "astro-og-canvas": "^0.11.0",
     "canvaskit-wasm": "^0.41.1",
@@ -41,19 +41,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
-    "@eslint/js": "^10.0.1",
+    "@biomejs/biome": "^2.2.6",
     "@types/markdown-it": "^14.1.2",
     "@types/sanitize-html": "^2.16.1",
-    "@typescript-eslint/eslint-plugin": "^8.58.1",
-    "@typescript-eslint/parser": "^8.58.1",
-    "eslint": "^10.2.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^1.7.0",
-    "globals": "^17.5.0",
-    "prettier": "^3.8.2",
-    "prettier-plugin-astro": "^0.14.1",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.1"
+    "typescript": "^6.0.2"
   }
 }

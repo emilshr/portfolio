@@ -120,7 +120,7 @@
 }
 
 /* Loading state for images */
-.prose img[loading='lazy'] {
+.prose img[loading="lazy"] {
   opacity: 0;
   animation: fadeIn 0.3s ease-out forwards;
 }
@@ -183,11 +183,11 @@
   font-family: var(--mono);
   font-size: 0.9em;
   font-feature-settings:
-    'liga' 0,
-    'calt' 0;
+    "liga" 0,
+    "calt" 0;
   -webkit-font-feature-settings:
-    'liga' 0,
-    'calt' 0;
+    "liga" 0,
+    "calt" 0;
 }
 
 /* Blockquotes */
@@ -239,7 +239,7 @@
 
 .prose ul li::before {
   --size: 0.3125rem;
-  content: '';
+  content: "";
   position: absolute;
   left: -0.785rem;
   top: calc((1.75em - var(--size)) / 2);
@@ -270,7 +270,7 @@
 }
 
 .prose ol li::before {
-  content: counter(item) '.';
+  content: counter(item) ".";
   counter-increment: item;
   position: absolute;
   left: -1.15rem;
@@ -280,14 +280,14 @@
   opacity: 0.75;
   font-variant-numeric: tabular-nums;
   font-feature-settings:
-    'tnum' 1,
-    'zero' 0,
-    'cv01' 1,
-    'cv02' 1,
-    'calt' 1,
-    'ss03' 1,
-    'liga' 1,
-    'ordn' 1;
+    "tnum" 1,
+    "zero" 0,
+    "cv01" 1,
+    "cv02" 1,
+    "calt" 1,
+    "ss03" 1,
+    "liga" 1,
+    "ordn" 1;
 }
 
 /* Task lists */
@@ -311,7 +311,7 @@
 }
 
 /* Task list checkboxes */
-.prose ul.contains-task-list li.task-list-item input[type='checkbox'] {
+.prose ul.contains-task-list li.task-list-item input[type="checkbox"] {
   margin-right: 0.625em;
   position: relative;
   top: 0.15em;
@@ -324,7 +324,7 @@
   -webkit-appearance: none;
 }
 
-.prose ul.contains-task-list li.task-list-item input[type='checkbox']:checked {
+.prose ul.contains-task-list li.task-list-item input[type="checkbox"]:checked {
   position: relative;
   background: var(--code-bg);
   font-family: var(--sans);
@@ -332,8 +332,8 @@
   opacity: 0.75;
 }
 
-.prose ul.contains-task-list li.task-list-item input[type='checkbox']:checked::after {
-  content: '✓';
+.prose ul.contains-task-list li.task-list-item input[type="checkbox"]:checked::after {
+  content: "✓";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -345,7 +345,7 @@
   opacity: 0.55;
 }
 
-.prose ul.contains-task-list li.task-list-item input[type='checkbox'] + * {
+.prose ul.contains-task-list li.task-list-item input[type="checkbox"] + * {
   display: inline;
   margin-left: 0;
   line-height: 1.75;
@@ -376,7 +376,7 @@
 }
 
 .prose hr::before {
-  content: '***';
+  content: "***";
   font-family: var(--mono);
   color: var(--text-tertiary);
   font-size: 0.875em;
@@ -411,7 +411,7 @@
 }
 
 .prose .footnotes::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -436,14 +436,14 @@
   font-size: 1em;
   font-variant-numeric: tabular-nums;
   font-feature-settings:
-    'tnum' 1,
-    'zero' 0,
-    'cv01' 1,
-    'cv02' 1,
-    'calt' 1,
-    'ss03' 1,
-    'liga' 1,
-    'ordn' 1;
+    "tnum" 1,
+    "zero" 0,
+    "cv01" 1,
+    "cv02" 1,
+    "calt" 1,
+    "ss03" 1,
+    "liga" 1,
+    "ordn" 1;
 }
 
 .prose [data-footnote-ref],
@@ -495,8 +495,8 @@
 .prose pre > code {
   font-family: var(--mono);
   font-feature-settings:
-    'liga' 0,
-    'calt' 0;
+    "liga" 0,
+    "calt" 0;
   display: block;
   white-space: pre;
   word-break: normal;
@@ -570,13 +570,13 @@
 /* Video */
 .prose iframe {
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
   border: none;
   border-radius: 6px;
   margin: 0.25em 0 0 0;
 }
 
 /* Spotify */
-.prose iframe[src*='spotify.com'] {
+.prose iframe[src*="spotify.com"] {
   aspect-ratio: auto;
 }
