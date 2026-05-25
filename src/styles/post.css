@@ -583,6 +583,19 @@
   margin: 0 0.25em;
 }
 
+.last-updated {
+  color: var(--text-secondary);
+  letter-spacing: -0.025em;
+}
+
+.last-updated .separator {
+  margin: 0 0.25em;
+}
+
+.last-updated .label {
+  margin-right: 0.25em;
+}
+
 /* Video */
 .prose iframe {
   width: 100%;

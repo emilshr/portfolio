@@ -9,6 +9,7 @@ export interface TOCProps {
 export interface PostLayoutProps {
   title: string
   pubDate: Date
+  lastUpdatedAt?: Date
   image?: string
   readingTime?: ReadingTime
   toc?: TOCItem[]
