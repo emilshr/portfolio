@@ -12,9 +12,24 @@
     <header class="dialog-header">
       <h2 id="exp-dialog-title" class="dialog-title"></h2>
       <p class="dialog-subtitle">
-        <a id="exp-dialog-company" class="dialog-company" href="#" target="_blank" rel="noopener noreferrer"></a><span
-          id="exp-dialog-dates"
-          class="dialog-dates"></span>
+        <a id="exp-dialog-company" class="dialog-company" href="#" target="_blank" rel="noopener noreferrer">
+          <span id="exp-dialog-company-name" class="dialog-company-name"></span>
+          <svg
+            class="dialog-company-icon"
+            width="11"
+            height="11"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M6 3.5H3.5C2.94772 3.5 2.5 3.94772 2.5 4.5V12.5C2.5 13.0523 2.94772 13.5 3.5 13.5H11.5C12.0523 13.5 12.5 13.0523 12.5 12.5V10M9 2.5H13.5V7M13 3L7.5 8.5"
+              stroke="currentColor"
+              stroke-width="1.25"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a><span id="exp-dialog-dates" class="dialog-dates"></span>
       </p>
     </header>
     <div id="exp-dialog-body" class="dialog-body prose"></div>
@@ -29,16 +44,19 @@
 
     const titleEl = document.getElementById('exp-dialog-title')
     const companyEl = document.getElementById('exp-dialog-company') as HTMLAnchorElement | null
+    const companyNameEl = document.getElementById('exp-dialog-company-name')
     const datesEl = document.getElementById('exp-dialog-dates')
     const bodyEl = document.getElementById('exp-dialog-body')
     const closeButton = dialog.querySelector('.close-button') as HTMLButtonElement | null
     const panel = dialog.querySelector('.dialog-panel') as HTMLDivElement | null
 
-    if (!titleEl || !companyEl || !datesEl || !bodyEl || !closeButton || !panel) return
+    if (!titleEl || !companyEl || !companyNameEl || !datesEl || !bodyEl || !closeButton || !panel)
+      return
 
     const dialogEl = dialog
     const title = titleEl
     const company = companyEl
+    const companyName = companyNameEl
     const dates = datesEl
     const body = bodyEl
     const closeBtn = closeButton
@@ -56,7 +74,7 @@
 
       trigger = row
       title.textContent = row.dataset.expTitle ?? ''
-      company.textContent = row.dataset.expCompany ?? ''
+      companyName.textContent = row.dataset.expCompany ?? ''
       company.href = row.dataset.expUrl ?? '#'
       dates.textContent = ` · ${row.dataset.expFrom ?? ''} – ${row.dataset.expTo ?? ''}`
       body.innerHTML = panelSource.innerHTML
@@ -254,8 +272,32 @@
     transition: color 0.2s ease-out;
   }
 
+  .dialog-company-name {
+    text-decoration: underline;
+    text-decoration-thickness: 0.5px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+    transition: text-decoration-color 0.2s ease-out;
+  }
+
+  .dialog-company-icon {
+    display: inline-block;
+    vertical-align: -0.1em;
+    margin-left: 0.15em;
+    opacity: 0.7;
+    transition: opacity 0.2s ease-out;
+  }
+
   .dialog-company:hover {
     color: var(--text-primary);
+  }
+
+  .dialog-company:hover .dialog-company-name {
+    text-decoration-color: currentColor;
+  }
+
+  .dialog-company:hover .dialog-company-icon {
+    opacity: 1;
   }
 
   .dialog-dates {
