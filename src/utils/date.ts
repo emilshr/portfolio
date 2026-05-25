@@ -8,9 +8,10 @@ const VALID_SEPARATORS = ['.', '-', '/']
 /**
  * @param date
  * @param format
+ * @param hideYear when true, the year is omitted from the formatted output
  * @returns
  */
-export function formatDate(date: Date, format?: string): string {
+export function formatDate(date: Date, format?: string, hideYear = false): string {
   const formatStr = (format || themeConfig.date.dateFormat).trim()
   const configSeparator = themeConfig.date.dateSeparator || '-'
 
@@ -25,22 +26,34 @@ export function formatDate(date: Date, format?: string): string {
 
   switch (formatStr) {
     case 'YYYY-MM-DD':
-      return `${year}${separator}${pad(month)}${separator}${pad(day)}`
+      return hideYear
+        ? `${pad(month)}${separator}${pad(day)}`
+        : `${year}${separator}${pad(month)}${separator}${pad(day)}`
 
     case 'MM-DD-YYYY':
-      return `${pad(month)}${separator}${pad(day)}${separator}${year}`
+      return hideYear
+        ? `${pad(month)}${separator}${pad(day)}`
+        : `${pad(month)}${separator}${pad(day)}${separator}${year}`
 
     case 'DD-MM-YYYY':
-      return `${pad(day)}${separator}${pad(month)}${separator}${year}`
+      return hideYear
+        ? `${pad(day)}${separator}${pad(month)}`
+        : `${pad(day)}${separator}${pad(month)}${separator}${year}`
 
     case 'MONTH DAY YYYY':
-      return `<span class="month">${monthName}</span> ${day} ${year}`
+      return hideYear
+        ? `<span class="month">${monthName}</span> ${day}`
+        : `<span class="month">${monthName}</span> ${day} ${year}`
 
     case 'DAY MONTH YYYY':
-      return `${day} <span class="month">${monthName}</span> ${year}`
+      return hideYear
+        ? `${day} <span class="month">${monthName}</span>`
+        : `${day} <span class="month">${monthName}</span> ${year}`
 
     default:
-      return `${year}${separator}${pad(month)}${separator}${pad(day)}`
+      return hideYear
+        ? `${pad(month)}${separator}${pad(day)}`
+        : `${year}${separator}${pad(month)}${separator}${pad(day)}`
   }
 }
 

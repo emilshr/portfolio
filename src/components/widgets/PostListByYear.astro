@@ -1,46 +1,63 @@
 ---
 import FormattedDate from '@/components/widgets/FormattedDate.astro'
-import type { PostListProps } from '@/types'
+import type { PostListByYearProps } from '@/types'
 import { themeConfig } from '@/config'
 
-const { posts, showViewAllLink = false, totalCount = posts.length } = Astro.props as PostListProps
-const showLink = showViewAllLink && totalCount > 5
+const { groups } = Astro.props as PostListByYearProps
 ---
 
-<ul>
+<section class="posts-archive">
   {
-    posts.map((post) => (
-      <li>
-        <a href={`/${post.id}/`}>
-          <div class={`post-item ${!themeConfig.date.dateOnRight ? 'date-left' : ''}`}>
-            {!themeConfig.date.dateOnRight && (
-              <p class="date font-features">
-                <FormattedDate date={post.data.pubDate} context="list" />
-              </p>
-            )}
-            <p class="title">{post.data.title}</p>
-            {themeConfig.date.dateOnRight && (
-              <div class={themeConfig.general.postListDottedDivider ? 'dotted-divider' : 'divider'} />
-            )}
-            {themeConfig.date.dateOnRight && (
-              <p class="date font-features">
-                <FormattedDate date={post.data.pubDate} context="list" />
-              </p>
-            )}
-          </div>
-        </a>
-      </li>
+    groups.map(({ year, posts }) => (
+      <section class="year-section">
+        <h2 class="year-heading">{year}</h2>
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <a href={`/${post.id}/`}>
+                <div class={`post-item ${!themeConfig.date.dateOnRight ? 'date-left' : ''}`}>
+                  {!themeConfig.date.dateOnRight && (
+                    <p class="date font-features">
+                      <FormattedDate date={post.data.pubDate} context="list" hideYear />
+                    </p>
+                  )}
+                  <p class="title">{post.data.title}</p>
+                  {themeConfig.date.dateOnRight && (
+                    <div class={themeConfig.general.postListDottedDivider ? 'dotted-divider' : 'divider'} />
+                  )}
+                  {themeConfig.date.dateOnRight && (
+                    <p class="date font-features">
+                      <FormattedDate date={post.data.pubDate} context="list" hideYear />
+                    </p>
+                  )}
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
     ))
   }
-</ul>
-{showLink && (
-  <p class="view-all">
-    <a href="/posts">View all posts</a>
-  </p>
-)}
-<div class="placeholder"></div>
+</section>
 
 <style>
+  .year-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .year-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .year-heading {
+    font-weight: var(--font-weight-bold);
+    font-size: 1.375rem;
+    line-height: 1.75;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+    letter-spacing: var(--spacing-m);
+  }
+
   ul {
     padding: 0;
     margin: 0;
@@ -58,22 +75,24 @@ const showLink = showViewAllLink && totalCount > 5
   }
 
   @media (hover: hover) and (pointer: fine) {
-    ul:hover a {
+    .year-section ul:hover a {
       opacity: 0.4;
     }
 
-    ul:hover a:hover {
+    .year-section ul:hover a:hover {
       opacity: 1;
     }
 
-    ul:hover a:hover .divider {
+    .year-section ul:hover a:hover .divider {
       background-color: var(--text-tertiary);
       opacity: 0.75;
     }
-    ul:hover a:hover .dotted-divider {
+
+    .year-section ul:hover a:hover .dotted-divider {
       color: var(--text-secondary);
     }
-    ul:hover a:hover .date {
+
+    .year-section ul:hover a:hover .date {
       color: var(--text-secondary);
       opacity: 1;
     }
@@ -141,25 +160,5 @@ const showLink = showViewAllLink && totalCount > 5
   .dotted-divider::after {
     content: '·····························································································································································';
     pointer-events: none;
-  }
-
-  .view-all {
-    margin: 0.5rem 0 0;
-    padding: 0;
-  }
-
-  .view-all a {
-    font-size: var(--font-size-s);
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s ease-out;
-  }
-
-  .view-all a:hover {
-    color: var(--text-primary);
-  }
-
-  .placeholder {
-    height: 3rem;
   }
 </style>

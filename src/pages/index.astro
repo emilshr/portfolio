@@ -15,7 +15,7 @@ const posts = await getSortedFilteredPosts()
   <!-- <OpenToWorkBanner /> -->
   <About />
   <main>
-    <PostList posts={posts} />
+    <PostList posts={posts.slice(0, 5)} showViewAllLink totalCount={posts.length} />
     <WorkExperience />
     <ContactCTA />
   </main>

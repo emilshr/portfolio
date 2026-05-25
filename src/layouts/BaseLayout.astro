@@ -10,6 +10,7 @@ type Props = LayoutProps
 
 const { type = 'page' } = Astro.props
 const language = themeConfig.site.language || 'en-US'
+const navPage = Astro.url.pathname.replace(/\/$/, '') === '/posts' ? 'posts' : 'home'
 const contentWidth = themeConfig.general.contentWidth
 const fadeAnimation = themeConfig.general.fadeAnimation
 const widthValue = Math.min(parseFloat(contentWidth), 50)
@@ -17,7 +18,7 @@ const shouldUseCustomWidth = widthValue > 25
 const finalWidth = shouldUseCustomWidth ? `${widthValue}rem` : '25rem'
 ---
 
-<html lang={language}>
+<html lang={language} data-nav-page={navPage}>
   <head>
     <ThemeManager />
     {fadeAnimation && <ClientRouter />}

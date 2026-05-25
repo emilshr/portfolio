@@ -1,28 +1,106 @@
 ---
 import ThemeToggle from '@/components/ui/ThemeToggle.astro'
 import { themeConfig } from '@/config'
+
+const siteTitle = themeConfig.site.title
 ---
 
-<header>
+<header transition:animate="none">
   <nav>
-    <a href="/">{themeConfig.site.title}</a>
+    <div class="site-title">
+      <a href="/" class="title-layer title-home">{siteTitle}</a>
+      <span class="title-layer title-posts">Posts</span>
+    </div>
     {themeConfig.general.themeToggle && <ThemeToggle />}
   </nav>
 </header>
+
+<script>
+  function updateSiteTitle() {
+    const pathname = window.location.pathname.replace(/\/$/, '') || '/'
+    document.documentElement.dataset.navPage = pathname === '/posts' ? 'posts' : 'home'
+  }
+
+  updateSiteTitle()
+  document.addEventListener('astro:after-swap', updateSiteTitle)
+  document.addEventListener('astro:page-load', updateSiteTitle)
+</script>
+
 <style>
   header {
     margin: 0;
   }
+
   nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  header a {
+
+  .site-title {
+    position: relative;
+    display: inline-block;
     font-weight: var(--font-weight-bold);
     color: var(--text-primary);
-    text-decoration: none;
     min-width: 3rem;
+    min-height: 1.25em;
+  }
+
+  .title-home {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease-out;
+  }
+
+  .title-home:hover {
+    color: var(--text-primary);
+  }
+
+  .title-layer {
     display: inline-block;
+    transition:
+      opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .title-home {
+    position: relative;
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  .title-posts {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    filter: blur(6px);
+    pointer-events: none;
+  }
+
+  :global(html[data-nav-page='posts']) .title-home {
+    position: absolute;
+    opacity: 0;
+    filter: blur(6px);
+    pointer-events: none;
+  }
+
+  :global(html[data-nav-page='posts']) .title-posts {
+    position: relative;
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .title-layer {
+      transition: opacity 0.15s ease;
+    }
+
+    .title-home,
+    .title-posts,
+    :global(html[data-nav-page='posts']) .title-home,
+    :global(html[data-nav-page='posts']) .title-posts {
+      filter: none;
+    }
   }
 </style>

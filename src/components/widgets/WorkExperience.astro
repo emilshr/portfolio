@@ -1,45 +1,60 @@
 ---
+import ExperienceDialog from '@/components/ui/ExperienceDialog.astro'
 import { themeConfig } from '@/config'
+import { getCollection, render } from 'astro:content'
 
-const experiences = [
-  { role: 'Contractor', company: 'Subs', url: 'https://subs.com/', from: 'Sep 2025', to: 'Present' },
-  {
-    role: 'Senior Software Engineer',
-    company: 'Infosys Consulting',
-    url: 'https://www.linkedin.com/company/infosysconsulting',
-    from: 'April 2025',
-    to: 'Sep 2025'
-  },
-  {
-    role: 'Full Stack Engineer',
-    company: 'Sigtech',
-    url: 'https://www.linkedin.com/company/sigtechltd',
-    from: 'Sep 2023',
-    to: 'Feb 2025'
-  },
-  { role: 'Software Engineer', company: 'Vamstar', url: 'https://vamstar.io/', from: 'May 2021', to: 'Sep 2023' },
-  { role: 'Software Engineer Intern', company: 'Nybula', url: 'https://nbyula.com/', from: 'Nov 2020', to: 'Mar 2021' }
-]
+const entries = await getCollection('experiences')
+const sorted = entries.sort((a, b) => a.data.order - b.data.order)
+const rendered = await Promise.all(
+  sorted.map(async (entry) => {
+    const { Content } = await render(entry)
+    return { entry, Content }
+  })
+)
 ---
 
 <section class="work-experience">
   <h2 class="section-heading">Work</h2>
   <ul>
     {
-      experiences.map((exp) => (
+      rendered.map(({ entry }) => (
         <li>
-          <div class="experience-item">
-            <div class="role-group">
-              <p class="role">{exp.role}</p>
-              <a href={exp.url} target="_blank" rel="noopener noreferrer" class="company">{exp.company}</a>
+          <div
+            role="button"
+            tabindex="0"
+            class="experience-row"
+            data-exp-id={entry.id}
+            data-exp-title={entry.data.title}
+            data-exp-company={entry.data.company}
+            data-exp-url={entry.data.url}
+            data-exp-from={entry.data.from}
+            data-exp-to={entry.data.to}
+          >
+            <div class="experience-item">
+              <div class="role-group">
+                <p class="role">{entry.data.title}</p>
+                <span class="company">{entry.data.company}</span>
+              </div>
+              <div class={themeConfig.general.postListDottedDivider ? 'dotted-divider' : 'divider'} />
+              <p class="date font-features">
+                {entry.data.from} &ndash; {entry.data.to}
+              </p>
             </div>
-            <div class={themeConfig.general.postListDottedDivider ? 'dotted-divider' : 'divider'} />
-            <p class="dates">{exp.from} &ndash; {exp.to}</p>
           </div>
         </li>
       ))
     }
   </ul>
+  <div class="exp-panels" hidden aria-hidden="true">
+    {
+      rendered.map(({ entry, Content }) => (
+        <div class="exp-panel" data-exp-id={entry.id}>
+          <Content />
+        </div>
+      ))
+    }
+  </div>
+  <ExperienceDialog />
   <div class="placeholder"></div>
 </section>
 
@@ -60,31 +75,49 @@ const experiences = [
     gap: 0;
   }
 
-  li {
+  .experience-row {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    color: var(--text-primary);
+    text-align: left;
+    cursor: pointer;
     transition: opacity 0.15s ease-out;
   }
 
+  .experience-row:focus,
+  .experience-row:focus-visible {
+    outline: none;
+  }
+
   @media (hover: hover) and (pointer: fine) {
-    ul:hover li {
+    ul:hover .experience-row {
       opacity: 0.4;
     }
 
-    ul:hover li:hover {
+    ul:hover .experience-row:hover {
       opacity: 1;
     }
 
-    ul:hover li:hover .divider {
+    ul:hover .experience-row:hover .divider {
       background-color: var(--text-tertiary);
       opacity: 0.75;
     }
 
-    ul:hover li:hover .dotted-divider {
+    ul:hover .experience-row:hover .dotted-divider {
       color: var(--text-secondary);
     }
 
-    ul:hover li:hover .dates {
+    ul:hover .experience-row:hover .date {
       color: var(--text-secondary);
       opacity: 1;
+    }
+
+    ul:hover .experience-row:hover .company {
+      color: var(--text-primary);
     }
   }
 
@@ -113,31 +146,7 @@ const experiences = [
   .company {
     font-size: var(--font-size-s);
     color: var(--text-secondary);
-    text-decoration: none;
     transition: color 0.2s ease-out;
-  }
-
-  .company:hover {
-    color: var(--text-primary);
-  }
-
-  .dates {
-    margin: 0;
-    color: var(--text-secondary);
-    opacity: 0.75;
-    letter-spacing: var(--spacing-s);
-    flex-shrink: 0;
-    white-space: nowrap;
-    font-weight: var(--font-weight-light);
-    font-variant-numeric: tabular-nums;
-    font-feature-settings:
-      "tnum" 1,
-      "zero" 0,
-      "cv01" 1,
-      "cv02" 1,
-      "calt" 1,
-      "ss03" 1,
-      "ordn" 1;
   }
 
   .divider {
@@ -163,6 +172,10 @@ const experiences = [
   .dotted-divider::after {
     content: '·····························································································································································';
     pointer-events: none;
+  }
+
+  .exp-panels {
+    display: none;
   }
 
   .placeholder {

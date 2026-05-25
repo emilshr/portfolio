@@ -1,5 +1,14 @@
 ---
 import { themeConfig } from '@/config'
+
+interface Props {
+  /** When false, skips TOC-aware fixed positioning (e.g. on /posts archive). */
+  toc?: boolean
+  /** When false, keeps the button in normal document flow on wide screens. */
+  allowFixedPosition?: boolean
+}
+
+const { toc = themeConfig.post.toc, allowFixedPosition = true } = Astro.props as Props
 ---
 
 <a href="/" class="back-button">
@@ -19,7 +28,8 @@ import { themeConfig } from '@/config'
   define:vars={{
     contentWidth: themeConfig.general.contentWidth,
     centeredLayout: themeConfig.general.centeredLayout,
-    toc: themeConfig.post.toc
+    toc,
+    allowFixedPosition
   }}
 >
   ;(function () {
@@ -28,7 +38,7 @@ import { themeConfig } from '@/config'
       const button = document.querySelector('.back-button')
       if (!button) return
 
-      if (!centeredLayout) {
+      if (!centeredLayout || !allowFixedPosition) {
         button.classList.remove('fixed-position')
         button.style.left = ''
         return

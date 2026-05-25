@@ -19,4 +19,11 @@ export interface TOCItem {
 // PostList component props interface
 export interface PostListProps {
   posts: CollectionEntry<'posts'>[]
+  showViewAllLink?: boolean
+  totalCount?: number
+}
+
+// PostListByYear component props interface
+export interface PostListByYearProps {
+  groups: import('@/utils/posts').PostsByYear[]
 }

@@ -6,7 +6,8 @@ import type { FormattedDateProps } from '@/types'
 const {
   date,
   format,
-  context = 'default'
+  context = 'default',
+  hideYear = false
 } = Astro.props as FormattedDateProps & { context?: 'list' | 'post' | 'default' }
 ---
 
@@ -18,7 +19,7 @@ const {
     ? 'date-left'
     : ''}
 >
-  <Fragment set:html={formatDate(date, format)} />
+  <Fragment set:html={formatDate(date, format, hideYear)} />
 </time>
 
 <style>

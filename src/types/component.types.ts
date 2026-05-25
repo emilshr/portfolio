@@ -54,6 +54,7 @@ export interface FormattedDateProps {
   date: Date
   format?: string
   context?: 'list' | 'post' | 'default'
+  hideYear?: boolean
 }
 
 // GitHub repository data interface
