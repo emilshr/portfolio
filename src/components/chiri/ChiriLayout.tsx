@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react'
+import { cookies } from 'next/headers'
 
 import { AdminBar } from '@/components/AdminBar'
+import { isChiriTheme } from '@/lib/chiri-theme'
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { ThemeManager } from './ThemeManager'
+import { ThemeProvider } from './ThemeProvider'
 
 type Props = {
   children: ReactNode
@@ -12,13 +15,19 @@ type Props = {
   preview?: boolean
 }
 
-export function ChiriLayout({ children, settings, preview }: Props) {
+export async function ChiriLayout({ children, settings, preview }: Props) {
   const widthValue = Math.min(parseFloat(settings.general.contentWidth || '35'), 50)
   const shouldUseCustomWidth = widthValue > 25
   const finalWidth = shouldUseCustomWidth ? `${widthValue}rem` : '25rem'
+  const cookieTheme = (await cookies()).get('chiri-theme')?.value
+  const initialTheme = isChiriTheme(cookieTheme) ? cookieTheme : undefined
 
   return (
-    <html lang={settings.site.language || 'en-US'} suppressHydrationWarning>
+    <html
+      lang={settings.site.language || 'en-US'}
+      className={initialTheme}
+      suppressHydrationWarning
+    >
       <head>
         <ThemeManager />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -45,12 +54,14 @@ export function ChiriLayout({ children, settings, preview }: Props) {
           ...(shouldUseCustomWidth ? { ['--content-width' as string]: `${widthValue}rem` } : {}),
         }}
       >
-        <AdminBar adminBarProps={{ preview: preview ?? false }} />
-        <div className="page-content layout-wrapper">
-          <Header settings={settings} />
-          <main>{children}</main>
-          <Footer settings={settings} />
-        </div>
+        <ThemeProvider initialTheme={initialTheme}>
+          <AdminBar adminBarProps={{ preview: preview ?? false }} />
+          <div className="page-content layout-wrapper">
+            <Header settings={settings} />
+            <main>{children}</main>
+            <Footer settings={settings} />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )

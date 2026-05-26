@@ -1,15 +1,12 @@
 'use client'
 
+import { useChiriTheme } from './ThemeProvider'
+
 export function ThemeToggle() {
+  const { toggle } = useChiriTheme()
+
   return (
-    <button
-      type="button"
-      className="theme-toggle"
-      aria-label="Toggle theme"
-      onClick={() => {
-        if (window.ThemeManager) window.ThemeManager.toggle()
-      }}
-    >
+    <button type="button" className="theme-toggle" aria-label="Toggle theme" onClick={toggle}>
       <svg className="sun-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
         <circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.25" />
         <path
