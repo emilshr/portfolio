@@ -4,4 +4,17 @@
   @include small-break {
     display: none;
   }
+
+  #payload-admin-bar {
+    a,
+    button {
+      color: inherit;
+      transition: color 0.2s ease-out;
+    }
+
+    a:hover,
+    button:hover {
+      color: var(--text-secondary);
+    }
+  }
 }

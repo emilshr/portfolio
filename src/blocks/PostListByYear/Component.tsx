@@ -1,8 +1,8 @@
-import Link from 'next/link'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
-import { FormattedDate } from '@/components/chiri/FormattedDate'
+import { HoverFocusProvider } from '@/components/chiri/hoverFocusList'
+import { PostListRow } from '@/components/chiri/PostListRow'
 import type { PostListByYearBlock as PostListByYearBlockProps } from '@/payload-types'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
@@ -35,35 +35,27 @@ export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = 
   const dateOnRight = settings.date.dateOnRight
 
   return (
-    <section className="posts-archive chiri-posts-archive">
+    <section className="posts-archive chiri-posts-archive chiri-post-list">
       {heading && <h1 className="page-title">{heading}</h1>}
-      {groups.map(({ year, posts }) => (
-        <section key={year} className="year-section">
-          <h2 className="year-heading">{year}</h2>
-          <ul>
-            {posts.map((post) => (
-              <li key={post.id}>
-                <Link href={`/${post.slug}`}>
-                  <div className={`post-item ${!dateOnRight ? 'date-left' : ''}`}>
-                    {!dateOnRight && post.pubDate && (
-                      <p className="date">
-                        <FormattedDate date={post.pubDate} settings={settings} hideYear />
-                      </p>
-                    )}
-                    <p className="title">{post.title}</p>
-                    {dateOnRight && <div className={dotted ? 'dotted-divider' : 'divider'} />}
-                    {dateOnRight && post.pubDate && (
-                      <p className="date">
-                        <FormattedDate date={post.pubDate} settings={settings} hideYear />
-                      </p>
-                    )}
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+      <HoverFocusProvider>
+        {groups.map(({ year, posts }) => (
+          <section key={year} className="year-section">
+            <h2 className="year-heading">{year}</h2>
+            <ul>
+              {posts.map((post) => (
+                <PostListRow
+                  key={post.id}
+                  post={post}
+                  settings={settings}
+                  dateOnRight={dateOnRight}
+                  dottedDivider={dotted}
+                  hideYear
+                />
+              ))}
+            </ul>
+          </section>
+        ))}
+      </HoverFocusProvider>
     </section>
   )
 }

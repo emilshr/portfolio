@@ -1,3 +1,4 @@
+@import "tailwindcss";
 @import "./fonts.css";
 @import "./post.css";
 @import "./chiri-components.css";
@@ -20,6 +21,12 @@
 }
 
 :root {
+  --background: var(--bg);
+  --foreground: var(--text-primary);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--selection);
+  --ring: var(--text-tertiary);
+
   /* Min Content Width */
   --content-width: 25rem;
 
@@ -61,6 +68,15 @@
   --astro-code-token-string-expression: rgba(0, 0, 0, 0.55);
   --astro-code-token-punctuation: rgba(0, 0, 0, 0.55);
   --astro-code-token-link: rgba(0, 0, 0, 0.55);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-ring: var(--ring);
+  --color-border: var(--border);
 }
 
 /* Light Mode (Explicit) */
@@ -121,6 +137,27 @@ html {
   -webkit-overflow-scrolling: touch;
   -webkit-tap-highlight-color: transparent;
   transition: background-color 0.2s ease-out;
+}
+
+/* Radix/shadcn scroll lock sets inline padding/margin for scrollbar compensation.
+   html already uses scrollbar-gutter: stable — restore the layout box model instead. */
+body[data-scroll-locked][data-centered='true'] {
+  padding: 6rem 1.5rem 1.5rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body[data-scroll-locked][data-centered='false'] {
+  padding: 6rem 0 1.5rem !important;
+  margin: 0 1.5rem 0 8rem !important;
+}
+
+@media (max-width: 768px) {
+  body[data-scroll-locked][data-centered='true'],
+  body[data-scroll-locked][data-centered='false'] {
+    padding: 4rem 1.35rem 1.35rem !important;
+    margin: 0 auto !important;
+  }
 }
 
 body {
