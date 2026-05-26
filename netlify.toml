@@ -1,14 +1,10 @@
 [build]
-  publish = "dist"
+  publish = ".next"
   command = "pnpm run build"
 
-# Redirects for Astro static assets
-[[redirects]]
-  from = "/_astro/*"
-  to = "/_astro/:splat"
-  status = 200
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
-# Global headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -18,45 +14,12 @@
     Permissions-Policy = "geolocation=(), microphone=(), camera=(), fullscreen=(self)"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; frame-src https: player.bilibili.com; connect-src 'self' https:; object-src 'none'; worker-src 'self' blob:; child-src 'self' blob: player.bilibili.com;"
 
-# HTML pages
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    Vary = "Accept-Encoding"
-
-# Blog posts
-[[headers]]
-  for = "/*/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    Vary = "Accept-Encoding"
-
-# Homepage
-[[headers]]
-  for = "/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    Vary = "Accept-Encoding"
-
-# Static assets
 [[headers]]
   for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Vary = "Accept-Encoding"
 
 [[headers]]
-  for = "/_astro/*"
+  for = "/_next/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Vary = "Accept-Encoding"
-
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Vary = "Accept-Encoding"
-
-
-

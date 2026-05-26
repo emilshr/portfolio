@@ -1,5 +1,23 @@
 @import "./fonts.css";
 @import "./post.css";
+@import "./chiri-components.css";
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content main {
+  flex: 1;
+}
 
 :root {
   /* Min Content Width */
