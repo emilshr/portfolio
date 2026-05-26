@@ -20,12 +20,15 @@ export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
     where: { _status: { equals: 'published' } },
   })
 
+  const listLimit = limit ?? 5
+
   return (
     <PostList
       posts={docs}
       settings={settings}
       showViewAll={showViewAll ?? true}
       totalCount={totalDocs}
+      limit={listLimit}
     />
   )
 }

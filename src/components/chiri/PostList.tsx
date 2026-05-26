@@ -9,10 +9,18 @@ type Props = {
   settings: SiteSettingsData
   showViewAll?: boolean
   totalCount?: number
+  limit?: number
 }
 
-export function PostList({ posts, settings, showViewAll = false, totalCount }: Props) {
-  const showLink = showViewAll && (totalCount ?? posts.length) > 5
+export function PostList({
+  posts,
+  settings,
+  showViewAll = false,
+  totalCount,
+  limit = posts.length,
+}: Props) {
+  const total = totalCount ?? posts.length
+  const showLink = showViewAll && total > limit
 
   return (
     <div className="chiri-post-list mb-6">

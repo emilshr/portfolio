@@ -72,12 +72,13 @@
   font-size: var(--font-size-s);
 }
 
-/* Post layout */
-.chiri-post .back-button {
+/* Back navigation */
+.back-button {
   color: var(--text-secondary);
   text-decoration: none;
   font-size: var(--font-size-s);
   display: inline-block;
+  margin-top: 1.25rem;
   margin-bottom: 1rem;
 }
 .chiri-post .title h1 {
@@ -227,6 +228,16 @@
   gap: 1rem;
   overflow: hidden;
 }
+@media (max-width: 768px) {
+  .experience-dialog {
+    width: calc(100vw - 2.7rem);
+    max-width: calc(100vw - 2.7rem);
+  }
+  .experience-dialog .experience-dialog-header,
+  .experience-dialog .experience-dialog-title {
+    text-align: center;
+  }
+}
 .experience-dialog [data-radix-dialog-close] {
   color: var(--text-secondary);
 }
@@ -240,9 +251,18 @@
   text-align: left;
 }
 .experience-dialog-company {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   color: var(--text-primary);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+.experience-dialog-company-icon {
+  width: 0.875em;
+  height: 0.875em;
+  flex-shrink: 0;
+  opacity: 0.75;
 }
 .experience-dialog-company:hover {
   opacity: 0.85;

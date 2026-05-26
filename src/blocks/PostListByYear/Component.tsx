@@ -1,6 +1,7 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
+import { BackButton } from '@/components/chiri/BackButton'
 import { HoverFocusProvider } from '@/components/chiri/hoverFocusList'
 import { PostListRow } from '@/components/chiri/PostListRow'
 import type { PostListByYearBlock as PostListByYearBlockProps } from '@/payload-types'
@@ -36,7 +37,7 @@ export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = 
 
   return (
     <section className="posts-archive chiri-posts-archive chiri-post-list">
-      {heading && <h1 className="page-title">{heading}</h1>}
+      <BackButton />
       <HoverFocusProvider>
         {groups.map(({ year, posts }) => (
           <section key={year} className="year-section">

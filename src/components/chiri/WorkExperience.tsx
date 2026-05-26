@@ -1,5 +1,6 @@
 'use client'
 
+import { ExternalLink } from 'lucide-react'
 import { useState, type KeyboardEvent } from 'react'
 
 import RichText from '@/components/RichText'
@@ -78,8 +79,8 @@ export function WorkExperience({ experiences, settings, heading = 'Work' }: Prop
         <DialogContent className="experience-dialog sm:max-w-lg">
           {selected && (
             <>
-              <DialogHeader>
-                <DialogTitle>{selected.title}</DialogTitle>
+              <DialogHeader className="experience-dialog-header">
+                <DialogTitle className="experience-dialog-title">{selected.title}</DialogTitle>
                 <DialogDescription asChild>
                   <p className="experience-dialog-subtitle">
                     <a
@@ -89,6 +90,11 @@ export function WorkExperience({ experiences, settings, heading = 'Work' }: Prop
                       rel="noopener noreferrer"
                     >
                       {selected.company}
+                      <ExternalLink
+                        className="experience-dialog-company-icon"
+                        aria-hidden="true"
+                      />
+                      <span className="sr-only"> (opens in new tab)</span>
                     </a>
                     <span className="experience-dialog-dates">
                       {' '}

@@ -1,8 +1,8 @@
-import Link from 'next/link'
-
 import RichText from '@/components/RichText'
 import type { Post } from '@/payload-types'
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
+
+import { BackButton } from './BackButton'
 import { FormattedDate } from './FormattedDate'
 
 type Props = {
@@ -16,9 +16,7 @@ export function PostLayout({ post, settings, readingTime }: Props) {
     <div className="post-container chiri-post">
       <main>
         <div className="prose">
-          <Link href="/" className="back-button">
-            ← Back
-          </Link>
+          <BackButton />
           <div className="title">
             <h1>{post.title}</h1>
             <div className="date">
