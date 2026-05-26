@@ -7,16 +7,5 @@ export const SpacerBlock: Block = {
     singular: 'Spacer',
     plural: 'Spacers',
   },
-  fields: [
-    {
-      name: 'height',
-      type: 'select',
-      defaultValue: 'medium',
-      options: [
-        { label: 'Small', value: 'small' },
-        { label: 'Medium', value: 'medium' },
-        { label: 'Large', value: 'large' },
-      ],
-    },
-  ],
+  fields: [],
 }

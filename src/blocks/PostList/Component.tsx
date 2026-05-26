@@ -6,6 +6,7 @@ import type { PostListBlock as PostListBlockProps } from '@/payload-types'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
+  heading = 'Posts',
   limit = 5,
   showViewAll,
 }) => {
@@ -26,6 +27,7 @@ export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
     <PostList
       posts={docs}
       settings={settings}
+      heading={heading ?? 'Posts'}
       showViewAll={showViewAll ?? true}
       totalCount={totalDocs}
       limit={listLimit}

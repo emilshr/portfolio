@@ -7,6 +7,7 @@ import { PostListItems } from './PostListItems'
 type Props = {
   posts: Post[]
   settings: SiteSettingsData
+  heading?: string
   showViewAll?: boolean
   totalCount?: number
   limit?: number
@@ -15,6 +16,7 @@ type Props = {
 export function PostList({
   posts,
   settings,
+  heading,
   showViewAll = false,
   totalCount,
   limit = posts.length,
@@ -23,13 +25,14 @@ export function PostList({
   const showLink = showViewAll && total > limit
 
   return (
-    <div className="chiri-post-list mb-6">
+    <section className="chiri-post-list mb-6">
+      {heading ? <h2 className="section-heading">{heading}</h2> : null}
       <PostListItems posts={posts} settings={settings} />
       {showLink && (
         <p className="view-all">
           <Link href="/posts">View all posts</Link>
         </p>
       )}
-    </div>
+    </section>
   )
 }

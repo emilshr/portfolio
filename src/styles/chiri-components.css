@@ -1,4 +1,10 @@
 /* Post list */
+.chiri-post-list .section-heading {
+  font-weight: var(--font-weight-bold);
+  font-size: 1.375rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
 .chiri-post-list ul {
   padding: 0;
   margin: 0;
@@ -54,7 +60,8 @@
 .chiri-contact .section-heading {
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-m);
-  margin: 0 0 0.5rem;
+  color: var(--text-secondary);
+  margin: 0;
 }
 .chiri-contact ul {
   list-style: none;
@@ -113,7 +120,8 @@
 .chiri-section-heading {
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-m);
-  margin: 0 0 0.5rem;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 /* Posts archive */
@@ -151,9 +159,9 @@
 /* Work experience */
 .chiri-work .section-heading {
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-m);
-  color: var(--text-primary);
-  margin: 0 0 1rem;
+  font-size: 1.375rem;
+  color: var(--text-secondary);
+  margin: 0;
 }
 .chiri-work ul {
   list-style: none;

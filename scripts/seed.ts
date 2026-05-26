@@ -201,6 +201,7 @@ async function seed() {
     },
     {
       blockType: 'postList' as const,
+      heading: 'Posts',
       limit: 5,
       showViewAll: true,
     },

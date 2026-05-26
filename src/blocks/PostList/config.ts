@@ -9,6 +9,11 @@ export const PostListBlock: Block = {
   },
   fields: [
     {
+      name: 'heading',
+      type: 'text',
+      defaultValue: 'Posts',
+    },
+    {
       name: 'limit',
       type: 'number',
       defaultValue: 5,

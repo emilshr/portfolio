@@ -113,7 +113,6 @@ export function WorkExperience({ experiences, settings, heading = 'Work' }: Prop
         </DialogContent>
       </Dialog>
 
-      <div className="placeholder" />
     </section>
   )
 }

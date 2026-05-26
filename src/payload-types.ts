@@ -210,6 +210,7 @@ export interface AboutBlock {
  * via the `definition` "PostListBlock".
  */
 export interface PostListBlock {
+  heading?: string | null;
   limit?: number | null;
   showViewAll?: boolean | null;
   id?: string | null;
@@ -452,7 +453,6 @@ export interface SectionHeadingBlock {
  * via the `definition` "SpacerBlock".
  */
 export interface SpacerBlock {
-  height?: ('small' | 'medium' | 'large') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'spacer';
@@ -921,6 +921,7 @@ export interface AboutBlockSelect<T extends boolean = true> {
  * via the `definition` "PostListBlock_select".
  */
 export interface PostListBlockSelect<T extends boolean = true> {
+  heading?: T;
   limit?: T;
   showViewAll?: T;
   id?: T;
@@ -984,7 +985,6 @@ export interface SectionHeadingBlockSelect<T extends boolean = true> {
  * via the `definition` "SpacerBlock_select".
  */
 export interface SpacerBlockSelect<T extends boolean = true> {
-  height?: T;
   id?: T;
   blockName?: T;
 }
