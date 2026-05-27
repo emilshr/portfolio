@@ -12,7 +12,7 @@ export const AboutBlockComponent: React.FC<AboutBlockProps> = ({
 
   return (
     <div className="about mb-0">
-      <div className="flex items-start justify-between gap-8 max-sm:flex-col max-sm:gap-5">
+      <div className="flex items-center justify-between gap-8 max-sm:flex-col-reverse max-sm:items-start max-sm:gap-5">
         <div className="min-w-0">
           {heading ? (
             <h1 className="m-0 text-[clamp(2rem,5vw,3.25rem)] font-bold leading-tight tracking-tight text-(--text-primary)">
@@ -27,8 +27,15 @@ export const AboutBlockComponent: React.FC<AboutBlockProps> = ({
         </div>
 
         {avatar && typeof avatar === 'object' ? (
-          <div className="size-21 shrink-0 overflow-hidden rounded-full border border-border bg-white/5 shadow-lg max-sm:size-19">
-            <Media resource={avatar} imgClassName="size-full object-cover" />
+          <div className="relative size-32 shrink-0 overflow-hidden rounded-full border border-border bg-white/5 shadow-lg max-sm:size-19 max-sm:self-start">
+            <Media
+              resource={avatar}
+              fill
+              className="size-full"
+              pictureClassName="block size-full"
+              imgClassName="object-cover"
+              size="(max-width: 640px) 76px, 128px"
+            />
           </div>
         ) : null}
       </div>
