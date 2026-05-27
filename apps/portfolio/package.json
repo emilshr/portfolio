@@ -28,6 +28,7 @@
     "@bprogress/next": "catalog:",
     "@payloadcms/admin-bar": "catalog:",
     "@payloadcms/db-mongodb": "catalog:",
+    "@payloadcms/email-resend": "catalog:",
     "@payloadcms/live-preview-react": "catalog:",
     "@payloadcms/next": "catalog:",
     "@payloadcms/plugin-form-builder": "catalog:",

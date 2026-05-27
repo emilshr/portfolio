@@ -1,4 +1,5 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { resendAdapter } from '@payloadcms/email-resend'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -39,6 +40,11 @@ export default buildConfig({
     },
   },
   editor: defaultLexical,
+  email: resendAdapter({
+    defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'noreply@example.com',
+    defaultFromName: process.env.RESEND_FROM_NAME || 'Portfolio',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { cookies } from 'next/headers'
+import Script from 'next/script'
 
 import { AdminBar } from '@/components/AdminBar'
 import { isChiriTheme } from '@/lib/chiri-theme'
@@ -21,6 +22,9 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
   const finalWidth = shouldUseCustomWidth ? `${widthValue}rem` : '25rem'
   const cookieTheme = (await cookies()).get('chiri-theme')?.value
   const initialTheme = isChiriTheme(cookieTheme) ? cookieTheme : undefined
+  const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC
+  const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID_PORTFOLIO
+  const hasUmami = Boolean(umamiSrc && umamiWebsiteId)
 
   return (
     <html
@@ -31,6 +35,13 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
       {/* oxlint-disable-next-line next/no-head-element -- App Router root layouts use native head */}
       <head>
         <ThemeManager />
+        {hasUmami && (
+          <Script
+            src={umamiSrc}
+            data-website-id={umamiWebsiteId}
+            strategy="afterInteractive"
+          />
+        )}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link
