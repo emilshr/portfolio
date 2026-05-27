@@ -187,7 +187,10 @@ export interface Page {
  * via the `definition` "AboutBlock".
  */
 export interface AboutBlock {
-  content: {
+  avatar?: (string | null) | Media;
+  heading: string;
+  subheading: string;
+  content?: {
     root: {
       type: string;
       children: {
@@ -201,124 +204,10 @@ export interface AboutBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'about';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostListBlock".
- */
-export interface PostListBlock {
-  heading?: string | null;
-  limit?: number | null;
-  showViewAll?: boolean | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'postList';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostListByYearBlock".
- */
-export interface PostListByYearBlock {
-  heading?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'postListByYear';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "WorkExperienceBlock".
- */
-export interface WorkExperienceBlock {
-  heading?: string | null;
-  /**
-   * Leave empty to show all experiences
-   */
-  limit?: number | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'workExperience';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContactCTABlock".
- */
-export interface ContactCTABlock {
-  heading?: string | null;
-  useGlobalLinks?: boolean | null;
-  links?:
-    | {
-        label: string;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'contactCTA';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: string;
-  title: string;
-  heroImage?: (string | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
-    description?: string | null;
-  };
-  pubDate: string;
-  lastUpdatedAt?: string | null;
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -438,6 +327,120 @@ export interface FolderInterface {
   folderType?: 'media'[] | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostListBlock".
+ */
+export interface PostListBlock {
+  heading?: string | null;
+  limit?: number | null;
+  showViewAll?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostListByYearBlock".
+ */
+export interface PostListByYearBlock {
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postListByYear';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorkExperienceBlock".
+ */
+export interface WorkExperienceBlock {
+  heading?: string | null;
+  /**
+   * Leave empty to show all experiences
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'workExperience';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactCTABlock".
+ */
+export interface ContactCTABlock {
+  heading?: string | null;
+  useGlobalLinks?: boolean | null;
+  links?:
+    | {
+        label: string;
+        link?: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactCTA';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  title: string;
+  heroImage?: (string | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  pubDate: string;
+  lastUpdatedAt?: string | null;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -938,6 +941,9 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "AboutBlock_select".
  */
 export interface AboutBlockSelect<T extends boolean = true> {
+  avatar?: T;
+  heading?: T;
+  subheading?: T;
   content?: T;
   id?: T;
   blockName?: T;
@@ -1536,16 +1542,13 @@ export interface GitHubEmbedBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "XPostEmbedBlock".
+ * via the `definition` "LinkCardBlock".
  */
-export interface XPostEmbedBlock {
-  /**
-   * Full URL to the X/Twitter post
-   */
+export interface LinkCardBlock {
   url: string;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'xPostEmbed';
+  blockType: 'linkCard';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1559,13 +1562,16 @@ export interface NeoDBEmbedBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LinkCardBlock".
+ * via the `definition` "XPostEmbedBlock".
  */
-export interface LinkCardBlock {
+export interface XPostEmbedBlock {
+  /**
+   * Full URL to the X/Twitter post
+   */
   url: string;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'linkCard';
+  blockType: 'xPostEmbed';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -16,9 +16,28 @@ export const AboutBlock: Block = {
   },
   fields: [
     {
+      name: 'avatar',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      filterOptions: {
+        mimeType: { contains: 'image' },
+      },
+    },
+    {
+      name: 'heading',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'subheading',
+      type: 'textarea',
+      required: true,
+    },
+    {
       name: 'content',
       type: 'richText',
-      required: true,
+      required: false,
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
           return [

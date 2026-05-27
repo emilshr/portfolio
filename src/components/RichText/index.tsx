@@ -14,9 +14,11 @@ import {
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
 import { AlertBannerBlockComponent } from '@/blocks/AlertBanner/Component'
 import { BannerBlock } from '@/blocks/Banner/Component'
+import { ContentBlock } from '@/blocks/Content/Component'
 import type {
   AlertBannerBlock as AlertBannerBlockProps,
   BannerBlock as BannerBlockProps,
+  ContentBlock as ContentBlockProps,
   GitHubEmbedBlock as GitHubEmbedBlockProps,
   LinkCardBlock as LinkCardBlockProps,
   MediaBlock as MediaBlockProps,
@@ -35,6 +37,7 @@ type NodeTypes =
       | XPostEmbedBlockProps
       | NeoDBEmbedBlockProps
       | LinkCardBlockProps
+      | ContentBlockProps
     >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
@@ -52,6 +55,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   blocks: {
     alertBanner: ({ node }) => <AlertBannerBlockComponent {...node.fields} />,
     banner: ({ node }) => <BannerBlock {...node.fields} />,
+    content: ({ node }) => <ContentBlock {...node.fields} />,
     mediaBlock: ({ node }) => (
       <MediaBlock {...node.fields} enableGutter={false} disableInnerContainer />
     ),
