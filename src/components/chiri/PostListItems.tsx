@@ -2,6 +2,8 @@
 
 import type { Post } from '@/payload-types'
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
+
+import { postListUl } from './classNames'
 import { HoverFocusProvider } from './hoverFocusList'
 import { PostListRow } from './PostListRow'
 
@@ -17,7 +19,7 @@ export function PostListItems({ posts, settings, hideYear }: Props) {
 
   return (
     <HoverFocusProvider>
-      <ul>
+      <ul className={postListUl}>
         {posts.map((post) => (
           <PostListRow
             key={post.id}

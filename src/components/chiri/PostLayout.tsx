@@ -13,13 +13,13 @@ type Props = {
 
 export function PostLayout({ post, settings, readingTime }: Props) {
   return (
-    <div className="post-container chiri-post">
+    <div className="post-container">
       <main>
         <div className="prose">
           <BackButton />
           <div className="title">
-            <h1>{post.title}</h1>
-            <div className="date">
+            <h1 className="mb-1 mt-0">{post.title}</h1>
+            <div className="date text-(length:--font-size-s) text-(--text-secondary)">
               {post.pubDate && <FormattedDate date={post.pubDate} settings={settings} />}
               {settings.post.readingTime && readingTime && (
                 <span className="reading-time">

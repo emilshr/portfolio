@@ -1,6 +1,8 @@
 import type { ContactCTABlock as ContactCTABlockProps } from '@/payload-types'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
+import { sectionHeading } from '@/components/chiri/classNames'
+
 const icons = {
   calendar: (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -44,12 +46,17 @@ export const ContactCTABlockComponent: React.FC<ContactCTABlockProps> = async ({
         .filter((l) => l.url)
 
   return (
-    <section className="contact-cta chiri-contact">
-      <h2 className="section-heading">{heading}</h2>
-      <ul>
+    <section className="contact-cta">
+      <h2 className={sectionHeading}>{heading}</h2>
+      <ul className="m-0 flex list-none gap-4 p-0">
         {contactLinks.map((link) => (
           <li key={link.label}>
-            <a href={link.url!} target="_blank" rel="noopener noreferrer">
+            <a
+              href={link.url!}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 text-(length:--font-size-s) text-(--text-secondary) no-underline"
+            >
               {icons[link.icon as keyof typeof icons]}
               <span>{link.label}</span>
             </a>

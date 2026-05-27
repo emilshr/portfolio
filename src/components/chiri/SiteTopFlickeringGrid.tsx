@@ -30,7 +30,7 @@ export function SiteTopFlickeringGrid() {
   return (
     <div
       aria-hidden
-      className="site-top-flickering-grid pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-0 w-screen overflow-hidden h-[min(7.5rem,15vh)] md:h-[min(9.5rem,18vh)]"
+      className="pointer-events-none absolute left-1/2 top-0 z-0 h-[min(7.5rem,15vh)] w-screen -translate-x-1/2 overflow-hidden mask-[linear-gradient(to_bottom,#000_0%,#000_35%,transparent_100%)] md:h-[min(9.5rem,18vh)]"
     >
       <FlickeringGrid
         className="size-full"

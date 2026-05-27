@@ -25,7 +25,11 @@ export default function Error({
       message="An unexpected error occurred. You can try again or return home."
       detail={isDev && detail ? detail : undefined}
     >
-      <button type="button" className="error-action" onClick={reset}>
+      <button
+        type="button"
+        className="cursor-pointer border-none bg-transparent p-0 font-inherit text-(length:--font-size-s) tracking-(--spacing-m) text-(--text-secondary) no-underline hover:text-(--text-primary)"
+        onClick={reset}
+      >
         Try again
       </button>
     </ErrorPage>

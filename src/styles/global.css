@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 @import "./fonts.css";
 @import "./post.css";
-@import "./chiri-components.css";
 
 .layout-wrapper {
   display: flex;

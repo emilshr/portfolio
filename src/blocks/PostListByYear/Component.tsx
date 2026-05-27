@@ -2,14 +2,13 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
 import { BackButton } from '@/components/chiri/BackButton'
+import { postListUl } from '@/components/chiri/classNames'
 import { HoverFocusProvider } from '@/components/chiri/hoverFocusList'
 import { PostListRow } from '@/components/chiri/PostListRow'
 import type { PostListByYearBlock as PostListByYearBlockProps } from '@/payload-types'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
-export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = async ({
-  heading,
-}) => {
+export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = async () => {
   const payload = await getPayload({ config: configPromise })
   const settings = await getSiteSettings()
 
@@ -36,13 +35,15 @@ export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = 
   const dateOnRight = settings.date.dateOnRight
 
   return (
-    <section className="posts-archive chiri-posts-archive chiri-post-list">
+    <section className="posts-archive">
       <BackButton />
       <HoverFocusProvider>
         {groups.map(({ year, posts }) => (
-          <section key={year} className="year-section">
-            <h2 className="year-heading">{year}</h2>
-            <ul>
+          <section key={year} className="mb-10">
+            <h2 className="m-0 mb-2 font-(length:--font-weight-bold) text-(length:--font-size-m)">
+              {year}
+            </h2>
+            <ul className={postListUl}>
               {posts.map((post) => (
                 <PostListRow
                   key={post.id}
