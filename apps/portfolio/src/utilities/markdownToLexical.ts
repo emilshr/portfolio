@@ -1,5 +1,5 @@
 // Lexical seed conversion — loose typing for migration content
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* oxlint-disable typescript/no-explicit-any */
 
 type TextNode = {
   type: 'text'

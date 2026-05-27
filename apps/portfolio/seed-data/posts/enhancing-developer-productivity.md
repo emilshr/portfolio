@@ -1,6 +1,6 @@
 ---
 title: Enhancing developer productivity
-pubDate: "2024-01-06"
+pubDate: '2024-01-06'
 ---
 
 As an engineer, I am always thinking of ways that would enhance my productivity. I have read multiple articles online & watched way too many day in the life vlogs of other engineers (Before you judge me. I know! most of them are pointless). However, none of them seemed to help me "optimize" my time nor my productivity.

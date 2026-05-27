@@ -23,11 +23,8 @@ updates:
         patterns: ['markdown-it', '@types/markdown-it', 'mdast-*', 'remark-*', 'rehype-*', 'unist-*']
         update-types: ['minor', 'patch']
       # Code quality tools
-      eslint:
-        patterns: ['eslint', 'eslint-*', '@eslint/*', '@typescript-eslint/*']
-        update-types: ['minor', 'patch']
-      prettier:
-        patterns: ['prettier', 'prettier-*', 'eslint-config-prettier']
+      oxc:
+        patterns: ['oxlint', 'oxfmt', 'oxc*']
         update-types: ['minor', 'patch']
       # TypeScript
       typescript:
@@ -50,11 +47,11 @@ updates:
           - 'remark-*'
           - 'rehype-*'
           - 'unist-*'
-          - 'eslint*'
-          - '@eslint/*'
+          - 'oxlint'
+          - 'oxfmt'
+          - 'oxc*'
           - 'typescript*'
           - '@types/*'
-          - 'prettier*'
           - 'tsx'
           - 'sharp'
           - '@playform/*'

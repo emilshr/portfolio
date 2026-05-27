@@ -9,6 +9,8 @@
     "dev:journeys": "turbo dev --filter=journeys",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
+    "format": "turbo format",
+    "format:check": "turbo format:check",
     "check-types": "turbo check-types",
     "generate:types": "turbo generate:types --filter=portfolio",
     "generate:importmap": "turbo generate:importmap --filter=portfolio",

@@ -62,7 +62,11 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     code: ({ node }) => <CodeBlock {...node.fields} />,
     githubEmbed: ({ node }) => (
       <div className="github-embed" data-repo={node.fields.repo}>
-        <a href={`https://github.com/${node.fields.repo}`} target="_blank" rel="noopener noreferrer">
+        <a
+          href={`https://github.com/${node.fields.repo}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {node.fields.repo}
         </a>
       </div>

@@ -6,7 +6,10 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev --port 3001",
-    "lint": "eslint .",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
     "check-types": "tsc --noEmit",
     "start": "next start --port 3001"
   },
@@ -21,8 +24,8 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "eslint": "catalog:",
-    "eslint-config-next": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
     "typescript": "catalog:"
   }
 }

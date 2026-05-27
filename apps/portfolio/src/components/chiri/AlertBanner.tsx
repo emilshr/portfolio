@@ -17,7 +17,12 @@ function resolveLinkHref(link?: AlertBannerBlock['link']): string | null {
 
   const { type, reference, url } = link
 
-  if (type === 'reference' && reference?.value && typeof reference.value === 'object' && 'slug' in reference.value) {
+  if (
+    type === 'reference' &&
+    reference?.value &&
+    typeof reference.value === 'object' &&
+    'slug' in reference.value
+  ) {
     const slug = reference.value.slug
     if (!slug) return null
     return reference.relationTo === 'posts' ? `/${slug}` : slug === 'home' ? '/' : `/${slug}`

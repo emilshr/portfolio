@@ -1,6 +1,6 @@
 ---
 title: Attempting to master Golang
-pubDate: "2026-05-25"
+pubDate: '2026-05-25'
 ---
 
 ## What's this about?
@@ -18,6 +18,7 @@ I'm also documenting how I'm approaching the whole thing. I'd consider myself a 
 I have picked out a fun little project to build as part of the learning process. My idea is to build a TUI combining [Monkey type](https://monkeytype.com/) & [Type racer](https://play.typeracer.com/).
 
 The feature set that I have in my mind are as follows:
+
 - Core keystroke capture mechanics
 - Engine to calculate WPM (Words per minute)
 - A global/regional leaderboard
@@ -26,6 +27,7 @@ The feature set that I have in my mind are as follows:
 # Day 1 - 25 May
 
 I've been scouring the internet and found few fantastic resources.
+
 - [Tour of Go](https://go.dev/tour/)
 - [Go by example](https://gobyexample.com/)
 - [Learn Go with tests](https://quii.gitbook.io/learn-go-with-tests)

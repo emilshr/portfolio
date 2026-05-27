@@ -41,9 +41,7 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    ...(useLocalMediaStorage
-      ? { staticDir: path.resolve(dirname, '../../public/media') }
-      : {}),
+    ...(useLocalMediaStorage ? { staticDir: path.resolve(dirname, '../../public/media') } : {}),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     imageSizes: [

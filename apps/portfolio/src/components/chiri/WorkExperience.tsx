@@ -11,17 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { HoverFocusItem, HoverFocusProvider, HoverFocusText } from '@/components/chiri/hoverFocusList'
+import {
+  HoverFocusItem,
+  HoverFocusProvider,
+  HoverFocusText,
+} from '@/components/chiri/hoverFocusList'
 import type { Experience } from '@repo/payload-types'
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
 import { cn } from '@/utilities/ui'
 
-import {
-  listDivider,
-  listDottedDivider,
-  postListUl,
-  sectionHeading,
-} from './classNames'
+import { listDivider, listDottedDivider, postListUl, sectionHeading } from './classNames'
 
 type Props = {
   experiences: Experience[]
@@ -119,7 +118,10 @@ export function WorkExperience({ experiences, settings, heading = 'Work' }: Prop
                       rel="noopener noreferrer"
                     >
                       {selected.company}
-                      <ExternalLink className="size-[0.875em] shrink-0 opacity-75" aria-hidden="true" />
+                      <ExternalLink
+                        className="size-[0.875em] shrink-0 opacity-75"
+                        aria-hidden="true"
+                      />
                       <span className="sr-only"> (opens in new tab)</span>
                     </a>
                     <span className="text-(--text-secondary)">

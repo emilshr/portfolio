@@ -91,10 +91,12 @@ const getSiteSettingsUncached = async (): Promise<SiteSettingsData> => {
     },
     general: {
       contentWidth: settings.general?.contentWidth ?? defaultSiteSettings.general.contentWidth,
-      centeredLayout: settings.general?.centeredLayout ?? defaultSiteSettings.general.centeredLayout,
+      centeredLayout:
+        settings.general?.centeredLayout ?? defaultSiteSettings.general.centeredLayout,
       themeToggle: settings.general?.themeToggle ?? defaultSiteSettings.general.themeToggle,
       postListDottedDivider:
-        settings.general?.postListDottedDivider ?? defaultSiteSettings.general.postListDottedDivider,
+        settings.general?.postListDottedDivider ??
+        defaultSiteSettings.general.postListDottedDivider,
       footer: settings.general?.footer ?? defaultSiteSettings.general.footer,
       fadeAnimation: settings.general?.fadeAnimation ?? defaultSiteSettings.general.fadeAnimation,
     },

@@ -1,7 +1,7 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "./fonts.css";
-@import "./post.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './fonts.css';
+@import './post.css';
 
 .layout-wrapper {
   display: flex;
@@ -32,8 +32,8 @@
 
   /* Typography */
   --sans: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
-  --serif: Besley, Baskerville, Georgia, "Times New Roman", Times, serif;
-  --mono: "SF Mono", SFMono-Regular, monospace;
+  --serif: Besley, Baskerville, Georgia, 'Times New Roman', Times, serif;
+  --mono: 'SF Mono', SFMono-Regular, monospace;
 
   --font-size-s: 0.8125rem;
   --font-size-m: 0.9375rem;
@@ -162,7 +162,7 @@ body[data-scroll-locked][data-centered='false'] {
 
 body {
   font-family: var(--sans);
-  font-feature-settings: "ss03" 1;
+  font-feature-settings: 'ss03' 1;
   font-size: var(--font-size-m);
   line-height: 1.75;
   color: var(--text-primary);
@@ -182,18 +182,18 @@ body {
   overflow-wrap: break-word;
 }
 
-body[data-centered="true"] {
+body[data-centered='true'] {
   padding: 6rem 1.5rem 1.5rem;
 }
 
-body[data-centered="false"] {
+body[data-centered='false'] {
   padding: 6rem 0 1.5rem;
   margin: 0 1.5rem 0 8rem;
 }
 
 @media (max-width: 768px) {
-  body[data-centered="true"],
-  body[data-centered="false"] {
+  body[data-centered='true'],
+  body[data-centered='false'] {
     padding: 4rem 1.35rem 1.35rem;
     margin: 0 auto;
   }
@@ -241,13 +241,13 @@ main {
   letter-spacing: var(--spacing-s);
   font-variant-numeric: tabular-nums;
   font-feature-settings:
-    "tnum" 1,
-    "zero" 0,
-    "cv01" 1,
-    "cv02" 1,
-    "calt" 1,
-    "ss03" 1,
-    "ordn" 1;
+    'tnum' 1,
+    'zero' 0,
+    'cv01' 1,
+    'cv02' 1,
+    'calt' 1,
+    'ss03' 1,
+    'ordn' 1;
 }
 
 .date .month {

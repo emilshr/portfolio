@@ -83,7 +83,9 @@ function useHoverFocusAnimate(itemId: string, variant: TextVariant) {
 
   return {
     animate: tone[variant][state],
-    transition: reducedMotion ? { duration: 0 } : { duration: 0.2, ease: [0.4, 0, 0.2, 1] as const },
+    transition: reducedMotion
+      ? { duration: 0 }
+      : { duration: 0.2, ease: [0.4, 0, 0.2, 1] as const },
   }
 }
 
