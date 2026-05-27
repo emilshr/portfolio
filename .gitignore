@@ -4,6 +4,8 @@ node_modules/
 # Build output
 build/
 .next/
+apps/*/.next/
+.turbo/
 dist/
 .output/
 .vercel/
@@ -35,6 +37,8 @@ public/media/
 # Sitemaps (generated on build)
 public/robots.txt
 public/sitemap*.xml
+apps/portfolio/public/robots.txt
+apps/portfolio/public/sitemap*.xml
 
 # Playwright
 /test-results/

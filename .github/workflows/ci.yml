@@ -40,6 +40,9 @@ jobs:
       - name: Generate types
         run: pnpm generate:types
 
+      - name: Check types
+        run: pnpm check-types
+
       - name: Build
         run: pnpm build
         env:
