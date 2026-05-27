@@ -1,7 +1,28 @@
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  process.env.VERCEL_PROJECT_PRODUCTION_URL ||
-  'https://example.com'
+const getPrimaryProductionURL = () => {
+  const rawValue = process.env.RAILWAY_PROJECT_PRODUCTION_URLS
+
+  if (!rawValue) {
+    return null
+  }
+
+  const firstValidURL = rawValue
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .map((value) => (/^https?:\/\//i.test(value) ? value : `https://${value}`))
+    .find((value) => {
+      try {
+        new URL(value)
+        return true
+      } catch {
+        return false
+      }
+    })
+
+  return firstValidURL || null
+}
+
+const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || getPrimaryProductionURL() || 'https://example.com'
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {

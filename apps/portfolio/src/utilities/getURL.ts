@@ -1,11 +1,13 @@
 import canUseDOM from './canUseDOM'
+import { getPrimaryProductionURL } from './railwayURLs'
 
 export const getServerSideURL = () => {
+  const primaryProductionURL = getPrimaryProductionURL()
+
   return (
     process.env.NEXT_PUBLIC_SERVER_URL ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : 'http://localhost:3000')
+    primaryProductionURL ||
+    'http://localhost:3000'
   )
 }
 
@@ -18,8 +20,10 @@ export const getClientSideURL = () => {
     return `${protocol}//${domain}${port ? `:${port}` : ''}`
   }
 
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  const primaryProductionURL = getPrimaryProductionURL()
+
+  if (primaryProductionURL) {
+    return primaryProductionURL
   }
 
   return process.env.NEXT_PUBLIC_SERVER_URL || ''
