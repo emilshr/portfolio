@@ -5,13 +5,17 @@
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.mjs",
-    "css": "src/app/(frontend)/globals.css",
+    "css": "src/styles/global.css",
     "baseColor": "slate",
     "cssVariables": true,
     "prefix": ""
   },
+  "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
     "utils": "@/utilities/ui"
+  },
+  "registries": {
+    "@magicui": "https://magicui.design/r/{name}"
   }
 }

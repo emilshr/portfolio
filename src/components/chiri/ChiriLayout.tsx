@@ -6,6 +6,7 @@ import { isChiriTheme } from '@/lib/chiri-theme'
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
 import { Footer } from './Footer'
 import { Header } from './Header'
+import { SiteTopFlickeringGrid } from './SiteTopFlickeringGrid'
 import { ThemeManager } from './ThemeManager'
 import { ThemeProvider } from './ThemeProvider'
 
@@ -48,6 +49,7 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
         />
       </head>
       <body
+        className="relative"
         data-centered={settings.general.centeredLayout ? 'true' : 'false'}
         style={{
           maxWidth: finalWidth,
@@ -55,8 +57,9 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
         }}
       >
         <ThemeProvider initialTheme={initialTheme}>
+          <SiteTopFlickeringGrid />
           <AdminBar adminBarProps={{ preview: preview ?? false }} />
-          <div className="page-content layout-wrapper">
+          <div className="page-content layout-wrapper relative z-10">
             <Header settings={settings} />
             <main>{children}</main>
             <Footer settings={settings} />

@@ -297,6 +297,12 @@
   margin-bottom: 0;
 }
 
+/* Top flickering grid backdrop */
+.site-top-flickering-grid {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%);
+}
+
 /* About */
 .chiri-about {
   margin-bottom: 0;
