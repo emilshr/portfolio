@@ -28,6 +28,7 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
       className={initialTheme}
       suppressHydrationWarning
     >
+      {/* oxlint-disable-next-line next/no-head-element -- App Router root layouts use native head */}
       <head>
         <ThemeManager />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />

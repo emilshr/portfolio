@@ -28,6 +28,7 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
 
     return (
       <video
+        aria-label="Video"
         autoPlay
         className={cn(videoClassName)}
         controls={false}

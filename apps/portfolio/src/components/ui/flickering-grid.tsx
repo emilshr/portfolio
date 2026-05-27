@@ -183,6 +183,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     <div ref={containerRef} className={cn(`h-full w-full ${className}`)} {...props}>
       <canvas
         ref={canvasRef}
+        aria-hidden="true"
         className="pointer-events-none"
         style={{
           width: canvasSize.width,

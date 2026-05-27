@@ -5,7 +5,6 @@ import { defaultTheme, themeLocalStorageKey } from '../ThemeSelector/types'
 
 export const InitTheme: React.FC = () => {
   return (
-    // oxlint-disable-next-line nextjs/no-before-interactive-script-outside-document
     <Script
       dangerouslySetInnerHTML={{
         __html: `
@@ -44,6 +43,7 @@ export const InitTheme: React.FC = () => {
   `,
       }}
       id="theme-script"
+      // oxlint-disable-next-line next/no-before-interactive-script-outside-document
       strategy="beforeInteractive"
     />
   )

@@ -1,16 +1,6 @@
 // Lexical seed conversion — loose typing for migration content
 /* oxlint-disable typescript/no-explicit-any */
 
-type TextNode = {
-  type: 'text'
-  detail: number
-  format: number
-  mode: 'normal'
-  style: string
-  text: string
-  version: number
-}
-
 type LexicalNode = {
   type: string
   children?: LexicalNode[]

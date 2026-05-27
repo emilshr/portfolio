@@ -1,7 +1,7 @@
 'use client'
 
 import { ExternalLink } from 'lucide-react'
-import { useState, type KeyboardEvent } from 'react'
+import { useState } from 'react'
 
 import RichText from '@/components/RichText'
 import {
@@ -39,13 +39,6 @@ export function WorkExperience({ experiences, settings, heading = 'Work' }: Prop
     setOpen(true)
   }
 
-  const handleRowKeyDown = (e: KeyboardEvent<HTMLDivElement>, exp: Experience) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      openExperience(exp)
-    }
-  }
-
   return (
     <section className="work-experience">
       <h2 className={sectionHeading}>{heading}</h2>
@@ -55,12 +48,11 @@ export function WorkExperience({ experiences, settings, heading = 'Work' }: Prop
             const id = String(exp.id)
             return (
               <HoverFocusItem key={exp.id} id={id}>
-                <div
-                  role="button"
-                  tabIndex={0}
-                  className="w-full cursor-pointer"
+                <button
+                  type="button"
+                  className="w-full cursor-pointer text-left"
                   onClick={() => openExperience(exp)}
-                  onKeyDown={(e) => handleRowKeyDown(e, exp)}
+                  aria-label={`${exp.title} at ${exp.company}`}
                 >
                   <div className="flex min-h-11 items-center justify-between gap-3">
                     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -89,7 +81,7 @@ export function WorkExperience({ experiences, settings, heading = 'Work' }: Prop
                       {exp.from} – {exp.to}
                     </HoverFocusText>
                   </div>
-                </div>
+                </button>
               </HoverFocusItem>
             )
           })}

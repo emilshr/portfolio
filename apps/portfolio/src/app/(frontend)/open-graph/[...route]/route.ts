@@ -6,10 +6,10 @@ import { fileURLToPath } from 'url'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-export async function GET(_request: Request, { params }: { params: Promise<{ route: string[] }> }) {
-  const { route } = await params
-  const slug = route?.join('/') || ''
-
+export async function GET(
+  _request: Request,
+  _context: { params: Promise<{ route: string[] }> },
+) {
   const defaultOg = path.resolve(dirname, '../../../../../public/og/chiri-og.png')
 
   if (fs.existsSync(defaultOg)) {

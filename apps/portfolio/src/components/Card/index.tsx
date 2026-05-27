@@ -2,7 +2,7 @@
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
 import Link from 'next/link'
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import type { Post } from '@repo/payload-types'
 
@@ -19,7 +19,7 @@ export const Card: React.FC<{
   title?: string
 }> = (props) => {
   const { card, link } = useClickableCard({})
-  const { className, doc, relationTo, showCategories, title: titleFromProps } = props
+  const { className, doc, title: titleFromProps } = props
 
   const { slug, meta, title } = doc || {}
   const { description, image: metaImage } = meta || {}
