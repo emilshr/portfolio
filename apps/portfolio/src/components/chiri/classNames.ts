@@ -11,9 +11,10 @@ export const postItemRowDateLeft = 'justify-start'
 
 export const postItemTitle = 'm-0 min-w-0 flex-1 truncate'
 
-export const listDivider = 'mx-1 min-w-12 flex-1 self-center bg-(--border) h-px'
+export const listDivider =
+  'mx-1 min-w-12 flex-1 self-center bg-(--border) h-px max-md:mx-0.5 max-md:min-w-0 max-md:w-6 max-md:flex-none'
 
 export const listDottedDivider =
-  'mx-1 min-w-12 flex-1 self-center border-b border-dotted border-(--border)'
+  'mx-1 min-w-12 flex-1 self-center border-b border-dotted border-(--border) max-md:mx-0.5 max-md:min-w-0 max-md:w-6 max-md:flex-none'
 
 export const postListUl = 'm-0 list-none p-0'
