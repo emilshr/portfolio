@@ -157,6 +157,7 @@ export interface Page {
     | WorkExperienceBlock
     | ContactCTABlock
     | SectionHeadingBlock
+    | AlertBannerBlock
     | SpacerBlock
     | ContentBlock
     | MediaBlock
@@ -447,6 +448,30 @@ export interface SectionHeadingBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'sectionHeading';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AlertBannerBlock".
+ */
+export interface AlertBannerBlock {
+  text: string;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'alertBanner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -887,6 +912,7 @@ export interface PagesSelect<T extends boolean = true> {
         workExperience?: T | WorkExperienceBlockSelect<T>;
         contactCTA?: T | ContactCTABlockSelect<T>;
         sectionHeading?: T | SectionHeadingBlockSelect<T>;
+        alertBanner?: T | AlertBannerBlockSelect<T>;
         spacer?: T | SpacerBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -977,6 +1003,23 @@ export interface ContactCTABlockSelect<T extends boolean = true> {
  */
 export interface SectionHeadingBlockSelect<T extends boolean = true> {
   heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AlertBannerBlock_select".
+ */
+export interface AlertBannerBlockSelect<T extends boolean = true> {
+  text?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+      };
   id?: T;
   blockName?: T;
 }

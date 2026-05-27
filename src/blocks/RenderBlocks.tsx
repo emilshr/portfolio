@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 
 import type { Page } from '@/payload-types'
 
+import { AlertBannerBlockComponent } from '@/blocks/AlertBanner/Component'
 import { AboutBlockComponent } from '@/blocks/About/Component'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
@@ -15,6 +16,7 @@ import { SpacerBlockComponent } from '@/blocks/Spacer/Component'
 import { WorkExperienceBlockComponent } from '@/blocks/WorkExperience/Component'
 
 const blockComponents = {
+  alertBanner: AlertBannerBlockComponent,
   about: AboutBlockComponent,
   archive: ArchiveBlock,
   content: ContentBlock,

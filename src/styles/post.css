@@ -229,19 +229,19 @@
   padding-left: 0;
   margin-left: 1rem;
   margin-bottom: 1.75em;
-  line-height: 1.75;
+  line-height: 1.5;
 }
 
 .prose ul ul {
   margin-left: 0.625rem;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
 }
 
 .prose ul li {
   position: relative;
   padding-left: 0.125rem;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
 }
 
 .prose ul li:last-child {
@@ -249,8 +249,8 @@
 }
 
 .prose ul li > ul {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
 }
 
 .prose ul li::before {
@@ -258,7 +258,7 @@
   content: "";
   position: absolute;
   left: -0.785rem;
-  top: calc((1.75em - var(--size)) / 2);
+  top: calc((1.5em - var(--size)) / 2);
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
@@ -271,6 +271,7 @@
   padding-left: 0;
   margin-left: 1.25rem;
   margin-bottom: 1.75em;
+  line-height: 1.5;
   counter-reset: item;
 }
 
@@ -278,7 +279,7 @@
   display: block;
   position: relative;
   padding-left: 0.125rem;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
 }
 
 .prose ol li:last-child {
@@ -319,7 +320,7 @@
 
 .prose ul.contains-task-list li.task-list-item {
   padding-left: 0.125em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
 }
 
 .prose ul.contains-task-list li.task-list-item:last-child {
@@ -364,7 +365,7 @@
 .prose ul.contains-task-list li.task-list-item input[type="checkbox"] + * {
   display: inline;
   margin-left: 0;
-  line-height: 1.75;
+  line-height: 1.5;
   white-space: nowrap;
 }
 

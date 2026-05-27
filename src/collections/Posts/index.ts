@@ -10,6 +10,7 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { AlertBanner } from '../../blocks/AlertBanner/config'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { GitHubEmbed } from '../../blocks/GitHubEmbed/config'
@@ -90,6 +91,7 @@ export const Posts: CollectionConfig<'posts'> = {
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
                     BlocksFeature({
                       blocks: [
+                        AlertBanner,
                         Banner,
                         Code,
                         MediaBlock,

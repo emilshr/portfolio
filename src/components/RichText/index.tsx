@@ -12,8 +12,10 @@ import {
 } from '@payloadcms/richtext-lexical/react'
 
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import { AlertBannerBlockComponent } from '@/blocks/AlertBanner/Component'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import type {
+  AlertBannerBlock as AlertBannerBlockProps,
   BannerBlock as BannerBlockProps,
   GitHubEmbedBlock as GitHubEmbedBlockProps,
   LinkCardBlock as LinkCardBlockProps,
@@ -25,6 +27,7 @@ import type {
 type NodeTypes =
   | DefaultNodeTypes
   | SerializedBlockNode<
+      | AlertBannerBlockProps
       | BannerBlockProps
       | MediaBlockProps
       | CodeBlockProps
@@ -47,6 +50,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
+    alertBanner: ({ node }) => <AlertBannerBlockComponent {...node.fields} />,
     banner: ({ node }) => <BannerBlock {...node.fields} />,
     mediaBlock: ({ node }) => (
       <MediaBlock {...node.fields} enableGutter={false} disableInnerContainer />

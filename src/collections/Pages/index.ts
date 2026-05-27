@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { AlertBanner } from '../../blocks/AlertBanner/config'
 import { AboutBlock } from '../../blocks/About/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
@@ -78,6 +79,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 WorkExperienceBlock,
                 ContactCTABlock,
                 SectionHeadingBlock,
+                AlertBanner,
                 SpacerBlock,
                 Content,
                 MediaBlock,
