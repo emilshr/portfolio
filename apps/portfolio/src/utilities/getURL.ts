@@ -4,11 +4,7 @@ import { getPrimaryProductionURL } from './railwayURLs'
 export const getServerSideURL = () => {
   const primaryProductionURL = getPrimaryProductionURL()
 
-  return (
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    primaryProductionURL ||
-    'http://localhost:3000'
-  )
+  return process.env.NEXT_PUBLIC_SERVER_URL || primaryProductionURL || 'http://localhost:3000'
 }
 
 export const getClientSideURL = () => {

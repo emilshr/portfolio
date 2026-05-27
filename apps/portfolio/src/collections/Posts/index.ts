@@ -18,6 +18,7 @@ import { LinkCard } from '../../blocks/LinkCard/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { NeoDBEmbed } from '../../blocks/NeoDBEmbed/config'
 import { XPostEmbed } from '../../blocks/XPostEmbed/config'
+import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
@@ -41,14 +42,14 @@ export const Posts: CollectionConfig<'posts'> = {
   defaultPopulate: {
     title: true,
     slug: true,
-    pubDate: true,
+    publishedAt: true,
     meta: {
       image: true,
       description: true,
     },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'pubDate', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'publishedAt', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -134,15 +135,6 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     {
-      name: 'pubDate',
-      type: 'date',
-      required: true,
-      admin: {
-        date: { pickerAppearance: 'dayOnly' },
-        position: 'sidebar',
-      },
-    },
-    {
       name: 'lastUpdatedAt',
       type: 'date',
       admin: {
@@ -154,24 +146,15 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'publishedAt',
       type: 'date',
       admin: {
-        date: { pickerAppearance: 'dayAndTime' },
+        date: { pickerAppearance: 'dayOnly' },
         position: 'sidebar',
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
-              return new Date()
-            }
-            return value
-          },
-        ],
       },
     },
     slugField(),
   ],
   hooks: {
     afterChange: [revalidatePost],
+    beforeChange: [populatePublishedAt],
     afterDelete: [revalidateDelete],
   },
   versions: {

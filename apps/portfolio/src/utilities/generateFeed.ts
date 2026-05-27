@@ -14,7 +14,7 @@ export async function generateFeedInstance() {
 
   const { docs: posts } = await payload.find({
     collection: 'posts',
-    sort: '-pubDate',
+    sort: '-publishedAt',
     limit: 1000,
     depth: 0,
     where: { _status: { equals: 'published' } },
@@ -68,8 +68,8 @@ export async function generateFeedInstance() {
       link: postUrl,
       description,
       content: cleanHtml,
-      date: post.pubDate ? new Date(post.pubDate) : new Date(),
-      published: post.pubDate ? new Date(post.pubDate) : new Date(),
+      date: post.publishedAt ? new Date(post.publishedAt) : new Date(),
+      published: post.publishedAt ? new Date(post.publishedAt) : new Date(),
     })
   }
 

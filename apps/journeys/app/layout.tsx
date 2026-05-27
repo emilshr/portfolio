@@ -15,11 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         {hasUmami && (
-          <Script
-            src={umamiSrc}
-            data-website-id={umamiWebsiteId}
-            strategy="afterInteractive"
-          />
+          <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
         )}
       </head>
       <body>{children}</body>

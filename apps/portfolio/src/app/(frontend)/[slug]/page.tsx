@@ -71,7 +71,6 @@ const queryPostBySlug = cache(async ({ slug, draft }: { slug: string; draft: boo
       createdAt: true,
       title: true,
       slug: true,
-      pubDate: true,
       lastUpdatedAt: true,
       content: true,
       meta: true,

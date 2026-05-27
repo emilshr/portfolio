@@ -33,18 +33,18 @@ export function PostListRow({ post, settings, dateOnRight, dottedDivider, hideYe
     <HoverFocusItem id={id}>
       <Link href={`/${post.slug}`} className={postListLink}>
         <div className={cn(postItemRow, !dateOnRight && postItemRowDateLeft)}>
-          {!dateOnRight && post.pubDate && (
+          {!dateOnRight && post.publishedAt && (
             <HoverFocusText itemId={id} variant="secondary" className="date">
-              <FormattedDate date={post.pubDate} settings={settings} hideYear={hideYear} />
+              <FormattedDate date={post.publishedAt} settings={settings} hideYear={hideYear} />
             </HoverFocusText>
           )}
           <HoverFocusText itemId={id} variant="primary" className={postItemTitle}>
             {post.title}
           </HoverFocusText>
           {dateOnRight && <div className={dividerClass} aria-hidden />}
-          {dateOnRight && post.pubDate && (
+          {dateOnRight && post.publishedAt && (
             <HoverFocusText itemId={id} variant="secondary" className="date">
-              <FormattedDate date={post.pubDate} settings={settings} hideYear={hideYear} />
+              <FormattedDate date={post.publishedAt} settings={settings} hideYear={hideYear} />
             </HoverFocusText>
           )}
         </div>

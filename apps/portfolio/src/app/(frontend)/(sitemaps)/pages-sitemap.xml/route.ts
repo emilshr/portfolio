@@ -8,9 +8,7 @@ const getPagesSitemap = unstable_cache(
   async () => {
     const payload = await getPayload({ config })
     const SITE_URL =
-      process.env.NEXT_PUBLIC_SERVER_URL ||
-      getPrimaryProductionURL() ||
-      'https://example.com'
+      process.env.NEXT_PUBLIC_SERVER_URL || getPrimaryProductionURL() || 'https://example.com'
 
     const results = await payload.find({
       collection: 'pages',

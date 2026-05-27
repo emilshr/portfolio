@@ -36,11 +36,7 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
       <head>
         <ThemeManager />
         {hasUmami && (
-          <Script
-            src={umamiSrc}
-            data-website-id={umamiWebsiteId}
-            strategy="afterInteractive"
-          />
+          <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
         )}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

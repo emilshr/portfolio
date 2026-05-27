@@ -1,6 +1,6 @@
 ---
 title: NestJs is interesting
-pubDate: '2024-11-01'
+publishedAt: '2024-11-01'
 ---
 
 ## A little background

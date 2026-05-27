@@ -27,7 +27,7 @@ export const ArchiveBlock: React.FC<
       collection: 'posts',
       depth: 0,
       limit,
-      sort: '-pubDate',
+      sort: '-publishedAt',
       where: { _status: { equals: 'published' } },
     })
 

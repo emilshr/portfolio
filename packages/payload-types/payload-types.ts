@@ -430,7 +430,6 @@ export interface Post {
     image?: (string | null) | Media;
     description?: string | null;
   };
-  pubDate: string;
   lastUpdatedAt?: string | null;
   publishedAt?: string | null;
   /**
@@ -1124,7 +1123,6 @@ export interface PostsSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
-  pubDate?: T;
   lastUpdatedAt?: T;
   publishedAt?: T;
   generateSlug?: T;

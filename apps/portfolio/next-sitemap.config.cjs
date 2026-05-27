@@ -22,7 +22,8 @@ const getPrimaryProductionURL = () => {
   return firstValidURL || null
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || getPrimaryProductionURL() || 'https://example.com'
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SERVER_URL || getPrimaryProductionURL() || 'https://example.com'
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {

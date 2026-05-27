@@ -14,7 +14,7 @@ export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = 
 
   const { docs } = await payload.find({
     collection: 'posts',
-    sort: '-pubDate',
+    sort: '-publishedAt',
     limit: 1000,
     depth: 0,
     where: { _status: { equals: 'published' } },
@@ -22,7 +22,9 @@ export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = 
 
   const groups = docs.reduce(
     (acc, post) => {
-      const year = post.pubDate ? new Date(post.pubDate).getFullYear().toString() : 'Unknown'
+      const year = post.publishedAt
+        ? new Date(post.publishedAt).getFullYear().toString()
+        : 'Unknown'
       const existing = acc.find((g) => g.year === year)
       if (existing) existing.posts.push(post)
       else acc.push({ year, posts: [post] })

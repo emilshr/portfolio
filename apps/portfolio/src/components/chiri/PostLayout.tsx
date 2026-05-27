@@ -20,7 +20,7 @@ export function PostLayout({ post, settings, readingTime }: Props) {
           <div className="title">
             <h1 className="mb-1 mt-0">{post.title}</h1>
             <div className="date text-(length:--font-size-s) text-(--text-secondary)">
-              {post.pubDate && <FormattedDate date={post.pubDate} settings={settings} />}
+              {post.publishedAt && <FormattedDate date={post.publishedAt} settings={settings} />}
               {settings.post.readingTime && readingTime && (
                 <span className="reading-time">
                   <span className="separator">·</span>

@@ -1,6 +1,6 @@
 ---
 title: GoLang for Typescript devs
-pubDate: '2024-02-18'
+publishedAt: '2024-02-18'
 ---
 
 This is a small series that I would be regularly updating as I have started learning [Golang](https://go.dev/). This isn't an actual tutorial or anything but rather a small collection of mistakes I made and things I overlooked.

@@ -166,14 +166,18 @@ async function seed() {
       limit: 1,
     })
 
+    const publishedAtSource = data.publishedAt ?? data.pubDate
+    if (!publishedAtSource) {
+      throw new Error(`Post "${slug}" is missing publishedAt in frontmatter`)
+    }
+
     const postData = {
       title: data.title,
       slug,
-      pubDate: data.pubDate,
       lastUpdatedAt: data.lastUpdatedAt || undefined,
       content: toRichText(content.trim()),
       _status: 'published' as const,
-      publishedAt: new Date(data.pubDate).toISOString(),
+      publishedAt: new Date(publishedAtSource).toISOString(),
     }
 
     if (existing.docs[0]) {

@@ -15,7 +15,7 @@ export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
 
   const { docs, totalDocs } = await payload.find({
     collection: 'posts',
-    sort: '-pubDate',
+    sort: '-publishedAt',
     limit: limit ?? 5,
     depth: 0,
     where: { _status: { equals: 'published' } },

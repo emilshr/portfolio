@@ -1,6 +1,6 @@
 ---
 title: How serverless almost screwed me over
-pubDate: '2024-02-15'
+publishedAt: '2024-02-15'
 ---
 
 ## I do not like serverless

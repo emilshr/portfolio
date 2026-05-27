@@ -1,6 +1,6 @@
 ---
 title: Attempting to master Golang
-pubDate: '2026-05-25'
+publishedAt: '2026-05-25'
 ---
 
 ## What's this about?
