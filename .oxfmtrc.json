@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "semi": false,
+  "ignorePatterns": [
+    "**/importMap.js",
+    "**/payload-types.ts",
+    "**/payload-generated-schema.ts",
+    "**/.next/**",
+    "**/node_modules/**"
+  ]
+}

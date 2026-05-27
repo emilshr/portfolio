@@ -1,13 +1,23 @@
-# Build output
-dist/
-.output/
-
-# Generated types
-.astro/
-.vercel/
-
 # Dependencies
 node_modules/
+
+# Build output
+build/
+.next/
+apps/*/.next/
+.turbo/
+dist/
+.output/
+.vercel/
+.netlify/
+
+# Generated types
+next-env.d.ts
+
+# Environment variables
+.env
+.env.production
+test.env
 
 # Logs
 npm-debug.log*
@@ -15,17 +25,26 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Environment variables
-.env
-.env.production
-
 # macOS-specific files
 .DS_Store
 
 # IDE settings
 .idea/
 
-# Netlify build output
-.netlify/
+# Payload media (local dev)
+public/media/
+
+# Sitemaps (generated on build)
+public/robots.txt
+public/sitemap*.xml
+apps/portfolio/public/robots.txt
+apps/portfolio/public/sitemap*.xml
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 *.tsbuildinfo
+.pnpm-store/

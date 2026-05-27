@@ -1,0 +1,9 @@
+{
+  "extends": ["../../packages/oxc-config/oxlint.base.json"],
+  "settings": {
+    "next": {
+      "rootDir": "apps/portfolio"
+    }
+  },
+  "ignorePatterns": [".next/"]
+}

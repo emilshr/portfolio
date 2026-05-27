@@ -1,0 +1,26 @@
+{
+  "ignorePatterns": [
+    "**/importMap.js",
+    "**/payload-types.ts",
+    "**/payload-generated-schema.ts"
+  ],
+  "plugins": ["react", "typescript", "unicorn", "import", "oxc", "jsx-a11y", "nextjs"],
+  "rules": {
+    "react/jsx-key": "error",
+    "react/jsx-no-comment-textnodes": "error",
+    "typescript/no-explicit-any": "warn",
+    "typescript/no-empty-object-type": "warn",
+    "typescript/ban-ts-comment": "warn",
+    "typescript/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": false,
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^(_|ignore)"
+      }
+    ]
+  }
+}
