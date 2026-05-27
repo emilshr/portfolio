@@ -22,8 +22,8 @@ export function Header({ settings }: Props) {
   return (
     <header>
       <nav>
-        <div className="site-title">
-          <Link href="/" className="title-layer title-home">
+        <div className="site-title font-bold">
+          <Link href="/" className="title-layer title-home font-bold">
             {settings.site.title}
           </Link>
           <span className="title-layer title-posts">Posts</span>
