@@ -12,12 +12,15 @@ import { Users } from './collections/Users'
 import { SiteSettings } from './globals/SiteSettings/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
-import { getServerSideURL } from './utilities/getURL'
+import { getAllowedOrigins } from './utilities/railwayURLs'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const allowedOrigins = getAllowedOrigins()
 
 export default buildConfig({
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
   admin: {
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
@@ -40,7 +43,6 @@ export default buildConfig({
     url: process.env.DATABASE_URL || '',
   }),
   collections: [Pages, Posts, Experiences, Media, Users],
-  cors: [getServerSideURL()].filter(Boolean),
   globals: [SiteSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
