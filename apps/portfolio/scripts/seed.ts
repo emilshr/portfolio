@@ -4,7 +4,14 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import matter from 'gray-matter'
 
+import type { Page, Post } from '@repo/payload-types'
 import { getPayload } from 'payload'
+
+type SeedRichText = Post['content']
+
+function toRichText(markdown: string): SeedRichText {
+  return markdownToLexical(markdown) as SeedRichText
+}
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -121,7 +128,7 @@ async function seed() {
       to: data.to,
       order: data.order,
       slug,
-      description: markdownToLexical(content.trim()) as never,
+      description: toRichText(content.trim()),
       _status: 'published' as const,
     }
 
@@ -164,7 +171,7 @@ async function seed() {
       slug,
       pubDate: data.pubDate,
       lastUpdatedAt: data.lastUpdatedAt || undefined,
-      content: markdownToLexical(content.trim()) as never,
+      content: toRichText(content.trim()),
       _status: 'published' as const,
       publishedAt: new Date(data.pubDate).toISOString(),
     }
@@ -190,27 +197,27 @@ async function seed() {
   const aboutPath = path.join(astroContentRoot, 'about/about.md')
   const aboutRaw = fs.readFileSync(aboutPath, 'utf-8')
   const { content: aboutContent } = matter(aboutRaw)
-  const aboutLexical = markdownToLexical(
-    aboutContent.replace(/<!--[\s\S]*?-->/g, '').trim(),
-  )
+  const aboutLexical = toRichText(aboutContent.replace(/<!--[\s\S]*?-->/g, '').trim())
 
-  const homeLayout = [
+  const homeLayout: NonNullable<Page['layout']> = [
     {
-      blockType: 'about' as const,
+      blockType: 'about',
+      heading: 'Emil',
+      subheading: 'I specialize in building things for the web.',
       content: aboutLexical,
     },
     {
-      blockType: 'postList' as const,
+      blockType: 'postList',
       heading: 'Posts',
       limit: 5,
       showViewAll: true,
     },
     {
-      blockType: 'workExperience' as const,
+      blockType: 'workExperience',
       heading: 'Work',
     },
     {
-      blockType: 'contactCTA' as const,
+      blockType: 'contactCTA',
       heading: 'Connect',
       useGlobalLinks: true,
     },
