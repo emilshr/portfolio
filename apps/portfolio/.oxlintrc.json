@@ -5,5 +5,5 @@
       "rootDir": "apps/portfolio"
     }
   },
-  "ignorePatterns": [".next/", "src/payload-generated-schema.ts"]
+  "ignorePatterns": [".next/"]
 }

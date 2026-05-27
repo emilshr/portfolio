@@ -2,5 +2,12 @@
   "singleQuote": true,
   "trailingComma": "all",
   "printWidth": 100,
-  "semi": false
+  "semi": false,
+  "ignorePatterns": [
+    "**/importMap.js",
+    "**/payload-types.ts",
+    "**/payload-generated-schema.ts",
+    "**/.next/**",
+    "**/node_modules/**"
+  ]
 }
