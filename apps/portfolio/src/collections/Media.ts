@@ -71,6 +71,14 @@ export const Media: CollectionConfig = {
         width: 1920,
       },
       {
+        name: 'card',
+        width: 800,
+      },
+      {
+        name: 'hero',
+        width: 1920,
+      },
+      {
         name: 'og',
         width: 1200,
         height: 630,

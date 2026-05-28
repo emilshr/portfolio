@@ -20,6 +20,7 @@
       }
     ],
     "paths": {
+      "@/*": ["./src/*"],
       "@repo/payload-types": ["../../packages/payload-types/index.ts"]
     }
   },

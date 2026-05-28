@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    travels: Travel;
     experiences: Experience;
     media: Media;
     users: User;
@@ -88,6 +89,7 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    travels: TravelsSelect<false> | TravelsSelect<true>;
     experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -105,9 +107,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
+    'journeys-settings': JourneysSetting;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'journeys-settings': JourneysSettingsSelect<false> | JourneysSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -285,6 +289,22 @@ export interface Media {
       filename?: string | null;
     };
     xlarge?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -627,6 +647,82 @@ export interface ArchiveBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "travels".
+ */
+export interface Travel {
+  id: string;
+  title: string;
+  /**
+   * Displayed under the title on the travel detail hero.
+   */
+  subtitle?: string | null;
+  /**
+   * Short teaser for cards and listings (max 160 characters).
+   */
+  excerpt?: string | null;
+  /**
+   * Full-width hero image on the travel detail page.
+   */
+  heroImage?: (string | null) | Media;
+  /**
+   * Thumbnail for grids and cards (can differ from hero).
+   */
+  coverImage?: (string | null) | Media;
+  location?: {
+    city?: string | null;
+    country?: string | null;
+  };
+  tripDates?: {
+    start?: string | null;
+    end?: string | null;
+  };
+  gallery?:
+    | {
+        image: string | Media;
+        /**
+         * Optional override; defaults to media alt text.
+         */
+        alt?: string | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  lastUpdatedAt?: string | null;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "experiences".
  */
 export interface Experience {
@@ -707,6 +803,10 @@ export interface Redirect {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'travels';
+          value: string | Travel;
         } | null);
     url?: string | null;
   };
@@ -836,6 +936,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: string | Post;
+      } | null)
+    | ({
+        relationTo: 'travels';
+        value: string | Travel;
       } | null)
     | ({
         relationTo: 'experiences';
@@ -1133,6 +1237,52 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "travels_select".
+ */
+export interface TravelsSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  excerpt?: T;
+  heroImage?: T;
+  coverImage?: T;
+  location?:
+    | T
+    | {
+        city?: T;
+        country?: T;
+      };
+  tripDates?:
+    | T
+    | {
+        start?: T;
+        end?: T;
+      };
+  gallery?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        caption?: T;
+        id?: T;
+      };
+  content?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  lastUpdatedAt?: T;
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "experiences_select".
  */
 export interface ExperiencesSelect<T extends boolean = true> {
@@ -1222,6 +1372,26 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
         xlarge?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
           | T
           | {
               url?: T;
@@ -1408,6 +1578,33 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "journeys-settings".
+ */
+export interface JourneysSetting {
+  id: string;
+  /**
+   * Homepage hero background image.
+   */
+  heroImage?: (string | null) | Media;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  /**
+   * Optional fallback hero image when no homepage hero image is set.
+   */
+  featuredTravel?: (string | null) | Travel;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -1459,6 +1656,26 @@ export interface SiteSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "journeys-settings_select".
+ */
+export interface JourneysSettingsSelect<T extends boolean = true> {
+  heroImage?: T;
+  heroTitle?: T;
+  heroSubtitle?: T;
+  featuredTravel?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -1483,6 +1700,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'travels';
+          value: string | Travel;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

@@ -1,6 +1,6 @@
 # Emil — Portfolio Monorepo
 
-Turborepo monorepo for [emilshr.com](https://emilshr.com) (portfolio + Payload CMS) and [journeys.emilshr.com](https://journeys.emilshr.com) (travel blog). Dependency versions are centralized in the [pnpm catalog](https://pnpm.io/catalogs) (`pnpm-workspace.yaml`).
+Turborepo monorepo for [emilshr.com](https://emilshr.com) (portfolio + Payload CMS) and [burntclutchproject.com](https://burntclutchproject.com) (Journeys travel blog). Dependency versions are centralized in the [pnpm catalog](https://pnpm.io/catalogs) (`pnpm-workspace.yaml`).
 
 ## Repository layout
 
@@ -13,7 +13,7 @@ Turborepo monorepo for [emilshr.com](https://emilshr.com) (portfolio + Payload C
 │   │   ├── seed-data/      # Markdown seed content
 │   │   ├── tests/          # Vitest + Playwright
 │   │   └── .env.example    # Portfolio env vars
-│   └── journeys/           # Next.js 16 travel blog (journeys.emilshr.com)
+│   └── journeys/           # Next.js 16 travel blog (burntclutchproject.com)
 │       ├── app/            # Minimal App Router surface
 │       └── .env.example    # Payload API URL for SDK
 ├── packages/
@@ -107,7 +107,7 @@ Populates posts, experiences, about, and homepage from `apps/portfolio/seed-data
 | App | Domain | Notes |
 |-----|--------|--------|
 | `portfolio` | emilshr.com | Netlify config in `apps/portfolio/netlify.toml` (monorepo build from root) |
-| `journeys` | journeys.emilshr.com | Point host to `apps/journeys`; set `PAYLOAD_API_URL` to production API |
+| `journeys` | burntclutchproject.com | Point host to `apps/journeys`; set `PAYLOAD_API_URL` to production API |
 
 ## Debugging tips (agents)
 

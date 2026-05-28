@@ -9,7 +9,9 @@ import { Experiences } from './collections/Experiences'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Travels } from './collections/Travels'
 import { Users } from './collections/Users'
+import { JourneysSettings } from './globals/JourneysSettings/config'
 import { SiteSettings } from './globals/SiteSettings/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -23,6 +25,10 @@ export default buildConfig({
   cors: allowedOrigins,
   csrf: allowedOrigins,
   admin: {
+    autoLogin: {
+      email: process.env.SEED_ADMIN_EMAIL || 'admin@example.com',
+      password: process.env.SEED_ADMIN_PASSWORD || 'changeme',
+    },
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
@@ -48,8 +54,8 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  collections: [Pages, Posts, Experiences, Media, Users],
-  globals: [SiteSettings],
+  collections: [Pages, Posts, Travels, Experiences, Media, Users],
+  globals: [SiteSettings, JourneysSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

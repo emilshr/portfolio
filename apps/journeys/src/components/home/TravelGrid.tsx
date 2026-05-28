@@ -1,0 +1,29 @@
+import type { Travel } from '@repo/payload-types'
+
+import { TravelCard } from '@/components/travels/TravelCard'
+
+type TravelGridProps = {
+  travels: Travel[]
+  title?: string
+}
+
+export function TravelGrid({ travels, title = 'Latest journeys' }: TravelGridProps) {
+  if (travels.length === 0) {
+    return (
+      <section className="container-content py-[var(--space-16)]">
+        <p className="text-muted-foreground">No travel stories published yet.</p>
+      </section>
+    )
+  }
+
+  return (
+    <section className="container-content py-[var(--space-16)]">
+      <h2 className="text-display mb-[var(--space-10)] text-2xl font-semibold md:text-3xl">{title}</h2>
+      <div className="grid grid-cols-1 gap-[var(--space-10)] sm:grid-cols-2 lg:grid-cols-3">
+        {travels.map((travel) => (
+          <TravelCard key={travel.id} travel={travel} />
+        ))}
+      </div>
+    </section>
+  )
+}
