@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@payloadcms/richtext-lexical": "catalog:",
-    "@payloadcms/richtext-lexical": "catalog:",
     "@payloadcms/sdk": "catalog:",
     "@radix-ui/react-dialog": "catalog:",
     "@radix-ui/react-slot": "catalog:",
