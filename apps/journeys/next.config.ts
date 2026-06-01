@@ -17,12 +17,20 @@ function parseHostname(urlString: string | undefined): string | null {
 const payloadApiUrl = process.env.PAYLOAD_API_URL || 'http://localhost:3000/api'
 const payloadOrigin = payloadApiUrl.replace(/\/api\/?$/, '').replace(/\/$/, '')
 const r2Hostname = parseHostname(process.env.NEXT_PUBLIC_MEDIA_HOST || process.env.R2_PUBLIC_URL)
+const mediaBaseHostname = parseHostname(process.env.NEXT_PUBLIC_MEDIA_BASE_URL)
 
 const remotePatterns: NonNullable<NextConfig['images']>['remotePatterns'] = []
 
 if (r2Hostname) {
   remotePatterns.push({
     hostname: r2Hostname,
+    protocol: 'https',
+  })
+}
+
+if (mediaBaseHostname) {
+  remotePatterns.push({
+    hostname: mediaBaseHostname,
     protocol: 'https',
   })
 }

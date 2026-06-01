@@ -24,9 +24,10 @@ export function resolveMediaUrl(url: string | null | undefined): string | null {
   if (/^https?:\/\//i.test(url)) return url
 
   const path = url.startsWith('/') ? url : `/${url}`
+  const mediaBaseURL = process.env.NEXT_PUBLIC_MEDIA_BASE_URL?.replace(/\/$/, '')
 
   if (path.startsWith('/api/media/')) {
-    return path
+    return mediaBaseURL ? `${mediaBaseURL}${path}` : path
   }
 
   return `${getPayloadServerURL()}${path}`
@@ -51,33 +52,33 @@ export function getMediaUrl(
   if (!media) return null
   if (typeof media === 'string') return null
 
-  const raw =
-    (size && media.sizes?.[size]?.url ? media.sizes[size].url : null) ?? media.url ?? null
+  const raw = (size && media.sizes?.[size]?.url ? media.sizes[size].url : null) ?? media.url ?? null
 
   return resolveMediaUrl(raw)
 }
 
-export function getMediaAlt(
-  media: string | Media | null | undefined,
-  fallback = '',
-): string {
+export function getMediaAlt(media: string | Media | null | undefined, fallback = ''): string {
   if (!media || typeof media === 'string') return fallback
   return media.alt || fallback
 }
 
-export function formatLocation(location?: {
-  city?: string | null
-  country?: string | null
-} | null): string | null {
+export function formatLocation(
+  location?: {
+    city?: string | null
+    country?: string | null
+  } | null,
+): string | null {
   if (!location) return null
   const parts = [location.city, location.country].filter(Boolean)
   return parts.length > 0 ? parts.join(', ') : null
 }
 
-export function formatTripDates(dates?: {
-  start?: string | null
-  end?: string | null
-} | null): string | null {
+export function formatTripDates(
+  dates?: {
+    start?: string | null
+    end?: string | null
+  } | null,
+): string | null {
   if (!dates?.start && !dates?.end) return null
 
   const formatter = new Intl.DateTimeFormat('en', {

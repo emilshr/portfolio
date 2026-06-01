@@ -1,6 +1,9 @@
 import type { JourneysSetting, Media, Travel } from '@repo/payload-types'
 
-type HeroSettings = Pick<JourneysSetting, 'heroImage' | 'heroTitle' | 'heroSubtitle' | 'featuredTravel'>
+type HeroSettings = Pick<
+  JourneysSetting,
+  'heroImage' | 'heroTitle' | 'heroSubtitle' | 'featuredTravel'
+>
 
 import { PayloadImage } from '@/components/media/PayloadImage'
 import { getMediaUrl, isMedia } from '@/lib/media'
@@ -49,13 +52,13 @@ export function HeroSection({ settings }: HeroSectionProps) {
       ) : (
         <div className="absolute inset-0 bg-muted" aria-hidden />
       )}
-      <div className="relative z-10 flex min-h-[min(92vh,900px)] flex-col justify-end pb-[var(--space-16)] pt-32">
+      <div className="relative z-10 flex min-h-[min(92vh,900px)] flex-col justify-end pb-(--space-16) pt-32">
         <div className="container-content">
           <h1 className="text-display max-w-4xl text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl">
             {settings.heroTitle || 'Journeys'}
           </h1>
           {settings.heroSubtitle ? (
-            <p className="mt-[var(--space-4)] max-w-2xl text-lg text-white/60 sm:text-xl">
+            <p className="mt-(--space-4) max-w-2xl text-lg text-white/60 sm:text-xl">
               {settings.heroSubtitle}
             </p>
           ) : null}

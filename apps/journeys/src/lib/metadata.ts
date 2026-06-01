@@ -59,7 +59,9 @@ export function journeysHomeMetadata(settings: JourneysHomeSEOSettings): Metadat
 
   const image =
     (isMedia(metaImage) ? getAbsoluteMediaUrl(getMediaUrl(metaImage, 'og')) : null) ||
-    (isMedia(settings.heroImage) ? getAbsoluteMediaUrl(getMediaUrl(settings.heroImage, 'og')) : null)
+    (isMedia(settings.heroImage)
+      ? getAbsoluteMediaUrl(getMediaUrl(settings.heroImage, 'og'))
+      : null)
 
   return buildPageMetadata({
     title,
