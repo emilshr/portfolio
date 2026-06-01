@@ -1,5 +1,5 @@
 import canUseDOM from './canUseDOM'
-import { getPrimaryProductionURL } from './railwayURLs'
+import { getPrimaryProductionURL } from './siteURLs'
 
 export const getServerSideURL = () => {
   const primaryProductionURL = getPrimaryProductionURL()

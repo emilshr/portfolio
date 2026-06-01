@@ -102,12 +102,24 @@ Populates posts, experiences, about, and homepage from `apps/portfolio/seed-data
 - **Portfolio:** `apps/portfolio/.env.example` — `DATABASE_URL`, `PAYLOAD_SECRET`, R2, seed admin, etc.
 - **Journeys:** `apps/journeys/.env.example` — `PAYLOAD_API_URL` (portfolio REST API base)
 
-## Deploy
+## Deploy (Vercel Hobby + MongoDB Atlas M0)
 
-| App | Domain | Notes |
-|-----|--------|--------|
-| `portfolio` | emilshr.com | Netlify config in `apps/portfolio/netlify.toml` (monorepo build from root) |
-| `journeys` | burntclutchproject.com | Point host to `apps/journeys`; set `PAYLOAD_API_URL` to production API |
+Two separate [Vercel](https://vercel.com) projects from this monorepo. Each app has a [`vercel.json`](apps/portfolio/vercel.json) with install/build commands from the repo root.
+
+| App | Vercel root | Domain | Config |
+|-----|-------------|--------|--------|
+| `portfolio` | `apps/portfolio` | emilshr.com | [`apps/portfolio/.env.example`](apps/portfolio/.env.example) |
+| `journeys` | `apps/journeys` | burntclutchproject.com | [`apps/journeys/.env.example`](apps/journeys/.env.example) |
+
+**Vercel project settings (both):** Node.js 22.x; enable **Include source files outside of the Root Directory** (for `packages/payload-types`).
+
+**Portfolio env (production):** `DATABASE_URL` (Atlas SRV), `PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`, R2 vars (required — no local disk on Vercel), Resend, `JOURNEYS_SITE_URL`, `JOURNEYS_REVALIDATE_URL`, `REVALIDATE_SECRET`.
+
+**Journeys env (production):** `PAYLOAD_API_URL=https://emilshr.com/api`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_MEDIA_BASE_URL=https://emilshr.com`, `REVALIDATE_SECRET`.
+
+**MongoDB:** Migrate off Railway with `mongodump` / `mongorestore` to a free Atlas M0 cluster, then set `DATABASE_URL` on the portfolio project.
+
+**Seed:** Run `pnpm seed` locally against Atlas; the deployed `/next/seed` route exceeds the Hobby 10s function limit.
 
 ## Debugging tips (agents)
 

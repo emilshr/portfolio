@@ -15,7 +15,7 @@ import { JourneysSettings } from './globals/JourneysSettings/config'
 import { SiteSettings } from './globals/SiteSettings/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
-import { getAllowedOrigins } from './utilities/railwayURLs'
+import { getAllowedOrigins } from './utilities/siteURLs'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

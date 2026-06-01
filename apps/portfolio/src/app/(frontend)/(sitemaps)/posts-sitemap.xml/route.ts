@@ -2,7 +2,7 @@ import { getServerSideSitemap } from 'next-sitemap'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
-import { getPrimaryProductionURL } from '@/utilities/railwayURLs'
+import { getPrimaryProductionURL } from '@/utilities/siteURLs'
 
 const getPostsSitemap = unstable_cache(
   async () => {

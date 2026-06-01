@@ -30,21 +30,39 @@ const normalizeOrigin = (value: string): string | null => {
   }
 }
 
-export const getRailwayProductionURLs = (): string[] => {
-  const rawValue = process.env.RAILWAY_PROJECT_PRODUCTION_URLS
+const vercelHostToURL = (host: string | undefined): string | null => {
+  if (!host) return null
+  return normalizeURL(host)
+}
 
-  if (!rawValue) {
-    return []
+export const getProductionURLs = (): string[] => {
+  const urls: string[] = []
+
+  const explicit = process.env.NEXT_PUBLIC_SERVER_URL
+  if (explicit) {
+    const normalized = normalizeURL(explicit)
+    if (normalized) urls.push(normalized)
   }
 
-  return rawValue
-    .split(',')
-    .map((value) => normalizeURL(value))
-    .filter((value): value is string => Boolean(value))
+  const productionList = process.env.PRODUCTION_URLS
+  if (productionList) {
+    for (const value of productionList.split(',')) {
+      const normalized = normalizeURL(value)
+      if (normalized) urls.push(normalized)
+    }
+  }
+
+  const vercelProduction = vercelHostToURL(process.env.VERCEL_PROJECT_PRODUCTION_URL)
+  if (vercelProduction) urls.push(vercelProduction)
+
+  const vercelPreview = vercelHostToURL(process.env.VERCEL_URL)
+  if (vercelPreview) urls.push(vercelPreview)
+
+  return [...new Set(urls)]
 }
 
 export const getPrimaryProductionURL = (): string | null => {
-  const urls = getRailwayProductionURLs()
+  const urls = getProductionURLs()
   return urls[0] ?? null
 }
 
@@ -53,7 +71,7 @@ export const getAllowedOrigins = (): string[] => {
   const rawOrigins = [
     process.env.NEXT_PUBLIC_SERVER_URL,
     journeysURL,
-    ...getRailwayProductionURLs(),
+    ...getProductionURLs(),
   ]
   const originSet = new Set<string>()
 

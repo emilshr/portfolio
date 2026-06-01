@@ -2,14 +2,14 @@ import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { getPrimaryProductionURL, getRailwayProductionURLs } from './src/utilities/railwayURLs'
+import { getPrimaryProductionURL, getProductionURLs } from './src/utilities/siteURLs'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 import { redirects } from './redirects'
 
 const primaryProductionURL = getPrimaryProductionURL()
-const railwayProductionURLs = getRailwayProductionURLs()
+const productionURLs = getProductionURLs()
 const NEXT_PUBLIC_SERVER_URL =
   process.env.NEXT_PUBLIC_SERVER_URL ||
   primaryProductionURL ||
@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
     ],
     qualities: [100],
     remotePatterns: [
-      ...[NEXT_PUBLIC_SERVER_URL, ...railwayProductionURLs].map((item) => {
+      ...[NEXT_PUBLIC_SERVER_URL, ...productionURLs].map((item) => {
         const url = new URL(item)
 
         return {
