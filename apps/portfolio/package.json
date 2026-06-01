@@ -47,6 +47,7 @@
     "@radix-ui/react-select": "catalog:",
     "@radix-ui/react-slot": "catalog:",
     "@repo/payload-types": "workspace:*",
+    "@vercel/analytics": "catalog:",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "cross-env": "catalog:",
