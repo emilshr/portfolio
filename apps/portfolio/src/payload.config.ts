@@ -52,7 +52,7 @@ export default buildConfig({
     apiKey: process.env.RESEND_API_KEY || '',
   }),
   db: mongooseAdapter({
-    url: process.env.DATABASE_URL || '',
+    url: process.env.MONGODB_URI || '',
   }),
   collections: [Pages, Posts, Travels, Experiences, Media, Users],
   globals: [SiteSettings, JourneysSettings],

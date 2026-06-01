@@ -99,7 +99,7 @@ Populates posts, experiences, about, and homepage from `apps/portfolio/seed-data
 
 ## Environment variables
 
-- **Portfolio:** `apps/portfolio/.env.example` — `DATABASE_URL`, `PAYLOAD_SECRET`, R2, seed admin, etc.
+- **Portfolio:** `apps/portfolio/.env.example` — `MONGODB_URI`, `PAYLOAD_SECRET`, R2, seed admin, etc.
 - **Journeys:** `apps/journeys/.env.example` — `PAYLOAD_API_URL` (portfolio REST API base)
 
 ## Deploy (Vercel Hobby + MongoDB Atlas M0)
@@ -113,11 +113,11 @@ Two separate [Vercel](https://vercel.com) projects from this monorepo. Each app 
 
 **Vercel project settings (both):** Node.js 22.x; enable **Include source files outside of the Root Directory** (for `packages/payload-types`).
 
-**Portfolio env (production):** `DATABASE_URL` (Atlas SRV), `PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`, R2 vars (required — no local disk on Vercel), Resend, `JOURNEYS_SITE_URL`, `JOURNEYS_REVALIDATE_URL`, `REVALIDATE_SECRET`.
+**Portfolio env (production):** `MONGODB_URI` (Atlas SRV), `PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`, R2 vars (required — no local disk on Vercel), Resend, `JOURNEYS_SITE_URL`, `JOURNEYS_REVALIDATE_URL`, `REVALIDATE_SECRET`.
 
 **Journeys env (production):** `PAYLOAD_API_URL=https://emilshr.com/api`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_MEDIA_BASE_URL=https://emilshr.com`, `REVALIDATE_SECRET`.
 
-**MongoDB:** Migrate off Railway with `mongodump` / `mongorestore` to a free Atlas M0 cluster, then set `DATABASE_URL` on the portfolio project.
+**MongoDB:** Migrate off Railway with `mongodump` / `mongorestore` to a free Atlas M0 cluster, then set `MONGODB_URI` on the portfolio project.
 
 **Seed:** Run `pnpm seed` locally against Atlas; the deployed `/next/seed` route exceeds the Hobby 10s function limit.
 

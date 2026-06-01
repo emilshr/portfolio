@@ -34,7 +34,7 @@ jobs:
       - name: Run CI checks (Turbo)
         run: pnpm turbo run lint check-types build
         env:
-          DATABASE_URL: mongodb://127.0.0.1:27017/portfolio-ci
+          MONGODB_URI: mongodb://127.0.0.1:27017/portfolio-ci
           PAYLOAD_SECRET: ci-test-secret-min-32-chars-long
           NEXT_PUBLIC_SERVER_URL: http://localhost:3000
           CRON_SECRET: ci-cron-secret
