@@ -1586,12 +1586,37 @@ export interface JourneysSetting {
    * Homepage hero background image.
    */
   heroImage?: (string | null) | Media;
+  /**
+   * Large headline shown below the cover image on the homepage.
+   */
   heroTitle?: string | null;
   heroSubtitle?: string | null;
   /**
    * Optional fallback hero image when no homepage hero image is set.
    */
   featuredTravel?: (string | null) | Travel;
+  aboutHeading?: string | null;
+  aboutLead?: string | null;
+  /**
+   * Portrait shown in the about section.
+   */
+  aboutImage?: (string | null) | Media;
+  aboutContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  aboutImagePosition?: ('left' | 'right') | null;
   meta?: {
     title?: string | null;
     /**
@@ -1663,6 +1688,11 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
   heroTitle?: T;
   heroSubtitle?: T;
   featuredTravel?: T;
+  aboutHeading?: T;
+  aboutLead?: T;
+  aboutImage?: T;
+  aboutContent?: T;
+  aboutImagePosition?: T;
   meta?:
     | T
     | {

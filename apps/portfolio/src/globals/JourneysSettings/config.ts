@@ -1,6 +1,12 @@
 import type { GlobalConfig } from 'payload'
 
 import {
+  FixedToolbarFeature,
+  HeadingFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
+import {
   MetaDescriptionField,
   MetaImageField,
   MetaTitleField,
@@ -43,7 +49,10 @@ export const JourneysSettings: GlobalConfig = {
             {
               name: 'heroTitle',
               type: 'text',
-              defaultValue: 'Journeys',
+              defaultValue: 'BurntClutchProject',
+              admin: {
+                description: 'Large headline shown below the cover image on the homepage.',
+              },
             },
             {
               name: 'heroSubtitle',
@@ -57,6 +66,49 @@ export const JourneysSettings: GlobalConfig = {
               admin: {
                 description: 'Optional fallback hero image when no homepage hero image is set.',
               },
+            },
+          ],
+        },
+        {
+          label: 'About',
+          fields: [
+            {
+              name: 'aboutHeading',
+              type: 'text',
+              defaultValue: 'About me',
+            },
+            {
+              name: 'aboutLead',
+              type: 'textarea',
+            },
+            {
+              name: 'aboutImage',
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: 'Portrait shown in the about section.',
+              },
+            },
+            {
+              name: 'aboutContent',
+              type: 'richText',
+              editor: lexicalEditor({
+                features: ({ rootFeatures }) => [
+                  ...rootFeatures,
+                  HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
+                  FixedToolbarFeature(),
+                  InlineToolbarFeature(),
+                ],
+              }),
+            },
+            {
+              name: 'aboutImagePosition',
+              type: 'select',
+              defaultValue: 'left',
+              options: [
+                { label: 'Left', value: 'left' },
+                { label: 'Right', value: 'right' },
+              ],
             },
           ],
         },

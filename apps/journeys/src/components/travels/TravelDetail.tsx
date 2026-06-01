@@ -26,13 +26,13 @@ export function TravelDetail({ travel }: TravelDetailProps) {
           <div className="absolute inset-0 bg-muted" aria-hidden />
         )}
         <div className="relative z-10 flex min-h-[min(70vh,720px)] flex-col justify-end pb-[var(--space-12)] pt-28">
-          <div className="container-content">
+          <div className="mx-auto w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)]">
             {(location || dates) && (
               <p className="mb-[var(--space-3)] text-sm uppercase tracking-wider text-white/70">
                 {[location, dates].filter(Boolean).join(' · ')}
               </p>
             )}
-            <h1 className="text-display max-w-4xl text-4xl font-bold text-white sm:text-5xl md:text-6xl">
+            <h1 className="max-w-4xl font-display text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
               {travel.title}
             </h1>
             {travel.subtitle ? (
@@ -42,14 +42,17 @@ export function TravelDetail({ travel }: TravelDetailProps) {
         </div>
       </section>
 
-      <div className="container-content py-[var(--space-12)] md:py-[var(--space-16)]">
+      <div className="mx-auto w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)] py-[var(--space-12)] md:py-[var(--space-16)]">
         <div className="mx-auto max-w-3xl">
           <TravelRichText data={travel.content} />
         </div>
 
         {travel.gallery && travel.gallery.length > 0 ? (
           <section className="mt-[var(--space-16)]" aria-labelledby="travel-gallery-heading">
-            <h2 id="travel-gallery-heading" className="text-display mb-[var(--space-8)] text-2xl font-semibold">
+            <h2
+              id="travel-gallery-heading"
+              className="mb-[var(--space-8)] font-display text-2xl font-semibold tracking-tight"
+            >
               Gallery
             </h2>
             <div className="grid grid-cols-2 gap-[var(--space-4)] md:grid-cols-3">

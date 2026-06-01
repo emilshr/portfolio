@@ -13,9 +13,9 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-ring: var(--ring);
-  --font-sans: var(--font-open-sans);
-  --font-display: var(--font-montserrat);
-  --font-mono: var(--font-ibm-plex-mono);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-unbounded);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 :root {
@@ -47,9 +47,9 @@
 
   --hero-scrim: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.75) 0%,
-    rgba(0, 0, 0, 0.35) 45%,
-    rgba(0, 0, 0, 0.15) 100%
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.28) 45%,
+    rgba(0, 0, 0, 0.08) 100%
   );
 }
 
@@ -97,16 +97,4 @@
       transition-duration: 0.01ms !important;
     }
   }
-}
-
-@utility container-content {
-  width: 100%;
-  max-width: 72rem;
-  margin-inline: auto;
-  padding-inline: clamp(1.5rem, 5vw, 4rem);
-}
-
-@utility text-display {
-  font-family: var(--font-montserrat), system-ui, sans-serif;
-  letter-spacing: -0.02em;
 }

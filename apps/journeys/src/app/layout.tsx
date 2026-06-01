@@ -1,29 +1,23 @@
 import type { Metadata } from 'next'
-import { IBM_Plex_Mono, Montserrat, Open_Sans } from 'next/font/google'
+import { Outfit, Unbounded } from 'next/font/google'
 import type { ReactNode } from 'react'
 
+import { Main } from '@/components/layout/Main'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { Providers } from '@/components/providers'
 import { getSiteURL } from '@/lib/metadata'
 
 import '@/styles/globals.css'
 
-const openSans = Open_Sans({
+const unbounded = Unbounded({
   subsets: ['latin'],
-  variable: '--font-open-sans',
+  variable: '--font-unbounded',
   display: 'swap',
 })
 
-const montserrat = Montserrat({
+const outfit = Outfit({
   subsets: ['latin'],
-  variable: '--font-montserrat',
-  display: 'swap',
-})
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-ibm-plex-mono',
+  variable: '--font-outfit',
   display: 'swap',
 })
 
@@ -46,12 +40,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${openSans.variable} ${montserrat.variable} ${ibmPlexMono.variable} min-h-screen antialiased`}
-      >
+      <body className={`${unbounded.variable} ${outfit.variable} min-h-screen antialiased`}>
         <Providers>
           <SiteHeader />
-          <main className="pt-16">{children}</main>
+          <Main>{children}</Main>
         </Providers>
         {umamiWebsiteId && umamiSrc ? (
           <script async defer src={umamiSrc} data-website-id={umamiWebsiteId} />

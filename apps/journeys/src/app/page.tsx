@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { AboutSection } from '@/components/home/AboutSection'
 import { HeroSection } from '@/components/home/HeroSection'
 import { TravelGrid } from '@/components/home/TravelGrid'
 import { journeysHomeMetadata } from '@/lib/metadata'
@@ -16,6 +17,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection settings={settings} />
+      <AboutSection settings={settings} />
       <TravelGrid travels={travels} />
     </>
   )

@@ -14,9 +14,9 @@ export default async function GalleryPage() {
   const items = await getGalleryItems()
 
   return (
-    <div className="container-content py-[var(--space-12)] md:py-[var(--space-16)]">
+    <div className="mx-auto w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)] py-[var(--space-12)] md:py-[var(--space-16)]">
       <header className="mb-[var(--space-10)]">
-        <h1 className="text-display text-3xl font-bold md:text-4xl">Gallery</h1>
+        <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Gallery</h1>
         <p className="mt-[var(--space-3)] max-w-2xl text-muted-foreground">
           Moments from the road — select any image to explore fullscreen.
         </p>

@@ -18,8 +18,10 @@ const publishedWhere = {
 }
 
 const defaultJourneysSettings = {
-  heroTitle: 'Journeys',
+  heroTitle: 'BurntClutchProject',
   heroSubtitle: 'Travel stories from the road.',
+  aboutHeading: 'About me',
+  aboutImagePosition: 'left' as const,
 } as const
 
 export const getJourneysSettings = unstable_cache(

@@ -39,7 +39,7 @@ export function TravelCard({ travel, className }: TravelCardProps) {
             {[location, dates].filter(Boolean).join(' · ')}
           </p>
         )}
-        <h2 className="text-display text-xl font-semibold">
+        <h2 className="font-display text-xl font-semibold tracking-tight">
           <Link
             href={`/${travel.slug}`}
             className="hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"

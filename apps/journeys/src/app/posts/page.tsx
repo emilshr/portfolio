@@ -15,8 +15,8 @@ export default async function PostsPage() {
 
   return (
     <div className="pt-[var(--space-8)]">
-      <div className="container-content mb-[var(--space-8)]">
-        <h1 className="text-display text-3xl font-bold md:text-4xl">Posts</h1>
+      <div className="mx-auto mb-[var(--space-8)] w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)]">
+        <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Posts</h1>
         <p className="mt-[var(--space-3)] max-w-2xl text-muted-foreground">
           Every journey, captured in words and photographs.
         </p>
