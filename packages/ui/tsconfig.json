@@ -7,8 +7,13 @@
     "moduleResolution": "bundler",
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["node"],
     "jsx": "react-jsx",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

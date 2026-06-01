@@ -5,20 +5,40 @@
   "type": "module",
   "exports": {
     "./separator": "./src/components/separator.tsx",
+    "./media-player": "./src/components/media-player.tsx",
+    "./media-player-block-view": "./src/components/media-player-block-view.tsx",
     "./lib/utils": "./src/lib/utils.ts",
-    "./lib/separator-block": "./src/lib/separator-block.ts"
+    "./lib/separator-block": "./src/lib/separator-block.ts",
+    "./lib/media-player-block": "./src/lib/media-player-block.ts"
   },
   "peerDependencies": {
     "react": "catalog:",
     "react-dom": "catalog:"
   },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": false
+    }
+  },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "catalog:",
+    "@radix-ui/react-select": "catalog:",
     "@radix-ui/react-separator": "catalog:",
+    "@radix-ui/react-slider": "catalog:",
+    "@radix-ui/react-slot": "catalog:",
+    "@radix-ui/react-tooltip": "catalog:",
+    "class-variance-authority": "catalog:",
     "clsx": "catalog:",
+    "lucide-react": "catalog:",
+    "media-chrome": "^4.19.0",
+    "radix-ui": "^1.4.3",
     "tailwind-merge": "catalog:"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "react-dom": "catalog:",
     "typescript": "catalog:"
   }
 }

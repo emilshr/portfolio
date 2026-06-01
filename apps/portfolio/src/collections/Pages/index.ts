@@ -9,6 +9,7 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { ContactCTABlock } from '../../blocks/ContactCTA/config'
 import { Content } from '../../blocks/Content/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
 import { PostListBlock } from '../../blocks/PostList/config'
 import { PostListByYearBlock } from '../../blocks/PostListByYear/config'
 import { SectionHeadingBlock } from '../../blocks/SectionHeading/config'
@@ -85,6 +86,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 SeparatorBlock,
                 Content,
                 MediaBlock,
+                MediaPlayerBlock,
                 CallToAction,
                 Archive,
               ],

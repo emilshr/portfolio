@@ -13,6 +13,7 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidateTravel } from './hooks/revalidateTravel'
@@ -159,7 +160,7 @@ export const Travels: CollectionConfig<'travels'> = {
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
                     BlocksFeature({
-                      blocks: [Banner, Code, MediaBlock],
+                      blocks: [Banner, Code, MediaBlock, MediaPlayerBlock],
                     }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),

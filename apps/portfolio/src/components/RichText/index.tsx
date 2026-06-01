@@ -1,4 +1,5 @@
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { MediaPlayerBlockComponent } from '@/blocks/MediaPlayer/Component'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
@@ -22,6 +23,7 @@ import type {
   GitHubEmbedBlock as GitHubEmbedBlockProps,
   LinkCardBlock as LinkCardBlockProps,
   MediaBlock as MediaBlockProps,
+  MediaPlayerBlock as MediaPlayerBlockProps,
   NeoDBEmbedBlock as NeoDBEmbedBlockProps,
   XPostEmbedBlock as XPostEmbedBlockProps,
 } from '@repo/payload-types'
@@ -32,6 +34,7 @@ type NodeTypes =
       | AlertBannerBlockProps
       | BannerBlockProps
       | MediaBlockProps
+      | MediaPlayerBlockProps
       | CodeBlockProps
       | GitHubEmbedBlockProps
       | XPostEmbedBlockProps
@@ -58,6 +61,13 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     content: ({ node }) => <ContentBlock {...node.fields} />,
     mediaBlock: ({ node }) => (
       <MediaBlock {...node.fields} enableGutter={false} disableInnerContainer />
+    ),
+    mediaPlayer: ({ node }) => (
+      <MediaPlayerBlockComponent
+        {...node.fields}
+        enableGutter={false}
+        disableInnerContainer
+      />
     ),
     code: ({ node }) => <CodeBlock {...node.fields} />,
     githubEmbed: ({ node }) => (

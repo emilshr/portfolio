@@ -2,6 +2,7 @@ import type { JourneysSetting } from '@repo/payload-types'
 
 import { FeaturedTravelsSection } from '@/components/home/FeaturedTravelsSection'
 import { ImageMarqueeSection } from '@/components/home/ImageMarqueeSection'
+import { MediaPlayerSection } from '@/components/home/MediaPlayerSection'
 import { SeparatorSection } from '@/components/home/SeparatorSection'
 
 type RenderHomeBlocksProps = {
@@ -34,6 +35,13 @@ export function RenderHomeBlocks({ blocks }: RenderHomeBlocksProps) {
           case 'separator':
             return (
               <SeparatorSection key={block.id ?? `separator-${index}`} block={block} />
+            )
+          case 'mediaPlayer':
+            return (
+              <MediaPlayerSection
+                key={block.id ?? `mediaPlayer-${index}`}
+                block={block}
+              />
             )
           default:
             return null

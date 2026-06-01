@@ -166,6 +166,7 @@ export interface Page {
     | SeparatorBlock
     | ContentBlock
     | MediaBlock
+    | MediaPlayerBlock
     | CallToActionBlock
     | ArchiveBlock
   )[];
@@ -575,6 +576,91 @@ export interface MediaBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaPlayerBlock".
+ */
+export interface MediaPlayerBlock {
+  media: string | Media;
+  playerKind: 'auto' | 'video' | 'audio';
+  player?: {
+    autoHide?: boolean | null;
+    disabled?: boolean | null;
+    withoutTooltip?: boolean | null;
+    /**
+     * Leave empty for the player default.
+     */
+    tooltipSideOffset?: number | null;
+    /**
+     * Leave empty for the player default.
+     */
+    tooltipDelayDuration?: number | null;
+    /**
+     * Screen reader label for the player region.
+     */
+    label?: string | null;
+  };
+  /**
+   * Choose which controls appear in the player bar.
+   */
+  controls?: {
+    play?: boolean | null;
+    seekBackward?: boolean | null;
+    seekForward?: boolean | null;
+    volume?: boolean | null;
+    seek?: boolean | null;
+    time?: boolean | null;
+    controlsOverlay?: boolean | null;
+    loading?: boolean | null;
+    error?: boolean | null;
+    /**
+     * Shown briefly when volume changes via keyboard.
+     */
+    volumeIndicator?: boolean | null;
+    playbackSpeed?: boolean | null;
+    loop?: boolean | null;
+    /**
+     * Requires WebVTT tracks on the media file. Video only.
+     */
+    captions?: boolean | null;
+    /**
+     * Video only.
+     */
+    pip?: boolean | null;
+    /**
+     * Video only.
+     */
+    fullscreen?: boolean | null;
+    download?: boolean | null;
+    settings?: boolean | null;
+  };
+  controlOptions: {
+    seekBackwardSeconds?: number | null;
+    seekForwardSeconds?: number | null;
+    seekWithTime?: boolean | null;
+    seekWithoutTooltip?: boolean | null;
+    volumeExpandable?: boolean | null;
+    timeVariant: 'current' | 'duration' | 'remaining';
+    /**
+     * Comma-separated values for the playback speed control.
+     */
+    playbackSpeeds?: string | null;
+    /**
+     * Comma-separated values for the settings menu. Falls back to playback speeds.
+     */
+    settingsSpeeds?: string | null;
+    /**
+     * Leave empty for the player default.
+     */
+    loadingDelay?: number | null;
+  };
+  layout: {
+    maxWidth: 'full' | 'content' | 'narrow';
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaPlayer';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1039,6 +1125,7 @@ export interface PagesSelect<T extends boolean = true> {
         separator?: T | SeparatorBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
+        mediaPlayer?: T | MediaPlayerBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
       };
@@ -1199,6 +1286,65 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaPlayerBlock_select".
+ */
+export interface MediaPlayerBlockSelect<T extends boolean = true> {
+  media?: T;
+  playerKind?: T;
+  player?:
+    | T
+    | {
+        autoHide?: T;
+        disabled?: T;
+        withoutTooltip?: T;
+        tooltipSideOffset?: T;
+        tooltipDelayDuration?: T;
+        label?: T;
+      };
+  controls?:
+    | T
+    | {
+        play?: T;
+        seekBackward?: T;
+        seekForward?: T;
+        volume?: T;
+        seek?: T;
+        time?: T;
+        controlsOverlay?: T;
+        loading?: T;
+        error?: T;
+        volumeIndicator?: T;
+        playbackSpeed?: T;
+        loop?: T;
+        captions?: T;
+        pip?: T;
+        fullscreen?: T;
+        download?: T;
+        settings?: T;
+      };
+  controlOptions?:
+    | T
+    | {
+        seekBackwardSeconds?: T;
+        seekForwardSeconds?: T;
+        seekWithTime?: T;
+        seekWithoutTooltip?: T;
+        volumeExpandable?: T;
+        timeVariant?: T;
+        playbackSpeeds?: T;
+        settingsSpeeds?: T;
+        loadingDelay?: T;
+      };
+  layout?:
+    | T
+    | {
+        maxWidth?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1626,7 +1772,7 @@ export interface JourneysSetting {
   /**
    * Optional sections rendered after About. Order controls display order.
    */
-  homeLayout?: (ImageMarqueeBlock | FeaturedTravelsBlock | SeparatorBlock)[] | null;
+  homeLayout?: (ImageMarqueeBlock | FeaturedTravelsBlock | SeparatorBlock | MediaPlayerBlock)[] | null;
   aboutHeading?: string | null;
   aboutLead?: string | null;
   /**
@@ -1761,6 +1907,7 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
         imageMarquee?: T | ImageMarqueeBlockSelect<T>;
         featuredTravels?: T | FeaturedTravelsBlockSelect<T>;
         separator?: T | SeparatorBlockSelect<T>;
+        mediaPlayer?: T | MediaPlayerBlockSelect<T>;
       };
   aboutHeading?: T;
   aboutLead?: T;

@@ -16,6 +16,7 @@ import { Code } from '../../blocks/Code/config'
 import { GitHubEmbed } from '../../blocks/GitHubEmbed/config'
 import { LinkCard } from '../../blocks/LinkCard/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
 import { NeoDBEmbed } from '../../blocks/NeoDBEmbed/config'
 import { XPostEmbed } from '../../blocks/XPostEmbed/config'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -96,6 +97,7 @@ export const Posts: CollectionConfig<'posts'> = {
                         Banner,
                         Code,
                         MediaBlock,
+                        MediaPlayerBlock,
                         GitHubEmbed,
                         XPostEmbed,
                         NeoDBEmbed,

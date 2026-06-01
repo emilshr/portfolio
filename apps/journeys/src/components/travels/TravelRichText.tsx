@@ -14,14 +14,19 @@ import type {
   BannerBlock as BannerBlockProps,
   CodeBlock as CodeBlockProps,
   MediaBlock as MediaBlockProps,
+  MediaPlayerBlock as MediaPlayerBlockProps,
 } from '@repo/payload-types'
+
+import { MediaPlayerBlockComponent } from '@/components/travels/MediaPlayerBlock'
 
 import { getMediaAlt, getMediaUrl, isMedia } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 type NodeTypes =
   | DefaultNodeTypes
-  | SerializedBlockNode<BannerBlockProps | MediaBlockProps | CodeBlockProps>
+  | SerializedBlockNode<
+      BannerBlockProps | MediaBlockProps | MediaPlayerBlockProps | CodeBlockProps
+    >
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
@@ -61,6 +66,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
         </figure>
       )
     },
+    mediaPlayer: ({ node }) => <MediaPlayerBlockComponent {...node.fields} />,
     code: ({ node }) => {
       const { code, language } = node.fields
       return (

@@ -9,6 +9,7 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContactCTABlockComponent } from '@/blocks/ContactCTA/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { MediaPlayerBlockComponent } from '@/blocks/MediaPlayer/Component'
 import { PostListBlockComponent } from '@/blocks/PostList/Component'
 import { PostListByYearBlockComponent } from '@/blocks/PostListByYear/Component'
 import { SectionHeadingBlockComponent } from '@/blocks/SectionHeading/Component'
@@ -24,6 +25,7 @@ const blockComponents = {
   cta: CallToActionBlock,
   contactCTA: ContactCTABlockComponent,
   mediaBlock: MediaBlock,
+  mediaPlayer: MediaPlayerBlockComponent,
   postList: PostListBlockComponent,
   postListByYear: PostListByYearBlockComponent,
   sectionHeading: SectionHeadingBlockComponent,

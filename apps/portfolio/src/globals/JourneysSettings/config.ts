@@ -18,6 +18,7 @@ import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
 import { FeaturedTravelsBlock } from '@/blocks/FeaturedTravels/config'
 import { ImageMarqueeBlock } from '@/blocks/ImageMarquee/config'
+import { MediaPlayerBlock } from '@/blocks/MediaPlayer/config'
 import { SeparatorBlock } from '@/blocks/Separator/config'
 import { revalidateJourneysSettings } from './hooks/revalidateJourneysSettings'
 
@@ -78,7 +79,12 @@ export const JourneysSettings: GlobalConfig = {
             {
               name: 'homeLayout',
               type: 'blocks',
-              blocks: [ImageMarqueeBlock, FeaturedTravelsBlock, SeparatorBlock],
+              blocks: [
+                ImageMarqueeBlock,
+                FeaturedTravelsBlock,
+                SeparatorBlock,
+                MediaPlayerBlock,
+              ],
               admin: {
                 description:
                   'Optional sections rendered after About. Order controls display order.',
