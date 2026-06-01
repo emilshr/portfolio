@@ -23,6 +23,10 @@ export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
 
   const listLimit = limit ?? 5
 
+  if (totalDocs === 0) {
+    return null
+  }
+
   return (
     <PostList
       posts={docs}
