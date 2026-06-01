@@ -4,6 +4,21 @@ import { fileURLToPath } from 'url'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
+const payloadApiUrl =
+  process.env.PAYLOAD_API_URL ||
+  process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
+  'http://localhost:3000/api'
+
+if (
+  process.env.VERCEL_ENV === 'production' &&
+  !process.env.PAYLOAD_API_URL &&
+  !process.env.NEXT_PUBLIC_PAYLOAD_API_URL
+) {
+  throw new Error(
+    'journeys production build requires PAYLOAD_API_URL or NEXT_PUBLIC_PAYLOAD_API_URL (e.g. https://emilshr.com/api).',
+  )
+}
+
 function parseHostname(urlString: string | undefined): string | null {
   if (!urlString) return null
   try {
@@ -14,7 +29,6 @@ function parseHostname(urlString: string | undefined): string | null {
   }
 }
 
-const payloadApiUrl = process.env.PAYLOAD_API_URL || 'http://localhost:3000/api'
 const payloadOrigin = payloadApiUrl.replace(/\/api\/?$/, '').replace(/\/$/, '')
 const r2Hostname = parseHostname(process.env.NEXT_PUBLIC_MEDIA_HOST || process.env.R2_PUBLIC_URL)
 const mediaBaseHostname = parseHostname(process.env.NEXT_PUBLIC_MEDIA_BASE_URL)

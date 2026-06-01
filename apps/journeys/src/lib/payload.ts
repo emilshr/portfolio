@@ -2,11 +2,17 @@ import { PayloadSDK } from '@payloadcms/sdk'
 import type { Config, JourneysSetting, Travel } from '@repo/payload-types'
 import { unstable_cache } from 'next/cache'
 
+import { getPayloadApiUrl, isProductionDeploy } from '@/lib/env'
 import { getMediaUrl, isMedia } from '@/lib/media'
 
 const getSDK = (): PayloadSDK<Config> | null => {
-  const baseURL = process.env.PAYLOAD_API_URL
+  const baseURL = getPayloadApiUrl()
   if (!baseURL) {
+    if (isProductionDeploy()) {
+      console.error(
+        '[journeys] Missing PAYLOAD_API_URL / NEXT_PUBLIC_PAYLOAD_API_URL — serving fallback homepage content.',
+      )
+    }
     return null
   }
 

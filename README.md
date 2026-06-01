@@ -115,7 +115,9 @@ Two separate [Vercel](https://vercel.com) projects from this monorepo. Each app 
 
 **Portfolio env (production):** `MONGODB_URI` (Atlas SRV), `PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`, R2 vars (required — no local disk on Vercel), Resend, `JOURNEYS_SITE_URL`, `JOURNEYS_REVALIDATE_URL`, `REVALIDATE_SECRET`.
 
-**Journeys env (production):** `PAYLOAD_API_URL=https://emilshr.com/api`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_MEDIA_BASE_URL=https://emilshr.com`, `REVALIDATE_SECRET`.
+**Journeys env (production):** `PAYLOAD_API_URL` and `NEXT_PUBLIC_PAYLOAD_API_URL` (both `https://emilshr.com/api`), `NEXT_PUBLIC_SITE_URL` (`https://www.burntclutchproject.com`), `NEXT_PUBLIC_MEDIA_BASE_URL=https://emilshr.com`, `REVALIDATE_SECRET` (set in Vercel dashboard only — not committed). Non-secret URLs are also defined in [`apps/journeys/vercel.json`](apps/journeys/vercel.json).
+
+**Journeys content:** Edit homepage hero, about, and home sections in production Payload admin at `https://emilshr.com/admin` (Globals → Journeys Settings). Local CMS changes do not appear on burntclutchproject.com until saved against Atlas.
 
 **MongoDB:** Migrate off Railway with `mongodump` / `mongorestore` to a free Atlas M0 cluster, then set `MONGODB_URI` on the portfolio project.
 

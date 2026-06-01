@@ -7,11 +7,16 @@ export const revalidateJourneys = async ({ tags }: RevalidateJourneysArgs): Prom
   const secret = process.env.REVALIDATE_SECRET
 
   if (!url || !secret) {
+    if (process.env.VERCEL_ENV === 'production') {
+      console.warn(
+        '[portfolio] JOURNEYS_REVALIDATE_URL or REVALIDATE_SECRET is unset; journeys cache will not bust on CMS saves.',
+      )
+    }
     return
   }
 
   try {
-    await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +24,14 @@ export const revalidateJourneys = async ({ tags }: RevalidateJourneysArgs): Prom
       },
       body: JSON.stringify({ tags }),
     })
-  } catch {
-    // Journeys revalidation is best-effort; do not block CMS saves.
+
+    if (!response.ok) {
+      console.warn(
+        `[portfolio] Journeys revalidation failed (${response.status}):`,
+        await response.text(),
+      )
+    }
+  } catch (error) {
+    console.warn('[portfolio] Journeys revalidation request failed:', error)
   }
 }

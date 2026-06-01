@@ -1,33 +1,29 @@
 import type { Media } from '@repo/payload-types'
 
+import { getPayloadApiUrl } from '@/lib/env'
+
 type MediaSize = 'thumbnail' | 'card' | 'hero' | 'large' | 'medium' | 'small' | 'og'
 
-/** CMS origin (portfolio), derived from PAYLOAD_API_URL without the /api suffix. */
+/** CMS origin (portfolio), derived from Payload API URL without the `/api` suffix. */
 export function getPayloadServerURL(): string {
-  const apiUrl =
-    process.env.PAYLOAD_API_URL ||
-    process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
-    'http://localhost:3000/api'
-
+  const apiUrl = getPayloadApiUrl() || 'http://localhost:3000/api'
   return apiUrl.replace(/\/api\/?$/, '').replace(/\/$/, '')
 }
 
 /**
- * Normalizes Payload media paths for use with next/image.
+ * Normalizes Payload media paths for same-origin use on the journeys site.
  *
- * `/api/media/...` stays relative so Next.js treats it as local (see localPatterns +
- * rewrites in next.config.ts). Absolute CMS URLs are avoided because Next.js 16 blocks
- * private IPs when optimizing remote images.
+ * `/api/media/...` stays relative so the Next.js rewrite proxies to portfolio and
+ * `<audio>` / `<video>` avoid cross-origin issues. External CDN URLs pass through.
  */
 export function resolveMediaUrl(url: string | null | undefined): string | null {
   if (!url) return null
   if (/^https?:\/\//i.test(url)) return url
 
   const path = url.startsWith('/') ? url : `/${url}`
-  const mediaBaseURL = process.env.NEXT_PUBLIC_MEDIA_BASE_URL?.replace(/\/$/, '')
 
   if (path.startsWith('/api/media/')) {
-    return mediaBaseURL ? `${mediaBaseURL}${path}` : path
+    return path
   }
 
   return `${getPayloadServerURL()}${path}`
@@ -35,10 +31,17 @@ export function resolveMediaUrl(url: string | null | undefined): string | null {
 
 /** Absolute URL for Open Graph / metadata (not passed through next/image). */
 export function getAbsoluteMediaUrl(url: string | null | undefined): string | null {
-  const resolved = resolveMediaUrl(url)
-  if (!resolved) return null
-  if (/^https?:\/\//i.test(resolved)) return resolved
-  return `${getPayloadServerURL()}${resolved}`
+  if (!url) return null
+  if (/^https?:\/\//i.test(url)) return url
+
+  const path = url.startsWith('/') ? url : `/${url}`
+  const mediaBaseURL = process.env.NEXT_PUBLIC_MEDIA_BASE_URL?.replace(/\/$/, '')
+
+  if (path.startsWith('/api/media/')) {
+    return mediaBaseURL ? `${mediaBaseURL}${path}` : `${getPayloadServerURL()}${path}`
+  }
+
+  return `${getPayloadServerURL()}${path}`
 }
 
 export function isMedia(value: unknown): value is Media {

@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm turbo build --filter=journeys"
+  "buildCommand": "cd ../.. && pnpm turbo build --filter=journeys",
+  "env": {
+    "PAYLOAD_API_URL": "https://emilshr.com/api",
+    "NEXT_PUBLIC_PAYLOAD_API_URL": "https://emilshr.com/api",
+    "NEXT_PUBLIC_MEDIA_BASE_URL": "https://emilshr.com",
+    "NEXT_PUBLIC_SITE_URL": "https://www.burntclutchproject.com"
+  }
 }
