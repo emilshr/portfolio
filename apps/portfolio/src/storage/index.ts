@@ -13,6 +13,8 @@ export const storagePlugins: Plugin[] = useR2
         collections: {
           media: true,
         },
+        clientUploads: true,
+        signedDownloads: true,
         bucket: process.env.R2_BUCKET!,
         config: {
           credentials: {
