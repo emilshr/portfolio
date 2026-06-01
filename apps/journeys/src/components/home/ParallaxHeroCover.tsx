@@ -49,7 +49,7 @@ export function ParallaxHeroCover({ media }: ParallaxHeroCoverProps) {
   return (
     <div
       ref={sectionRef}
-      className="relative h-[min(85vh,820px)] w-full overflow-hidden"
+      className="relative h-[min(85vh,820px)] w-full overflow-hidden min-[1920px]:h-[min(88vh,1000px)] min-[2560px]:h-[min(92vh,1200px)]"
     >
       {media ? (
         <div

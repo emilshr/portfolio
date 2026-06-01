@@ -1,7 +1,7 @@
 import type { Media } from '@repo/payload-types'
 import Image from 'next/image'
 
-import { getMediaAlt, getMediaUrl, isMedia } from '@/lib/media'
+import { getMediaAlt, getMediaObjectPosition, getMediaUrl, isMedia } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 type PayloadImageProps = {
@@ -30,6 +30,7 @@ export function PayloadImage({
 
   const width = fill ? undefined : (media.width ?? 1200)
   const height = fill ? undefined : (media.height ?? 800)
+  const objectPosition = getMediaObjectPosition(media)
 
   if (fill) {
     return (
@@ -40,6 +41,7 @@ export function PayloadImage({
         priority={priority}
         sizes={sizes}
         className={cn('object-cover', className)}
+        style={{ objectPosition }}
       />
     )
   }
@@ -53,6 +55,7 @@ export function PayloadImage({
       priority={priority}
       sizes={sizes}
       className={cn('object-cover', className)}
+      style={{ objectPosition }}
     />
   )
 }

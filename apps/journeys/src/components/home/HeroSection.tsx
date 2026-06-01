@@ -35,11 +35,11 @@ export function HeroSection({ settings }: HeroSectionProps) {
       <ParallaxHeroCover media={heroMedia} />
       <div id="hero-cover-sentinel" className="h-0 w-full" aria-hidden />
       <div className="w-full text-center py-(--space-10) md:py-(--space-16)">
-        <h1 className="w-full font-display text-[clamp(2.75rem,11vw,8rem)] font-bold uppercase leading-[0.95] tracking-[-0.03em] text-foreground">
+        <h1 className="w-full font-display text-4xl sm:text-7xl font-bold uppercase leading-[0.95] tracking-[-0.03em] text-foreground">
           {settings.heroTitle || 'BurntClutchProject'}
         </h1>
         {settings.heroSubtitle ? (
-          <p className="mt-(--space-4) max-w-2xl text-lg text-muted-foreground sm:text-xl">
+          <p className="mt-(--space-4) w-full text-center text-lg text-muted-foreground sm:text-xl">
             {settings.heroSubtitle}
           </p>
         ) : null}

@@ -62,6 +62,13 @@ export function getMediaAlt(media: string | Media | null | undefined, fallback =
   return media.alt || fallback
 }
 
+/** CSS object-position from Payload focal point (0–100%, default center). */
+export function getMediaObjectPosition(media: Media): string {
+  const x = typeof media.focalX === 'number' ? media.focalX : 50
+  const y = typeof media.focalY === 'number' ? media.focalY : 50
+  return `${x}% ${y}%`
+}
+
 export function formatLocation(
   location?: {
     city?: string | null
