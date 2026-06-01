@@ -1,5 +1,5 @@
 import { PayloadSDK } from '@payloadcms/sdk'
-import type { Config, Travel } from '@repo/payload-types'
+import type { Config, JourneysSetting, Travel } from '@repo/payload-types'
 import { unstable_cache } from 'next/cache'
 
 import { getMediaUrl, isMedia } from '@/lib/media'
@@ -17,12 +17,16 @@ const publishedWhere = {
   _status: { equals: 'published' as const },
 }
 
-const defaultJourneysSettings = {
+const defaultJourneysSettings: Pick<
+  JourneysSetting,
+  'heroTitle' | 'heroSubtitle' | 'aboutHeading' | 'aboutImagePosition' | 'homeLayout'
+> = {
   heroTitle: 'BurntClutchProject',
   heroSubtitle: 'Travel stories from the road.',
   aboutHeading: 'About me',
-  aboutImagePosition: 'left' as const,
-} as const
+  aboutImagePosition: 'left',
+  homeLayout: null,
+}
 
 export const getJourneysSettings = unstable_cache(
   async () => {
@@ -50,6 +54,27 @@ export const getPublishedTravels = unstable_cache(
   ['published-travels'],
   { tags: ['travels'] },
 )
+
+export function getFeaturedTravels(limit = 6): Promise<Travel[]> {
+  return unstable_cache(
+    async () => {
+      const sdk = getSDK()
+      if (!sdk) return [] as Travel[]
+      const result = await sdk.find({
+        collection: 'travels',
+        depth: 2,
+        limit,
+        sort: '-publishedAt',
+        where: {
+          and: [publishedWhere, { featured: { equals: true } }],
+        },
+      })
+      return result.docs
+    },
+    ['featured-travels', String(limit)],
+    { tags: ['travels'] },
+  )()
+}
 
 export function getTravelBySlug(slug: string): Promise<Travel | null> {
   return unstable_cache(

@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+import { HeaderNavHighlightLink } from '@/components/layout/HeaderNavHighlight'
 import { cn } from '@/lib/utils'
 
 const INSTAGRAM_URL = 'https://www.instagram.com/burntclutchproject/'
@@ -49,10 +49,12 @@ export function SiteHeader() {
     >
       <div className="mx-auto grid h-16 w-full max-w-6xl grid-cols-3 items-center gap-4 px-[clamp(1.5rem,5vw,4rem)]">
         <div className="flex justify-start sm:justify-end">
-          <a
+          <HeaderNavHighlightLink
             href={INSTAGRAM_URL}
+            external
             target="_blank"
             rel="noopener noreferrer"
+            homeOverCover={homeOverCover}
             className={cn(
               navLinkClass,
               homeOverCover
@@ -61,24 +63,26 @@ export function SiteHeader() {
             )}
           >
             Instagram
-          </a>
+          </HeaderNavHighlightLink>
         </div>
 
         <div className="flex justify-center">
-          <Link
+          <HeaderNavHighlightLink
             href="/"
+            homeOverCover={homeOverCover}
             className={cn(
-              'font-display text-sm font-bold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm sm:text-base',
+              'inline-flex h-11 min-h-11 items-center px-2 font-display text-sm font-bold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm sm:text-base sm:px-3',
               homeOverCover ? 'text-white hover:text-white/90' : 'text-foreground',
             )}
           >
             BurntClutchProject
-          </Link>
+          </HeaderNavHighlightLink>
         </div>
 
         <div className="flex justify-end sm:justify-start">
-          <Link
+          <HeaderNavHighlightLink
             href="/gallery"
+            homeOverCover={homeOverCover}
             className={cn(
               navLinkClass,
               homeOverCover
@@ -87,7 +91,7 @@ export function SiteHeader() {
             )}
           >
             Gallery
-          </Link>
+          </HeaderNavHighlightLink>
         </div>
       </div>
     </header>

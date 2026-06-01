@@ -9,11 +9,7 @@ type TravelGridProps = {
 
 export function TravelGrid({ travels, title = 'Latest journeys' }: TravelGridProps) {
   if (travels.length === 0) {
-    return (
-      <section className="mx-auto w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)] py-[var(--space-16)]">
-        <p className="text-muted-foreground">No travel stories published yet.</p>
-      </section>
-    )
+    return null
   }
 
   return (

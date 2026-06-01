@@ -16,6 +16,8 @@ import {
 
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
+import { FeaturedTravelsBlock } from '@/blocks/FeaturedTravels/config'
+import { ImageMarqueeBlock } from '@/blocks/ImageMarquee/config'
 import { revalidateJourneysSettings } from './hooks/revalidateJourneysSettings'
 
 export const JourneysSettings: GlobalConfig = {
@@ -65,6 +67,20 @@ export const JourneysSettings: GlobalConfig = {
               relationTo: 'travels',
               admin: {
                 description: 'Optional fallback hero image when no homepage hero image is set.',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Home sections',
+          fields: [
+            {
+              name: 'homeLayout',
+              type: 'blocks',
+              blocks: [ImageMarqueeBlock, FeaturedTravelsBlock],
+              admin: {
+                description:
+                  'Optional sections rendered after About. Order controls display order.',
               },
             },
           ],

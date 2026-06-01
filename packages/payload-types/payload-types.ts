@@ -713,6 +713,10 @@ export interface Travel {
   lastUpdatedAt?: string | null;
   publishedAt?: string | null;
   /**
+   * Show in the Featured Travels homepage block when that block is added.
+   */
+  featured?: boolean | null;
+  /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
@@ -1275,6 +1279,7 @@ export interface TravelsSelect<T extends boolean = true> {
       };
   lastUpdatedAt?: T;
   publishedAt?: T;
+  featured?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1595,6 +1600,10 @@ export interface JourneysSetting {
    * Optional fallback hero image when no homepage hero image is set.
    */
   featuredTravel?: (string | null) | Travel;
+  /**
+   * Optional sections rendered after About. Order controls display order.
+   */
+  homeLayout?: (ImageMarqueeBlock | FeaturedTravelsBlock)[] | null;
   aboutHeading?: string | null;
   aboutLead?: string | null;
   /**
@@ -1627,6 +1636,41 @@ export interface JourneysSetting {
   };
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageMarqueeBlock".
+ */
+export interface ImageMarqueeBlock {
+  images?:
+    | {
+        image: string | Media;
+        /**
+         * Optional override; defaults to media alt text.
+         */
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Base scroll speed for the marquee row.
+   */
+  baseVelocity?: number | null;
+  direction?: ('1' | '-1') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageMarquee';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedTravelsBlock".
+ */
+export interface FeaturedTravelsBlock {
+  heading?: string | null;
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featuredTravels';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1688,6 +1732,12 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
   heroTitle?: T;
   heroSubtitle?: T;
   featuredTravel?: T;
+  homeLayout?:
+    | T
+    | {
+        imageMarquee?: T | ImageMarqueeBlockSelect<T>;
+        featuredTravels?: T | FeaturedTravelsBlockSelect<T>;
+      };
   aboutHeading?: T;
   aboutLead?: T;
   aboutImage?: T;
@@ -1703,6 +1753,33 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageMarqueeBlock_select".
+ */
+export interface ImageMarqueeBlockSelect<T extends boolean = true> {
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  baseVelocity?: T;
+  direction?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedTravelsBlock_select".
+ */
+export interface FeaturedTravelsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

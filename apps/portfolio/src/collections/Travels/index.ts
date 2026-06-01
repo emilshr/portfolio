@@ -45,7 +45,7 @@ export const Travels: CollectionConfig<'travels'> = {
     },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'publishedAt', 'updatedAt'],
+    defaultColumns: ['title', 'featured', 'slug', 'publishedAt', 'updatedAt'],
     group: 'Journeys',
     livePreview: {
       url: ({ data, req }) =>
@@ -207,6 +207,15 @@ export const Travels: CollectionConfig<'travels'> = {
       admin: {
         date: { pickerAppearance: 'dayOnly' },
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Show in the Featured Travels homepage block when that block is added.',
       },
     },
     slugField(),
