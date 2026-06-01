@@ -3,7 +3,24 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "PAYLOAD_SECRET",
+        "PRODUCTION_URLS",
+        "CRON_SECRET",
+        "PREVIEW_SECRET",
+        "RESEND_API_KEY",
+        "RESEND_FROM_EMAIL",
+        "RESEND_FROM_NAME",
+        "JOURNEYS_SITE_URL",
+        "JOURNEYS_REVALIDATE_URL",
+        "REVALIDATE_SECRET",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "R2_BUCKET",
+        "R2_ENDPOINT",
+        "MONGODB_URI"
+      ]
     },
     "dev": {
       "cache": false,
