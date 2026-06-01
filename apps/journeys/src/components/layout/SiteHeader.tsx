@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 import { HeaderNavHighlightLink } from '@/components/layout/HeaderNavHighlight'
@@ -11,10 +12,19 @@ const INSTAGRAM_URL = 'https://www.instagram.com/burntclutchproject/'
 const navLinkClass =
   'inline-flex h-11 min-h-11 items-center px-2 text-sm uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md sm:px-3'
 
+const solidHeaderClass =
+  'border-b border-border/60 bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/50'
+
 export function SiteHeader() {
   const pathname = usePathname()
   const isHome = pathname === '/'
   const [pastCover, setPastCover] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!isHome) {
@@ -37,14 +47,13 @@ export function SiteHeader() {
   }, [isHome])
 
   const homeOverCover = isHome && !pastCover
+  const heroOverlayHeader = homeOverCover && mounted && resolvedTheme === 'dark'
 
   return (
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-40 transition-colors duration-300',
-        homeOverCover
-          ? 'border-transparent bg-transparent'
-          : 'border-b border-border/60 bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/50',
+        heroOverlayHeader ? 'border-transparent bg-transparent' : solidHeaderClass,
       )}
     >
       <div className="mx-auto grid h-16 w-full max-w-6xl grid-cols-3 items-center gap-0.5 sm:gap-4 px-0 sm:px-[clamp(1.5rem,5vw,4rem)]">
@@ -54,10 +63,10 @@ export function SiteHeader() {
             external
             target="_blank"
             rel="noopener noreferrer"
-            homeOverCover={homeOverCover}
+            heroOverlay={heroOverlayHeader}
             className={cn(
               navLinkClass,
-              homeOverCover
+              heroOverlayHeader
                 ? 'text-white/90 hover:text-white'
                 : 'text-muted-foreground hover:text-foreground',
             )}
@@ -69,10 +78,10 @@ export function SiteHeader() {
         <div className="flex justify-center">
           <HeaderNavHighlightLink
             href="/"
-            homeOverCover={homeOverCover}
+            heroOverlay={heroOverlayHeader}
             className={cn(
               'inline-flex h-11 min-h-11 items-center px-2 font-display text-sm font-bold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm sm:text-base sm:px-3',
-              homeOverCover ? 'text-white hover:text-white/90' : 'text-foreground',
+              heroOverlayHeader ? 'text-white hover:text-white/90' : 'text-foreground',
             )}
           >
             BurntClutchProject
@@ -82,10 +91,10 @@ export function SiteHeader() {
         <div className="flex justify-end sm:justify-start">
           <HeaderNavHighlightLink
             href="/gallery"
-            homeOverCover={homeOverCover}
+            heroOverlay={heroOverlayHeader}
             className={cn(
               navLinkClass,
-              homeOverCover
+              heroOverlayHeader
                 ? 'text-white/90 hover:text-white'
                 : 'text-muted-foreground hover:text-foreground',
             )}

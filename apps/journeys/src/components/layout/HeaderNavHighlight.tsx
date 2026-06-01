@@ -12,15 +12,15 @@ import {
   type ReactNode,
 } from 'react'
 
-function highlightColor(homeOverCover: boolean): string {
-  return homeOverCover
+function highlightColor(heroOverlay: boolean): string {
+  return heroOverlay
     ? 'color-mix(in srgb, white 28%, transparent)'
     : 'color-mix(in srgb, var(--muted-foreground) 22%, transparent)'
 }
 
 type HeaderNavHighlightLinkProps = {
   children: ReactNode
-  homeOverCover: boolean
+  heroOverlay: boolean
   className?: string
 } & (
   | ({ href: string } & Omit<ComponentPropsWithoutRef<typeof Link>, 'href' | 'className'>)
@@ -32,7 +32,7 @@ type HeaderNavHighlightLinkProps = {
 
 export function HeaderNavHighlightLink({
   children,
-  homeOverCover,
+  heroOverlay,
   className,
   href,
   ...rest
@@ -40,7 +40,7 @@ export function HeaderNavHighlightLink({
   const prefersReducedMotion = useReducedMotion()
   const labelRef = useRef<HTMLSpanElement>(null)
   const annotationRef = useRef<RoughAnnotation | null>(null)
-  const color = highlightColor(homeOverCover)
+  const color = highlightColor(heroOverlay)
 
   const removeAnnotation = useCallback(() => {
     annotationRef.current?.remove()
