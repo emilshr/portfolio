@@ -42,7 +42,7 @@ export function TravelCard({ travel, className }: TravelCardProps) {
         <h2 className="font-display text-xl font-semibold tracking-tight">
           <Link
             href={`/${travel.slug}`}
-            className="hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+            className="hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm underline-offset-2 hover:underline"
           >
             {travel.title}
           </Link>

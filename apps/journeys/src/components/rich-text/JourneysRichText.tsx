@@ -24,9 +24,10 @@ export function JourneysRichText({ data, className }: JourneysRichTextProps) {
   return (
     <RichTextConverter
       className={cn(
-        'prose prose-neutral dark:prose-invert max-w-none',
-        'prose-headings:font-display prose-headings:tracking-tight',
-        'prose-a:text-primary',
+        'prose max-w-none',
+        'prose-p:text-foreground prose-li:text-foreground',
+        'prose-strong:text-foreground prose-headings:font-display prose-headings:text-foreground prose-headings:tracking-tight',
+        'prose-a:text-primary prose-a:underline-offset-2',
         className,
       )}
       converters={jsxConverters}

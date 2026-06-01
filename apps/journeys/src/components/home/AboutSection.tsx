@@ -66,7 +66,7 @@ export function AboutSection({ settings }: AboutSectionProps) {
             </h2>
           ) : null}
           {settings.aboutLead ? (
-            <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
+            <p className="max-w-xl text-lg leading-relaxed text-foreground">
               {settings.aboutLead}
             </p>
           ) : null}

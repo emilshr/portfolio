@@ -3,6 +3,7 @@ import { Outfit, Unbounded } from 'next/font/google'
 import type { ReactNode } from 'react'
 
 import { Main } from '@/components/layout/Main'
+import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { Providers } from '@/components/providers'
 import { getSiteURL } from '@/lib/metadata'
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Providers>
           <SiteHeader />
           <Main>{children}</Main>
+          <SiteFooter />
         </Providers>
         {umamiWebsiteId && umamiSrc ? (
           <script async defer src={umamiSrc} data-website-id={umamiWebsiteId} />

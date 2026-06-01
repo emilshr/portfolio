@@ -75,7 +75,7 @@ export function TravelDetail({ travel }: TravelDetailProps) {
               })}
             </div>
             <p className="mt-[var(--space-6)]">
-              <Link href="/gallery" className="text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
+              <Link href="/gallery" className="text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
                 View full gallery →
               </Link>
             </p>
