@@ -96,6 +96,9 @@ catalogs:
     '@types/sanitize-html':
       specifier: 2.16.1
       version: 2.16.1
+    '@vercel/analytics':
+      specifier: 2.0.1
+      version: 2.0.1
     '@vitejs/plugin-react':
       specifier: 4.5.2
       version: 4.5.2
@@ -352,7 +355,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/payload-types
       '@vercel/analytics':
-        specifier: ^2.0.1
+        specifier: 'catalog:'
         version: 2.0.1(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(react@19.2.6)
       class-variance-authority:
         specifier: 'catalog:'

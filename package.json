@@ -1,7 +1,6 @@
 {
   "name": "portfolio-monorepo",
   "private": true,
-  "packageManager": "pnpm@10.12.4",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -24,7 +23,8 @@
     "turbo": "catalog:"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0",
-    "pnpm": "^9 || ^10 || ^11"
-  }
+    "node": "24.16.0",
+    "pnpm": "11.5.0"
+  },
+  "packageManager": "pnpm@11.5.0"
 }
