@@ -2,7 +2,6 @@ import type { JourneysSetting, Media, Travel } from '@repo/payload-types'
 
 import { ParallaxHeroCover } from '@/components/home/ParallaxHeroCover'
 import { isMedia } from '@/lib/media'
-import { Separator } from '../ui/separator'
 
 type HeroSettings = Pick<
   JourneysSetting,

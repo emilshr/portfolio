@@ -17,6 +17,7 @@ const NEXT_PUBLIC_SERVER_URL =
   'http://localhost:3000'
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['@repo/ui'],
   // Temporarily required on Windows until Next.js fixes Turbopack Sass resolution.
   // See: https://github.com/vercel/next.js/issues/86431
   sassOptions: {

@@ -23,6 +23,8 @@
     "paths": {
       "@payload-config": ["./src/payload.config.ts"],
       "@repo/payload-types": ["../../packages/payload-types/index.ts"],
+      "@repo/ui": ["../../packages/ui/src"],
+      "@repo/ui/*": ["../../packages/ui/src/*"],
       "react": ["./node_modules/@types/react"],
       "@/*": ["./src/*"]
     }

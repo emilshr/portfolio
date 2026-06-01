@@ -36,6 +36,7 @@ if (mediaBaseHostname) {
 }
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['@repo/ui'],
   turbopack: {
     root: path.resolve(dirname, '../..'),
   },

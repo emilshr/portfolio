@@ -163,6 +163,7 @@ export interface Page {
     | SectionHeadingBlock
     | AlertBannerBlock
     | SpacerBlock
+    | SeparatorBlock
     | ContentBlock
     | MediaBlock
     | CallToActionBlock
@@ -503,6 +504,17 @@ export interface SpacerBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'spacer';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SeparatorBlock".
+ */
+export interface SeparatorBlock {
+  orientation: 'horizontal' | 'vertical';
+  spacing: 'none' | 'sm' | 'md' | 'lg';
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'separator';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1024,6 +1036,7 @@ export interface PagesSelect<T extends boolean = true> {
         sectionHeading?: T | SectionHeadingBlockSelect<T>;
         alertBanner?: T | AlertBannerBlockSelect<T>;
         spacer?: T | SpacerBlockSelect<T>;
+        separator?: T | SeparatorBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
@@ -1141,6 +1154,16 @@ export interface AlertBannerBlockSelect<T extends boolean = true> {
  * via the `definition` "SpacerBlock_select".
  */
 export interface SpacerBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SeparatorBlock_select".
+ */
+export interface SeparatorBlockSelect<T extends boolean = true> {
+  orientation?: T;
+  spacing?: T;
   id?: T;
   blockName?: T;
 }
@@ -1603,7 +1626,7 @@ export interface JourneysSetting {
   /**
    * Optional sections rendered after About. Order controls display order.
    */
-  homeLayout?: (ImageMarqueeBlock | FeaturedTravelsBlock)[] | null;
+  homeLayout?: (ImageMarqueeBlock | FeaturedTravelsBlock | SeparatorBlock)[] | null;
   aboutHeading?: string | null;
   aboutLead?: string | null;
   /**
@@ -1737,6 +1760,7 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
     | {
         imageMarquee?: T | ImageMarqueeBlockSelect<T>;
         featuredTravels?: T | FeaturedTravelsBlockSelect<T>;
+        separator?: T | SeparatorBlockSelect<T>;
       };
   aboutHeading?: T;
   aboutLead?: T;

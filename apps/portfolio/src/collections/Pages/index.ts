@@ -12,6 +12,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { PostListBlock } from '../../blocks/PostList/config'
 import { PostListByYearBlock } from '../../blocks/PostListByYear/config'
 import { SectionHeadingBlock } from '../../blocks/SectionHeading/config'
+import { SeparatorBlock } from '../../blocks/Separator/config'
 import { SpacerBlock } from '../../blocks/Spacer/config'
 import { WorkExperienceBlock } from '../../blocks/WorkExperience/config'
 import { slugField } from 'payload'
@@ -81,6 +82,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 SectionHeadingBlock,
                 AlertBanner,
                 SpacerBlock,
+                SeparatorBlock,
                 Content,
                 MediaBlock,
                 CallToAction,

@@ -2,6 +2,7 @@ import type { JourneysSetting } from '@repo/payload-types'
 
 import { FeaturedTravelsSection } from '@/components/home/FeaturedTravelsSection'
 import { ImageMarqueeSection } from '@/components/home/ImageMarqueeSection'
+import { SeparatorSection } from '@/components/home/SeparatorSection'
 
 type RenderHomeBlocksProps = {
   blocks?: JourneysSetting['homeLayout']
@@ -29,6 +30,10 @@ export function RenderHomeBlocks({ blocks }: RenderHomeBlocksProps) {
                 key={block.id ?? `featuredTravels-${index}`}
                 block={block}
               />
+            )
+          case 'separator':
+            return (
+              <SeparatorSection key={block.id ?? `separator-${index}`} block={block} />
             )
           default:
             return null

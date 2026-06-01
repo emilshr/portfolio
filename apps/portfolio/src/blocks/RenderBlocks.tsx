@@ -12,6 +12,7 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { PostListBlockComponent } from '@/blocks/PostList/Component'
 import { PostListByYearBlockComponent } from '@/blocks/PostListByYear/Component'
 import { SectionHeadingBlockComponent } from '@/blocks/SectionHeading/Component'
+import { SeparatorBlockComponent } from '@/blocks/Separator/Component'
 import { SpacerBlockComponent } from '@/blocks/Spacer/Component'
 import { WorkExperienceBlockComponent } from '@/blocks/WorkExperience/Component'
 
@@ -27,6 +28,7 @@ const blockComponents = {
   postListByYear: PostListByYearBlockComponent,
   sectionHeading: SectionHeadingBlockComponent,
   spacer: SpacerBlockComponent,
+  separator: SeparatorBlockComponent,
   workExperience: WorkExperienceBlockComponent,
 }
 
