@@ -25,12 +25,10 @@ const publishedWhere = {
 
 const defaultJourneysSettings: Pick<
   JourneysSetting,
-  'heroTitle' | 'heroSubtitle' | 'aboutHeading' | 'aboutImagePosition' | 'homeLayout'
+  'heroTitle' | 'heroSubtitle' | 'homeLayout'
 > = {
   heroTitle: 'BurntClutchProject',
   heroSubtitle: 'Travel stories from the road.',
-  aboutHeading: 'About me',
-  aboutImagePosition: 'left',
   homeLayout: null,
 }
 

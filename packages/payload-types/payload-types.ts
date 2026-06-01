@@ -1770,16 +1770,34 @@ export interface JourneysSetting {
    */
   featuredTravel?: (string | null) | Travel;
   /**
-   * Optional sections rendered after About. Order controls display order.
+   * Sections below the hero. Order controls display order.
    */
-  homeLayout?: (ImageMarqueeBlock | FeaturedTravelsBlock | SeparatorBlock | MediaPlayerBlock)[] | null;
-  aboutHeading?: string | null;
-  aboutLead?: string | null;
+  homeLayout?:
+    | (ContentSplitBlock | ImageMarqueeBlock | FeaturedTravelsBlock | SeparatorBlock | MediaPlayerBlock)[]
+    | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentSplitBlock".
+ */
+export interface ContentSplitBlock {
+  heading?: string | null;
+  lead?: string | null;
   /**
-   * Portrait shown in the about section.
+   * Portrait or feature image shown beside the text.
    */
-  aboutImage?: (string | null) | Media;
-  aboutContent?: {
+  image?: (string | null) | Media;
+  content?: {
     root: {
       type: string;
       children: {
@@ -1794,17 +1812,10 @@ export interface JourneysSetting {
     };
     [k: string]: unknown;
   } | null;
-  aboutImagePosition?: ('left' | 'right') | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
-    description?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  imagePosition?: ('left' | 'right') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contentSplit';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1904,16 +1915,12 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
   homeLayout?:
     | T
     | {
+        contentSplit?: T | ContentSplitBlockSelect<T>;
         imageMarquee?: T | ImageMarqueeBlockSelect<T>;
         featuredTravels?: T | FeaturedTravelsBlockSelect<T>;
         separator?: T | SeparatorBlockSelect<T>;
         mediaPlayer?: T | MediaPlayerBlockSelect<T>;
       };
-  aboutHeading?: T;
-  aboutLead?: T;
-  aboutImage?: T;
-  aboutContent?: T;
-  aboutImagePosition?: T;
   meta?:
     | T
     | {
@@ -1924,6 +1931,19 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentSplitBlock_select".
+ */
+export interface ContentSplitBlockSelect<T extends boolean = true> {
+  heading?: T;
+  lead?: T;
+  image?: T;
+  content?: T;
+  imagePosition?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

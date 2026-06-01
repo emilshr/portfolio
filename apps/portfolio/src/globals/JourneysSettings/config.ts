@@ -1,12 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
 import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-import {
   MetaDescriptionField,
   MetaImageField,
   MetaTitleField,
@@ -16,6 +10,7 @@ import {
 
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
+import { ContentSplitBlock } from '@/blocks/ContentSplit/config'
 import { FeaturedTravelsBlock } from '@/blocks/FeaturedTravels/config'
 import { ImageMarqueeBlock } from '@/blocks/ImageMarquee/config'
 import { MediaPlayerBlock } from '@/blocks/MediaPlayer/config'
@@ -80,58 +75,15 @@ export const JourneysSettings: GlobalConfig = {
               name: 'homeLayout',
               type: 'blocks',
               blocks: [
+                ContentSplitBlock,
                 ImageMarqueeBlock,
                 FeaturedTravelsBlock,
                 SeparatorBlock,
                 MediaPlayerBlock,
               ],
               admin: {
-                description:
-                  'Optional sections rendered after About. Order controls display order.',
+                description: 'Sections below the hero. Order controls display order.',
               },
-            },
-          ],
-        },
-        {
-          label: 'About',
-          fields: [
-            {
-              name: 'aboutHeading',
-              type: 'text',
-              defaultValue: 'About me',
-            },
-            {
-              name: 'aboutLead',
-              type: 'textarea',
-            },
-            {
-              name: 'aboutImage',
-              type: 'upload',
-              relationTo: 'media',
-              admin: {
-                description: 'Portrait shown in the about section.',
-              },
-            },
-            {
-              name: 'aboutContent',
-              type: 'richText',
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => [
-                  ...rootFeatures,
-                  HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
-                  FixedToolbarFeature(),
-                  InlineToolbarFeature(),
-                ],
-              }),
-            },
-            {
-              name: 'aboutImagePosition',
-              type: 'select',
-              defaultValue: 'left',
-              options: [
-                { label: 'Left', value: 'left' },
-                { label: 'Right', value: 'right' },
-              ],
             },
           ],
         },

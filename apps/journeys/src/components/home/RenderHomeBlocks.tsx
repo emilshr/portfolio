@@ -1,5 +1,6 @@
 import type { JourneysSetting } from '@repo/payload-types'
 
+import { ContentSplitSection } from '@/components/home/ContentSplitSection'
 import { FeaturedTravelsSection } from '@/components/home/FeaturedTravelsSection'
 import { ImageMarqueeSection } from '@/components/home/ImageMarqueeSection'
 import { MediaPlayerSection } from '@/components/home/MediaPlayerSection'
@@ -18,6 +19,13 @@ export function RenderHomeBlocks({ blocks }: RenderHomeBlocksProps) {
         const { blockType } = block
 
         switch (blockType) {
+          case 'contentSplit':
+            return (
+              <ContentSplitSection
+                key={block.id ?? `contentSplit-${index}`}
+                block={block}
+              />
+            )
           case 'imageMarquee':
             return (
               <ImageMarqueeSection
