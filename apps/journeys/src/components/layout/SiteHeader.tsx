@@ -47,7 +47,7 @@ export function SiteHeader() {
           : 'border-b border-border/60 bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/50',
       )}
     >
-      <div className="mx-auto grid h-16 w-full max-w-6xl grid-cols-3 items-center gap-4 px-[clamp(1.5rem,5vw,4rem)]">
+      <div className="mx-auto grid h-16 w-full max-w-6xl grid-cols-3 items-center gap-0.5 sm:gap-4 px-0 sm:px-[clamp(1.5rem,5vw,4rem)]">
         <div className="flex justify-start sm:justify-end">
           <HeaderNavHighlightLink
             href={INSTAGRAM_URL}
