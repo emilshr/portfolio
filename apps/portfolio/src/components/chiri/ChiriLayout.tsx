@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Analytics } from '@vercel/analytics/next'
 import { cookies } from 'next/headers'
 import Script from 'next/script'
 
@@ -71,6 +72,7 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
             <Footer settings={settings} />
           </div>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
