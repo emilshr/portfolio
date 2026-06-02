@@ -18,6 +18,11 @@ type TravelGalleryEntry = {
   caption?: string | null
 }
 
+type RichTextNode = {
+  text?: string | null
+  children?: RichTextNode[] | null
+}
+
 type TravelDetailGalleryProps = {
   travelTitle: string
   items: TravelGalleryEntry[]
@@ -32,6 +37,24 @@ const spanPatterns = [
   'md:col-span-2 md:row-span-2',
 ]
 
+function extractPlainTextFromRichText(node: RichTextNode | null | undefined): string {
+  if (!node) return ''
+
+  const chunks: string[] = []
+
+  const visit = (current: RichTextNode) => {
+    if (typeof current.text === 'string' && current.text.trim()) {
+      chunks.push(current.text.trim())
+    }
+    if (Array.isArray(current.children)) {
+      current.children.forEach(visit)
+    }
+  }
+
+  visit(node)
+  return chunks.join(' ').trim()
+}
+
 function toPreviewItems(travelTitle: string, entries: TravelGalleryEntry[]): MediaPreviewItem[] {
   return entries.reduce<MediaPreviewItem[]>((acc, entry, index) => {
     const media = entry.media || entry.image
@@ -40,9 +63,11 @@ function toPreviewItems(travelTitle: string, entries: TravelGalleryEntry[]): Med
     const url = getMediaUrl(media, 'large')
     if (!url) return acc
 
-    const thumb = getMediaUrl(media, 'thumbnail') || url
+    const thumb = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
     const mimeType = media.mimeType ?? null
     const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
+    const mediaCaption = extractPlainTextFromRichText((media.caption?.root as RichTextNode | undefined) ?? null)
+    const caption = entry.caption?.trim() || mediaCaption || null
 
     acc.push({
       id: entry.id || `${media.id}-${index}`,
@@ -51,7 +76,7 @@ function toPreviewItems(travelTitle: string, entries: TravelGalleryEntry[]): Med
       kind,
       mimeType,
       alt: entry.alt || media.alt || travelTitle,
-      caption: entry.caption,
+      caption,
     })
     return acc
   }, [])

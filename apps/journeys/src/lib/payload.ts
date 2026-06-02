@@ -16,6 +16,29 @@ type JourneysSettingsSnapshot = Pick<JourneysSetting, 'heroTitle' | 'heroSubtitl
   headerMenu: HeaderMenuItem[]
 }
 
+type RichTextNode = {
+  text?: string | null
+  children?: RichTextNode[] | null
+}
+
+function extractPlainTextFromRichText(node: RichTextNode | null | undefined): string {
+  if (!node) return ''
+
+  const chunks: string[] = []
+
+  const visit = (current: RichTextNode) => {
+    if (typeof current.text === 'string' && current.text.trim()) {
+      chunks.push(current.text.trim())
+    }
+    if (Array.isArray(current.children)) {
+      current.children.forEach(visit)
+    }
+  }
+
+  visit(node)
+  return chunks.join(' ').trim()
+}
+
 const getSDK = (): PayloadSDK<Config> | null => {
   const baseURL = getPayloadApiUrl()
   if (!baseURL) {
@@ -185,17 +208,19 @@ export const getGalleryItems = unstable_cache(
         if (!media || typeof media === 'string' || !isMedia(media)) continue
 
         const url = getMediaUrl(media, 'large')
-        const thumbnailUrl = getMediaUrl(media, 'thumbnail')
+        const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium')
         if (!url) continue
 
         const mimeType = media.mimeType ?? null
         const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
+        const mediaCaption = extractPlainTextFromRichText((media.caption?.root as RichTextNode | undefined) ?? null)
+        const caption = entry.caption?.trim() || mediaCaption || null
 
         items.push({
           id: entry.id || `${travel.id}-${media.id}`,
           url,
           alt: entry.alt || media.alt || travel.title,
-          caption: entry.caption,
+          caption,
           travelSlug: travel.slug,
           travelTitle: travel.title,
           thumbnailUrl: thumbnailUrl ?? url,
