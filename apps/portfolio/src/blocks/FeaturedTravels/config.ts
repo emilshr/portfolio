@@ -12,6 +12,16 @@ export const FeaturedTravelsBlock: Block = {
       name: 'heading',
       type: 'text',
       defaultValue: 'Featured journeys',
+      admin: {
+        description: 'Section heading shown above the featured journeys list.',
+      },
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      admin: {
+        description: 'Optional supporting copy shown below the section heading.',
+      },
     },
     {
       name: 'limit',
@@ -19,6 +29,9 @@ export const FeaturedTravelsBlock: Block = {
       defaultValue: 6,
       min: 1,
       max: 12,
+      admin: {
+        description: 'How many featured journeys to display.',
+      },
     },
   ],
 }

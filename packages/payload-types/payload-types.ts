@@ -1875,7 +1875,17 @@ export interface ImageMarqueeBlock {
  * via the `definition` "FeaturedTravelsBlock".
  */
 export interface FeaturedTravelsBlock {
+  /**
+   * Section heading shown above the featured journeys list.
+   */
   heading?: string | null;
+  /**
+   * Optional supporting copy shown below the section heading.
+   */
+  description?: string | null;
+  /**
+   * How many featured journeys to display.
+   */
   limit?: number | null;
   id?: string | null;
   blockName?: string | null;
@@ -2009,6 +2019,7 @@ export interface ImageMarqueeBlockSelect<T extends boolean = true> {
  */
 export interface FeaturedTravelsBlockSelect<T extends boolean = true> {
   heading?: T;
+  description?: T;
   limit?: T;
   id?: T;
   blockName?: T;

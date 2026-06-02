@@ -8,7 +8,7 @@ type FeaturedTravelsSectionProps = {
 }
 
 export async function FeaturedTravelsSection({ block }: FeaturedTravelsSectionProps) {
-  const limit = block.limit ?? 6
+  const limit = typeof block.limit === 'number' ? block.limit : 6
   const travels = await getFeaturedTravels(limit)
 
   if (travels.length === 0) return null
@@ -17,6 +17,8 @@ export async function FeaturedTravelsSection({ block }: FeaturedTravelsSectionPr
     <TravelGrid
       travels={travels}
       title={block.heading ?? 'Featured journeys'}
+      description={block.description}
+      showViewAllLink
     />
   )
 }

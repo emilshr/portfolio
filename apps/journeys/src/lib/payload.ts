@@ -12,6 +12,10 @@ export type HeaderMenuItem = {
   openInNewTab?: boolean | null
 }
 
+const FEATURED_TRAVELS_MIN_LIMIT = 1
+const FEATURED_TRAVELS_MAX_LIMIT = 12
+const FEATURED_TRAVELS_DEFAULT_LIMIT = 6
+
 type JourneysSettingsSnapshot = Pick<JourneysSetting, 'heroTitle' | 'heroSubtitle' | 'homeLayout'> & {
   headerMenu: HeaderMenuItem[]
 }
@@ -154,7 +158,28 @@ export const getPublishedTravels = unstable_cache(
   { tags: ['travels'] },
 )
 
-export function getFeaturedTravels(limit = 6): Promise<Travel[]> {
+function normalizeFeaturedLimit(limit?: number | null): number {
+  if (typeof limit !== 'number' || Number.isNaN(limit)) {
+    return FEATURED_TRAVELS_DEFAULT_LIMIT
+  }
+
+  const normalized = Math.floor(limit)
+  return Math.min(FEATURED_TRAVELS_MAX_LIMIT, Math.max(FEATURED_TRAVELS_MIN_LIMIT, normalized))
+}
+
+function getTravelSortTimestamp(travel: Travel): number {
+  const tripStart = travel.tripDates?.start
+  const publishedAt = travel.publishedAt
+  const source = tripStart ?? publishedAt
+  if (!source) return 0
+
+  const timestamp = new Date(source).getTime()
+  return Number.isFinite(timestamp) ? timestamp : 0
+}
+
+export function getFeaturedTravels(limit = FEATURED_TRAVELS_DEFAULT_LIMIT): Promise<Travel[]> {
+  const normalizedLimit = normalizeFeaturedLimit(limit)
+
   return unstable_cache(
     async () => {
       const sdk = getSDK()
@@ -162,15 +187,16 @@ export function getFeaturedTravels(limit = 6): Promise<Travel[]> {
       const result = await sdk.find({
         collection: 'travels',
         depth: 2,
-        limit,
-        sort: '-publishedAt',
+        limit: 100,
         where: {
           and: [publishedWhere, { featured: { equals: true } }],
         },
       })
       return result.docs
+        .sort((a, b) => getTravelSortTimestamp(b) - getTravelSortTimestamp(a))
+        .slice(0, normalizedLimit)
     },
-    ['featured-travels', String(limit)],
+    ['featured-travels', String(normalizedLimit)],
     { tags: ['travels'] },
   )()
 }
