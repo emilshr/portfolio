@@ -27,6 +27,7 @@ export function PayloadImage({
 
   const src = getMediaUrl(media, size)
   if (!src) return null
+  const isInternalPayloadMedia = src.startsWith('/api/media/')
 
   const width = fill ? undefined : (media.width ?? 1200)
   const height = fill ? undefined : (media.height ?? 800)
@@ -38,6 +39,7 @@ export function PayloadImage({
         src={src}
         alt={alt ?? getMediaAlt(media)}
         fill
+        unoptimized={isInternalPayloadMedia}
         priority={priority}
         sizes={sizes}
         className={cn('object-cover', className)}
@@ -52,6 +54,7 @@ export function PayloadImage({
       alt={alt ?? getMediaAlt(media)}
       width={width}
       height={height}
+      unoptimized={isInternalPayloadMedia}
       priority={priority}
       sizes={sizes}
       className={cn('object-cover', className)}

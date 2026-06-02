@@ -33,6 +33,8 @@ function isExternalUrl(url: string): boolean {
 export function SiteHeader({ menuItems }: SiteHeaderProps) {
   const pathname = usePathname()
   const isHome = pathname === '/'
+  const isTravelDetail = /^\/(?!gallery$|posts$)[^/]+$/.test(pathname)
+  const isOverlayHeroRoute = isHome || isTravelDetail
   const [pastCover, setPastCover] = useState(false)
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -72,7 +74,7 @@ export function SiteHeader({ menuItems }: SiteHeaderProps) {
   }, [menuOpen])
 
   useEffect(() => {
-    if (!isHome) {
+    if (!isOverlayHeroRoute) {
       setPastCover(false)
       return
     }
@@ -89,10 +91,10 @@ export function SiteHeader({ menuItems }: SiteHeaderProps) {
 
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [isHome])
+  }, [isOverlayHeroRoute, pathname])
 
-  const homeOverCover = isHome && !pastCover
-  const heroOverlayHeader = homeOverCover && mounted && resolvedTheme === 'dark' && !menuOpen
+  const overCover = isOverlayHeroRoute && !pastCover
+  const heroOverlayHeader = overCover && mounted && resolvedTheme === 'dark' && !menuOpen
 
   return (
     <>

@@ -16,6 +16,7 @@ export function TravelDetail({ travel }: TravelDetailProps) {
 
   return (
     <article>
+      <div id="hero-cover-sentinel" className="h-0 w-full" aria-hidden />
       <section className="relative min-h-[min(70vh,720px)] w-full overflow-hidden">
         {hero ? (
           <>
