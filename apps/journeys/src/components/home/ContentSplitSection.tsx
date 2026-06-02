@@ -64,7 +64,7 @@ export function ContentSplitSection({ block }: ContentSplitSectionProps) {
             <p className="max-w-xl text-lg leading-relaxed text-foreground">{block.lead}</p>
           ) : null}
           {richContent ? (
-            <JourneysRichText data={richContent} className="max-w-xl text-base leading-relaxed" />
+            <JourneysRichText data={richContent} className="max-w-xl leading-relaxed" />
           ) : null}
         </div>
       </div>
