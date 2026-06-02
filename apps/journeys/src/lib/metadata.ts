@@ -99,3 +99,54 @@ export function travelMetadata(travel: {
     image,
   })
 }
+
+export function articleMetadata(article: {
+  title: string
+  excerpt?: string | null
+  slug: string
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: unknown
+  } | null
+  heroImage?: unknown
+}): Metadata {
+  const title = article.meta?.title || article.title
+  const description = article.meta?.description || article.excerpt
+  const metaImage = article.meta?.image
+  const image =
+    (isMedia(metaImage) ? getAbsoluteMediaUrl(getMediaUrl(metaImage, 'og')) : null) ||
+    (isMedia(article.heroImage) ? getAbsoluteMediaUrl(getMediaUrl(article.heroImage, 'og')) : null)
+
+  return buildPageMetadata({
+    title,
+    description,
+    path: `/articles/${article.slug}`,
+    image,
+  })
+}
+
+export function vehiclesPageMetadata(vehicle: {
+  name: string
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: unknown
+  } | null
+  coverImage?: unknown
+} | null): Metadata {
+  const title = vehicle?.meta?.title || 'Vehicles'
+  const description = vehicle?.meta?.description || 'Motorcycles and upgrades from my garage.'
+  const image =
+    (isMedia(vehicle?.meta?.image)
+      ? getAbsoluteMediaUrl(getMediaUrl(vehicle.meta.image, 'og'))
+      : null) ||
+    (isMedia(vehicle?.coverImage) ? getAbsoluteMediaUrl(getMediaUrl(vehicle.coverImage, 'og')) : null)
+
+  return buildPageMetadata({
+    title,
+    description,
+    path: '/vehicles',
+    image,
+  })
+}

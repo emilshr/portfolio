@@ -6,11 +6,14 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Experiences } from './collections/Experiences'
+import { Articles } from './collections/Articles'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Travels } from './collections/Travels'
 import { Users } from './collections/Users'
+import { Vehicles } from './collections/Vehicles'
+import { GallerySettings } from './globals/GallerySettings/config'
 import { JourneysSettings } from './globals/JourneysSettings/config'
 import { SiteSettings } from './globals/SiteSettings/config'
 import { plugins } from './plugins'
@@ -54,8 +57,8 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || '',
   }),
-  collections: [Pages, Posts, Travels, Experiences, Media, Users],
-  globals: [SiteSettings, JourneysSettings],
+  collections: [Pages, Posts, Articles, Travels, Vehicles, Experiences, Media, Users],
+  globals: [SiteSettings, JourneysSettings, GallerySettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

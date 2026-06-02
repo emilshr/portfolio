@@ -61,7 +61,7 @@ export function MediaLightbox({ items, initialIndex, onClose }: MediaLightboxPro
     >
       <div className="flex items-center justify-between px-4 py-3">
         <p className="truncate text-sm text-white/80">
-          {current.travelTitle}
+          {current.source?.title || 'Gallery'}
           {current.caption ? ` — ${current.caption}` : ''}
         </p>
         <Button

@@ -69,7 +69,9 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    articles: Article;
     travels: Travel;
+    vehicles: Vehicle;
     experiences: Experience;
     media: Media;
     users: User;
@@ -89,7 +91,9 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
     travels: TravelsSelect<false> | TravelsSelect<true>;
+    vehicles: VehiclesSelect<false> | VehiclesSelect<true>;
     experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -108,10 +112,12 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     'journeys-settings': JourneysSetting;
+    'gallery-settings': GallerySetting;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'journeys-settings': JourneysSettingsSelect<false> | JourneysSettingsSelect<true>;
+    'gallery-settings': GallerySettingsSelect<false> | GallerySettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -745,6 +751,63 @@ export interface ArchiveBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: string;
+  title: string;
+  /**
+   * Short teaser used in article lists and metadata fallback.
+   */
+  excerpt?: string | null;
+  heroImage?: (string | null) | Media;
+  gallery?:
+    | {
+        media: string | Media;
+        /**
+         * Optional override; defaults to media alt text.
+         */
+        alt?: string | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  lastUpdatedAt?: string | null;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "travels".
  */
 export interface Travel {
@@ -818,6 +881,103 @@ export interface Travel {
    * Show in the Featured Travels homepage block when that block is added.
    */
   featured?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vehicles".
+ */
+export interface Vehicle {
+  id: string;
+  name: string;
+  /**
+   * Primary thumbnail/cover image for this vehicle.
+   */
+  coverImage?: (string | null) | Media;
+  /**
+   * Current odometer reading in kilometers.
+   */
+  odometer: number;
+  gallery?:
+    | {
+        media: string | Media;
+        /**
+         * Optional override; defaults to media alt text.
+         */
+        alt?: string | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  details: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  mods?:
+    | {
+        name: string;
+        /**
+         * Product URL for this mod.
+         */
+        productURL?: string | null;
+        /**
+         * Rating out of 5 stars (supports 0.5 increments).
+         */
+        rating?: number | null;
+        pictures?:
+          | {
+              media: string | Media;
+              alt?: string | null;
+              caption?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        review?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  lastUpdatedAt?: string | null;
+  publishedAt?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1044,8 +1204,16 @@ export interface PayloadLockedDocument {
         value: string | Post;
       } | null)
     | ({
+        relationTo: 'articles';
+        value: string | Article;
+      } | null)
+    | ({
         relationTo: 'travels';
         value: string | Travel;
+      } | null)
+    | ({
+        relationTo: 'vehicles';
+        value: string | Vehicle;
       } | null)
     | ({
         relationTo: 'experiences';
@@ -1414,6 +1582,38 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  title?: T;
+  excerpt?: T;
+  heroImage?: T;
+  gallery?:
+    | T
+    | {
+        media?: T;
+        alt?: T;
+        caption?: T;
+        id?: T;
+      };
+  content?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  lastUpdatedAt?: T;
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "travels_select".
  */
 export interface TravelsSelect<T extends boolean = true> {
@@ -1454,6 +1654,55 @@ export interface TravelsSelect<T extends boolean = true> {
   lastUpdatedAt?: T;
   publishedAt?: T;
   featured?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vehicles_select".
+ */
+export interface VehiclesSelect<T extends boolean = true> {
+  name?: T;
+  coverImage?: T;
+  odometer?: T;
+  gallery?:
+    | T
+    | {
+        media?: T;
+        alt?: T;
+        caption?: T;
+        id?: T;
+      };
+  details?: T;
+  mods?:
+    | T
+    | {
+        name?: T;
+        productURL?: T;
+        rating?: T;
+        pictures?:
+          | T
+          | {
+              media?: T;
+              alt?: T;
+              caption?: T;
+              id?: T;
+            };
+        review?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  lastUpdatedAt?: T;
+  publishedAt?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1792,7 +2041,7 @@ export interface JourneysSetting {
         /**
          * Choose a built-in route.
          */
-        internalPath?: ('/' | '/gallery' | '/posts') | null;
+        internalPath?: ('/' | '/gallery' | '/posts' | '/articles' | '/vehicles') | null;
         /**
          * Choose a travel entry. Link resolves to /{slug}.
          */
@@ -1890,6 +2139,27 @@ export interface FeaturedTravelsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'featuredTravels';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery-settings".
+ */
+export interface GallerySetting {
+  id: string;
+  /**
+   * Choose the Media folder used by the /gallery page.
+   */
+  folder: string | FolderInterface;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2026,6 +2296,23 @@ export interface FeaturedTravelsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery-settings_select".
+ */
+export interface GallerySettingsSelect<T extends boolean = true> {
+  folder?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -2052,8 +2339,16 @@ export interface TaskSchedulePublish {
           value: string | Post;
         } | null)
       | ({
+          relationTo: 'articles';
+          value: string | Article;
+        } | null)
+      | ({
           relationTo: 'travels';
           value: string | Travel;
+        } | null)
+      | ({
+          relationTo: 'vehicles';
+          value: string | Vehicle;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

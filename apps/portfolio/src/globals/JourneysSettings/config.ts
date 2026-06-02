@@ -170,6 +170,8 @@ export const JourneysSettings: GlobalConfig = {
                     { label: 'Home', value: '/' },
                     { label: 'Gallery', value: '/gallery' },
                     { label: 'Posts', value: '/posts' },
+                    { label: 'Articles', value: '/articles' },
+                    { label: 'Vehicles', value: '/vehicles' },
                   ],
                   defaultValue: '/',
                   admin: {

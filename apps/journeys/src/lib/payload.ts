@@ -1,5 +1,5 @@
 import { PayloadSDK } from '@payloadcms/sdk'
-import type { Config, JourneysSetting, Travel } from '@repo/payload-types'
+import type { Article, Config, GallerySetting, JourneysSetting, Travel, Vehicle } from '@repo/payload-types'
 import { unstable_cache } from 'next/cache'
 
 import { getPayloadApiUrl, isProductionDeploy } from '@/lib/env'
@@ -59,6 +59,11 @@ const getSDK = (): PayloadSDK<Config> | null => {
 
 const publishedWhere = {
   _status: { equals: 'published' as const },
+}
+
+const publishedAndSorted = {
+  where: publishedWhere,
+  sort: '-publishedAt',
 }
 
 const defaultJourneysSettings: Pick<
@@ -149,13 +154,44 @@ export const getPublishedTravels = unstable_cache(
       collection: 'travels',
       depth: 2,
       limit: limit ?? 100,
-      sort: '-publishedAt',
-      where: publishedWhere,
+      ...publishedAndSorted,
     })
     return result.docs
   },
   ['published-travels'],
   { tags: ['travels'] },
+)
+
+export const getPublishedArticles = unstable_cache(
+  async (limit?: number) => {
+    const sdk = getSDK()
+    if (!sdk) return [] as Article[]
+    const result = await sdk.find({
+      collection: 'articles',
+      depth: 2,
+      limit: limit ?? 100,
+      ...publishedAndSorted,
+    })
+    return result.docs
+  },
+  ['published-articles'],
+  { tags: ['articles'] },
+)
+
+export const getPublishedVehicles = unstable_cache(
+  async () => {
+    const sdk = getSDK()
+    if (!sdk) return [] as Vehicle[]
+    const result = await sdk.find({
+      collection: 'vehicles',
+      depth: 2,
+      limit: 100,
+      ...publishedAndSorted,
+    })
+    return result.docs
+  },
+  ['published-vehicles'],
+  { tags: ['vehicles'] },
 )
 
 function normalizeFeaturedLimit(limit?: number | null): number {
@@ -221,39 +257,126 @@ export function getTravelBySlug(slug: string): Promise<Travel | null> {
   )()
 }
 
+export function getArticleBySlug(slug: string): Promise<Article | null> {
+  return unstable_cache(
+    async () => {
+      const sdk = getSDK()
+      if (!sdk) return null
+      const result = await sdk.find({
+        collection: 'articles',
+        depth: 2,
+        limit: 1,
+        where: {
+          and: [publishedWhere, { slug: { equals: slug } }],
+        },
+      })
+      return result.docs[0] ?? null
+    },
+    [`article-${slug}`],
+    { tags: ['articles', `article:${slug}`] },
+  )()
+}
+
+export const getGallerySettings = unstable_cache(
+  async () => {
+    const sdk = getSDK()
+    if (!sdk) return null
+    const settings = await sdk.findGlobal({ slug: 'gallery-settings', depth: 2 })
+    return settings as GallerySetting
+  },
+  ['gallery-settings'],
+  { tags: ['gallery-settings'] },
+)
+
+export const getLatestVehicleForMetadata = unstable_cache(
+  async () => {
+    const vehicles = await getPublishedVehicles()
+    return vehicles[0] ?? null
+  },
+  ['latest-vehicle-metadata'],
+  { tags: ['vehicles'] },
+)
+
 export const getGalleryItems = unstable_cache(
   async () => {
-    const travels = await getPublishedTravels()
-    const items: GalleryItem[] = []
+    const sdk = getSDK()
+    if (!sdk) return [] as GalleryItem[]
+
+    const [settings, travels, articles] = await Promise.all([
+      getGallerySettings(),
+      getPublishedTravels(),
+      getPublishedArticles(),
+    ])
+
+    const folderId =
+      settings?.folder && typeof settings.folder === 'object' ? settings.folder.id : settings?.folder
+
+    if (!folderId) return [] as GalleryItem[]
+
+    const mediaResult = await sdk.find({
+      collection: 'media',
+      depth: 1,
+      limit: 500,
+      sort: '-createdAt',
+      where: {
+        folder: { equals: folderId },
+      },
+    })
+
+    const sourceByMediaId = new Map<string, GalleryItem['source']>()
 
     for (const travel of travels) {
       if (!travel.gallery?.length) continue
-
       for (const entry of travel.gallery) {
         const media = entry.media || entry.image
         if (!media || typeof media === 'string' || !isMedia(media)) continue
-
-        const url = getMediaUrl(media, 'large')
-        const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium')
-        if (!url) continue
-
-        const mimeType = media.mimeType ?? null
-        const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
-        const mediaCaption = extractPlainTextFromRichText((media.caption?.root as RichTextNode | undefined) ?? null)
-        const caption = entry.caption?.trim() || mediaCaption || null
-
-        items.push({
-          id: entry.id || `${travel.id}-${media.id}`,
-          url,
-          alt: entry.alt || media.alt || travel.title,
-          caption,
-          travelSlug: travel.slug,
-          travelTitle: travel.title,
-          thumbnailUrl: thumbnailUrl ?? url,
-          kind,
-          mimeType,
-        })
+        if (!sourceByMediaId.has(media.id)) {
+          sourceByMediaId.set(media.id, {
+            type: 'travel',
+            href: `/${travel.slug}`,
+            title: travel.title,
+          })
+        }
       }
+    }
+
+    for (const article of articles) {
+      if (!article.gallery?.length) continue
+      for (const entry of article.gallery) {
+        const media = entry.media
+        if (!media || typeof media === 'string' || !isMedia(media)) continue
+        if (!sourceByMediaId.has(media.id)) {
+          sourceByMediaId.set(media.id, {
+            type: 'article',
+            href: `/articles/${article.slug}`,
+            title: article.title,
+          })
+        }
+      }
+    }
+
+    const items: GalleryItem[] = []
+
+    for (const media of mediaResult.docs) {
+      if (!isMedia(media)) continue
+      const url = getMediaUrl(media, 'large')
+      if (!url) continue
+      const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
+      const mimeType = media.mimeType ?? null
+      const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
+      const mediaCaption = extractPlainTextFromRichText((media.caption?.root as RichTextNode | undefined) ?? null)
+      const source = sourceByMediaId.get(media.id) ?? null
+
+      items.push({
+        id: media.id,
+        url,
+        alt: media.alt || 'Gallery media',
+        caption: mediaCaption || null,
+        thumbnailUrl,
+        kind,
+        mimeType,
+        source,
+      })
     }
 
     return items
@@ -268,8 +391,11 @@ export type GalleryItem = {
   thumbnailUrl: string
   alt: string
   caption?: string | null
-  travelSlug: string
-  travelTitle: string
   kind: 'image' | 'video'
   mimeType: string | null
+  source?: {
+    type: 'article' | 'travel'
+    href: string
+    title: string
+  } | null
 }

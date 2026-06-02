@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import { type ReactNode, useCallback, useEffect, useMemo, useRef } from "react"
 
 import { cn } from "../lib/utils"
 import { Button } from "./button"
@@ -22,9 +22,17 @@ type MediaPreviewProps = {
   onIndexChange: (index: number) => void
   onClose: () => void
   title?: string
+  renderAnnotation?: (item: MediaPreviewItem) => ReactNode
 }
 
-export function MediaPreview({ items, currentIndex, onIndexChange, onClose, title }: MediaPreviewProps) {
+export function MediaPreview({
+  items,
+  currentIndex,
+  onIndexChange,
+  onClose,
+  title,
+  renderAnnotation,
+}: MediaPreviewProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const isOpen = currentIndex !== null
   const item = currentIndex !== null ? items[currentIndex] : null
@@ -104,6 +112,8 @@ export function MediaPreview({ items, currentIndex, onIndexChange, onClose, titl
       </div>
 
       <div className="relative flex flex-1 items-center justify-center px-4 pb-4">
+        {renderAnnotation ? <div className="absolute left-4 top-2 z-10 max-w-md">{renderAnnotation(item)}</div> : null}
+
         {hasMultiple ? (
           <Button
             type="button"

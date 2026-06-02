@@ -21,6 +21,7 @@ const fallbackMenuItems: HeaderMenuItem[] = [
 
 const solidHeaderClass =
   'border-b border-border/60 bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/50'
+const nonTravelTopLevelRoutes = new Set(['gallery', 'posts', 'articles', 'vehicles'])
 
 type SiteHeaderProps = {
   menuItems: HeaderMenuItem[]
@@ -33,7 +34,9 @@ function isExternalUrl(url: string): boolean {
 export function SiteHeader({ menuItems }: SiteHeaderProps) {
   const pathname = usePathname()
   const isHome = pathname === '/'
-  const isTravelDetail = /^\/(?!gallery$|posts$)[^/]+$/.test(pathname)
+  const topLevelSegment = pathname.replace(/^\//, '')
+  const isTopLevelRoute = topLevelSegment.length > 0 && !topLevelSegment.includes('/')
+  const isTravelDetail = isTopLevelRoute && !nonTravelTopLevelRoutes.has(topLevelSegment)
   const isOverlayHeroRoute = isHome || isTravelDetail
   const [pastCover, setPastCover] = useState(false)
   const { resolvedTheme } = useTheme()
