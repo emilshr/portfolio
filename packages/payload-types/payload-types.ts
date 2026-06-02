@@ -1775,6 +1775,30 @@ export interface JourneysSetting {
   homeLayout?:
     | (ContentSplitBlock | ImageMarqueeBlock | FeaturedTravelsBlock | SeparatorBlock | MediaPlayerBlock)[]
     | null;
+  /**
+   * Fullscreen hamburger menu links shown in the Journeys header overlay.
+   */
+  headerMenu?:
+    | {
+        label: string;
+        linkType: 'internal' | 'external';
+        openInNewTab?: boolean | null;
+        internalDestinationType?: ('static' | 'travel') | null;
+        /**
+         * Choose a built-in route.
+         */
+        internalPath?: ('/' | '/gallery' | '/posts') | null;
+        /**
+         * Choose a travel entry. Link resolves to /{slug}.
+         */
+        travel?: (string | null) | Travel;
+        /**
+         * External URL like https://example.com. (Legacy internal URLs still supported.)
+         */
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     /**
@@ -1920,6 +1944,18 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
         featuredTravels?: T | FeaturedTravelsBlockSelect<T>;
         separator?: T | SeparatorBlockSelect<T>;
         mediaPlayer?: T | MediaPlayerBlockSelect<T>;
+      };
+  headerMenu?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        openInNewTab?: T;
+        internalDestinationType?: T;
+        internalPath?: T;
+        travel?: T;
+        url?: T;
+        id?: T;
       };
   meta?:
     | T

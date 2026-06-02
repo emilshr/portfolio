@@ -5,6 +5,17 @@ import { unstable_cache } from 'next/cache'
 import { getPayloadApiUrl, isProductionDeploy } from '@/lib/env'
 import { getMediaUrl, isMedia } from '@/lib/media'
 
+export type HeaderMenuItem = {
+  id: string
+  label: string
+  url: string
+  openInNewTab?: boolean | null
+}
+
+type JourneysSettingsSnapshot = Pick<JourneysSetting, 'heroTitle' | 'heroSubtitle' | 'homeLayout'> & {
+  headerMenu: HeaderMenuItem[]
+}
+
 const getSDK = (): PayloadSDK<Config> | null => {
   const baseURL = getPayloadApiUrl()
   if (!baseURL) {
@@ -24,19 +35,80 @@ const publishedWhere = {
 }
 
 const defaultJourneysSettings: Pick<
-  JourneysSetting,
-  'heroTitle' | 'heroSubtitle' | 'homeLayout'
+  JourneysSettingsSnapshot,
+  'heroTitle' | 'heroSubtitle' | 'homeLayout' | 'headerMenu'
 > = {
   heroTitle: 'BurntClutchProject',
   heroSubtitle: 'Travel stories from the road.',
   homeLayout: null,
+  headerMenu: [],
 }
 
 export const getJourneysSettings = unstable_cache(
   async () => {
     const sdk = getSDK()
     if (!sdk) return defaultJourneysSettings
-    return sdk.findGlobal({ slug: 'journeys-settings', depth: 2 })
+    const settings = await sdk.findGlobal({ slug: 'journeys-settings', depth: 2 })
+    const rawMenu = (settings as { headerMenu?: unknown }).headerMenu
+    const headerMenu: HeaderMenuItem[] = Array.isArray(rawMenu)
+      ? rawMenu.reduce<HeaderMenuItem[]>((acc, item, index) => {
+          if (!item || typeof item !== 'object') return acc
+          const candidate = item as {
+            id?: unknown
+            label?: unknown
+            url?: unknown
+            linkType?: unknown
+            internalDestinationType?: unknown
+            internalPath?: unknown
+            travel?: unknown
+            openInNewTab?: unknown
+          }
+          if (typeof candidate.label !== 'string') return acc
+
+          const label = candidate.label.trim()
+          const resolvedInternalUrl = (() => {
+            if (candidate.internalDestinationType === 'travel') {
+              const travel =
+                candidate.travel && typeof candidate.travel === 'object'
+                  ? (candidate.travel as { slug?: unknown })
+                  : null
+              return typeof travel?.slug === 'string' && travel.slug.trim()
+                ? `/${travel.slug.trim()}`
+                : ''
+            }
+            if (typeof candidate.internalPath === 'string') return candidate.internalPath.trim()
+            if (typeof candidate.url === 'string' && candidate.url.startsWith('/')) {
+              return candidate.url.trim()
+            }
+            return ''
+          })()
+
+          const resolvedExternalUrl =
+            typeof candidate.url === 'string' && /^https?:\/\//i.test(candidate.url)
+              ? candidate.url.trim()
+              : ''
+
+          const url =
+            candidate.linkType === 'external'
+              ? resolvedExternalUrl
+              : resolvedInternalUrl || resolvedExternalUrl
+
+          if (!label || !url) return acc
+
+          acc.push({
+            id: typeof candidate.id === 'string' ? candidate.id : `header-menu-${index}`,
+            label,
+            url,
+            openInNewTab: Boolean(candidate.openInNewTab),
+          })
+          return acc
+        }, [])
+      : []
+
+    return {
+      ...settings,
+      headerMenu,
+    } as JourneysSettingsSnapshot
   },
   ['journeys-settings'],
   { tags: ['journeys-settings'] },
