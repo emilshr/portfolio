@@ -181,21 +181,26 @@ export const getGalleryItems = unstable_cache(
       if (!travel.gallery?.length) continue
 
       for (const entry of travel.gallery) {
-        const image = entry.image
-        if (!image || typeof image === 'string' || !isMedia(image)) continue
+        const media = entry.media || entry.image
+        if (!media || typeof media === 'string' || !isMedia(media)) continue
 
-        const url = getMediaUrl(image, 'large')
-        const thumbnailUrl = getMediaUrl(image, 'thumbnail')
+        const url = getMediaUrl(media, 'large')
+        const thumbnailUrl = getMediaUrl(media, 'thumbnail')
         if (!url) continue
 
+        const mimeType = media.mimeType ?? null
+        const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
+
         items.push({
-          id: entry.id || `${travel.id}-${image.id}`,
+          id: entry.id || `${travel.id}-${media.id}`,
           url,
-          alt: entry.alt || image.alt || travel.title,
+          alt: entry.alt || media.alt || travel.title,
           caption: entry.caption,
           travelSlug: travel.slug,
           travelTitle: travel.title,
           thumbnailUrl: thumbnailUrl ?? url,
+          kind,
+          mimeType,
         })
       }
     }
@@ -214,4 +219,6 @@ export type GalleryItem = {
   caption?: string | null
   travelSlug: string
   travelTitle: string
+  kind: 'image' | 'video'
+  mimeType: string | null
 }

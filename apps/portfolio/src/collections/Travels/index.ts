@@ -133,13 +133,22 @@ export const Travels: CollectionConfig<'travels'> = {
             {
               name: 'gallery',
               type: 'array',
-              labels: { singular: 'Image', plural: 'Gallery Images' },
+              labels: { singular: 'Media Item', plural: 'Gallery Media' },
               fields: [
+                {
+                  name: 'media',
+                  type: 'upload',
+                  relationTo: 'media',
+                  required: true,
+                },
                 {
                   name: 'image',
                   type: 'upload',
                   relationTo: 'media',
-                  required: true,
+                  admin: {
+                    description: 'Deprecated legacy field retained for old gallery entries.',
+                    condition: () => false,
+                  },
                 },
                 {
                   name: 'alt',

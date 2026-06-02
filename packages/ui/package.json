@@ -5,6 +5,11 @@
   "type": "module",
   "exports": {
     "./separator": "./src/components/separator.tsx",
+    "./button": "./src/components/button.tsx",
+    "./tooltip": "./src/components/tooltip.tsx",
+    "./bento-grid": "./src/components/bento-grid.tsx",
+    "./tooltip-card": "./src/components/tooltip-card.tsx",
+    "./media-preview": "./src/components/media-preview.tsx",
     "./media-player": "./src/components/media-player.tsx",
     "./media-player-block-view": "./src/components/media-player-block-view.tsx",
     "./lib/utils": "./src/lib/utils.ts",

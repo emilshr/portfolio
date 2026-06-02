@@ -776,7 +776,11 @@ export interface Travel {
   };
   gallery?:
     | {
-        image: string | Media;
+        media: string | Media;
+        /**
+         * Deprecated legacy field retained for old gallery entries.
+         */
+        image?: (string | null) | Media;
         /**
          * Optional override; defaults to media alt text.
          */
@@ -1433,6 +1437,7 @@ export interface TravelsSelect<T extends boolean = true> {
   gallery?:
     | T
     | {
+        media?: T;
         image?: T;
         alt?: T;
         caption?: T;

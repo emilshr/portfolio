@@ -8,7 +8,6 @@ import {
   LinkJSXConverter,
   RichText as RichTextConverter,
 } from '@payloadcms/richtext-lexical/react'
-import Image from 'next/image'
 
 import type {
   BannerBlock as BannerBlockProps,
@@ -18,6 +17,7 @@ import type {
 } from '@repo/payload-types'
 
 import { MediaPlayerBlockComponent } from '@/components/travels/MediaPlayerBlock'
+import { RichTextImagePreview } from '@/components/travels/RichTextImagePreview'
 
 import { getMediaAlt, getMediaUrl, isMedia } from '@/lib/media'
 import { cn } from '@/lib/utils'
@@ -55,13 +55,11 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
       if (!src) return null
       return (
         <figure className="my-10 overflow-hidden rounded-xl">
-          <Image
+          <RichTextImagePreview
             src={src}
             alt={getMediaAlt(media)}
             width={media.width ?? 1400}
             height={media.height ?? 900}
-            className="h-auto w-full object-cover"
-            sizes="(max-width: 768px) 100vw, 72rem"
           />
         </figure>
       )

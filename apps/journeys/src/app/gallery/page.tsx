@@ -18,7 +18,7 @@ export default async function GalleryPage() {
       <header className="mb-[var(--space-10)]">
         <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Gallery</h1>
         <p className="mt-[var(--space-3)] max-w-2xl text-muted-foreground">
-          Moments from the road — select any image to explore fullscreen.
+          Moments from the road — select any media item to explore fullscreen.
         </p>
       </header>
       <BentoGallery items={items} />

@@ -2,8 +2,10 @@ import type { Travel } from '@repo/payload-types'
 import Link from 'next/link'
 
 import { PayloadImage } from '@/components/media/PayloadImage'
+import { HeroMediaPreviewTrigger } from '@/components/travels/HeroMediaPreviewTrigger'
+import { TravelDetailGallery } from '@/components/travels/TravelDetailGallery'
 import { TravelRichText } from '@/components/travels/TravelRichText'
-import { formatLocation, formatTripDates } from '@/lib/media'
+import { formatLocation, formatTripDates, getMediaAlt, getMediaUrl, isMedia } from '@/lib/media'
 
 type TravelDetailProps = {
   travel: Travel
@@ -13,6 +15,8 @@ export function TravelDetail({ travel }: TravelDetailProps) {
   const location = formatLocation(travel.location)
   const dates = formatTripDates(travel.tripDates)
   const hero = travel.heroImage || travel.coverImage
+  const heroPreviewUrl = isMedia(hero) ? getMediaUrl(hero, 'large') : null
+  const heroPreviewAlt = isMedia(hero) ? getMediaAlt(hero, travel.title) : travel.title
 
   return (
     <article>
@@ -21,7 +25,8 @@ export function TravelDetail({ travel }: TravelDetailProps) {
         {hero ? (
           <>
             <PayloadImage media={hero} size="hero" fill priority sizes="100vw" className="absolute inset-0" />
-            <div className="absolute inset-0" style={{ background: 'var(--hero-scrim)' }} aria-hidden />
+            {heroPreviewUrl ? <HeroMediaPreviewTrigger url={heroPreviewUrl} alt={heroPreviewAlt} /> : null}
+            <div className="pointer-events-none absolute inset-0" style={{ background: 'var(--hero-scrim)' }} aria-hidden />
           </>
         ) : (
           <div className="absolute inset-0 bg-muted" aria-hidden />
@@ -56,25 +61,7 @@ export function TravelDetail({ travel }: TravelDetailProps) {
             >
               Gallery
             </h2>
-            <div className="grid grid-cols-2 gap-[var(--space-4)] md:grid-cols-3">
-              {travel.gallery.map((item) => {
-                const image = item.image
-                if (!image || typeof image === 'string') return null
-                return (
-                  <figure key={item.id} className="overflow-hidden rounded-lg">
-                    <PayloadImage
-                      media={image}
-                      size="medium"
-                      alt={item.alt || undefined}
-                      className="aspect-square w-full"
-                    />
-                    {item.caption ? (
-                      <figcaption className="mt-2 text-sm text-muted-foreground">{item.caption}</figcaption>
-                    ) : null}
-                  </figure>
-                )
-              })}
-            </div>
+            <TravelDetailGallery travelTitle={travel.title} items={travel.gallery} />
             <p className="mt-[var(--space-6)]">
               <Link href="/gallery" className="text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
                 View full gallery →
