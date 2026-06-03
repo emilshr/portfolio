@@ -34,7 +34,7 @@ catalog:
   dotenv: 16.4.7
   oxfmt: 0.52.0
   oxlint: 1.67.0
-  tsx: 4.21.0
+  tsx: 4.22.4
 
   # TypeScript types
   '@types/node': 22.19.9
@@ -88,7 +88,7 @@ catalog:
   react-hook-form: 7.71.1
   reading-time: 1.5.0
   sanitize-html: 2.17.4
-  sharp: 0.34.2
+  sharp: 0.34.5
 
 allowBuilds:
   '@parcel/watcher': false
