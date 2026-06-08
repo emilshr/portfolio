@@ -35,8 +35,8 @@
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "lucide-react": "catalog:",
-    "media-chrome": "^4.19.0",
-    "radix-ui": "^1.4.3",
+    "media-chrome": "^4.19.1",
+    "radix-ui": "^1.5.0",
     "tailwind-merge": "catalog:"
   },
   "devDependencies": {
