@@ -4,10 +4,7 @@ import type { ImageMarqueeBlock, Media } from '@repo/payload-types'
 import { useEffect, useMemo, useState } from 'react'
 
 import { PayloadImage } from '@/components/media/PayloadImage'
-import {
-  ScrollVelocityContainer,
-  ScrollVelocityRow,
-} from '@/components/ui/scroll-based-velocity'
+import { ScrollVelocityContainer, ScrollVelocityRow } from '@/components/ui/scroll-based-velocity'
 import { getMediaAlt, isMedia } from '@/lib/media'
 import { cn } from '@/lib/utils'
 

@@ -4,8 +4,6 @@ import {
   type MediaPlayerBlockConfig,
 } from '@repo/ui/lib/media-player-block'
 
-export function mapMediaPlayerBlockToConfig(
-  block: MediaPlayerBlock,
-): MediaPlayerBlockConfig {
+export function mapMediaPlayerBlockToConfig(block: MediaPlayerBlock): MediaPlayerBlockConfig {
   return mapMediaPlayerBlockFields(block)
 }

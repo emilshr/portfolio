@@ -1,7 +1,4 @@
-import {
-  type DefaultTypedEditorState,
-  type DefaultNodeTypes,
-} from '@payloadcms/richtext-lexical'
+import { type DefaultTypedEditorState, type DefaultNodeTypes } from '@payloadcms/richtext-lexical'
 import {
   type JSXConvertersFunction,
   LinkJSXConverter,

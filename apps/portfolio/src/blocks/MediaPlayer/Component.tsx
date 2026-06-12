@@ -48,11 +48,7 @@ export const MediaPlayerBlockComponent: React.FC<Props> = (props) => {
         className,
       )}
     >
-      <MediaPlayerBlockView
-        src={source.src}
-        mimeType={source.mimeType}
-        config={config}
-      />
+      <MediaPlayerBlockView src={source.src} mimeType={source.mimeType} config={config} />
     </div>
   )
 }

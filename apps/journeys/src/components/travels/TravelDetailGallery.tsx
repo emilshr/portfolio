@@ -66,7 +66,9 @@ function toPreviewItems(travelTitle: string, entries: TravelGalleryEntry[]): Med
     const thumb = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
     const mimeType = media.mimeType ?? null
     const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
-    const mediaCaption = extractPlainTextFromRichText((media.caption?.root as RichTextNode | undefined) ?? null)
+    const mediaCaption = extractPlainTextFromRichText(
+      (media.caption?.root as RichTextNode | undefined) ?? null,
+    )
     const caption = entry.caption?.trim() || mediaCaption || null
 
     acc.push({

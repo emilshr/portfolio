@@ -68,11 +68,7 @@ export const getPrimaryProductionURL = (): string | null => {
 
 export const getAllowedOrigins = (): string[] => {
   const journeysURL = process.env.JOURNEYS_SITE_URL
-  const rawOrigins = [
-    process.env.NEXT_PUBLIC_SERVER_URL,
-    journeysURL,
-    ...getProductionURLs(),
-  ]
+  const rawOrigins = [process.env.NEXT_PUBLIC_SERVER_URL, journeysURL, ...getProductionURLs()]
   const originSet = new Set<string>()
 
   for (const value of rawOrigins) {

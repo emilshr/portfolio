@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import {
   motion,
   useAnimationFrame,
@@ -9,10 +9,10 @@ import {
   useSpring,
   useTransform,
   useVelocity,
-} from "motion/react"
-import type { MotionValue } from "motion/react"
+} from 'motion/react'
+import type { MotionValue } from 'motion/react'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 interface ScrollVelocityRowProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
@@ -26,9 +26,7 @@ export const wrap = (min: number, max: number, v: number) => {
   return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min
 }
 
-const ScrollVelocityContext = React.createContext<MotionValue<number> | null>(
-  null
-)
+const ScrollVelocityContext = React.createContext<MotionValue<number> | null>(null)
 
 export function ScrollVelocityContainer({
   children,
@@ -49,7 +47,7 @@ export function ScrollVelocityContainer({
 
   return (
     <ScrollVelocityContext.Provider value={velocityFactor}>
-      <div className={cn("relative w-full", className)} {...props}>
+      <div className={cn('relative w-full', className)} {...props}>
         {children}
       </div>
     </ScrollVelocityContext.Provider>
@@ -59,9 +57,7 @@ export function ScrollVelocityContainer({
 export function ScrollVelocityRow(props: ScrollVelocityRowProps) {
   const sharedVelocityFactor = useContext(ScrollVelocityContext)
   if (sharedVelocityFactor) {
-    return (
-      <ScrollVelocityRowImpl {...props} velocityFactor={sharedVelocityFactor} />
-    )
+    return <ScrollVelocityRowImpl {...props} velocityFactor={sharedVelocityFactor} />
   }
   return <ScrollVelocityRowLocal {...props} />
 }
@@ -99,7 +95,7 @@ function ScrollVelocityRowImpl({
     let io: IntersectionObserver | null = null
     let mq: MediaQueryList | null = null
     const handleVisibility = () => {
-      isPageVisibleRef.current = document.visibilityState === "visible"
+      isPageVisibleRef.current = document.visibilityState === 'visible'
     }
     const handlePRM = () => {
       if (mq) {
@@ -127,13 +123,13 @@ function ScrollVelocityRowImpl({
       })
       io.observe(container)
 
-      document.addEventListener("visibilitychange", handleVisibility, {
+      document.addEventListener('visibilitychange', handleVisibility, {
         passive: true,
       })
       handleVisibility()
 
-      mq = window.matchMedia("(prefers-reduced-motion: reduce)")
-      mq.addEventListener("change", handlePRM)
+      mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+      mq.addEventListener('change', handlePRM)
       handlePRM()
     }
 
@@ -144,9 +140,9 @@ function ScrollVelocityRowImpl({
       if (io) {
         io.disconnect()
       }
-      document.removeEventListener("visibilitychange", handleVisibility)
+      document.removeEventListener('visibilitychange', handleVisibility)
       if (mq) {
-        mq.removeEventListener("change", handlePRM)
+        mq.removeEventListener('change', handlePRM)
       }
     }
   }, [children, unitWidth])
@@ -172,15 +168,14 @@ function ScrollVelocityRowImpl({
     const bw = unitWidth.get() || 0
     if (bw <= 0) return
     const pixelsPerSecond = (bw * baseVelocity) / 100
-    const moveBy =
-      currentDirectionRef.current * pixelsPerSecond * speedMultiplier * dt
+    const moveBy = currentDirectionRef.current * pixelsPerSecond * speedMultiplier * dt
     baseX.set(baseX.get() + moveBy)
   })
 
   return (
     <div
       ref={containerRef}
-      className={cn("w-full overflow-hidden whitespace-nowrap", className)}
+      className={cn('w-full overflow-hidden whitespace-nowrap', className)}
       {...props}
     >
       <motion.div
@@ -214,7 +209,5 @@ function ScrollVelocityRowLocal(props: ScrollVelocityRowProps) {
     const magnitude = Math.min(5, (Math.abs(v) / 1000) * 5)
     return sign * magnitude
   })
-  return (
-    <ScrollVelocityRowImpl {...props} velocityFactor={localVelocityFactor} />
-  )
+  return <ScrollVelocityRowImpl {...props} velocityFactor={localVelocityFactor} />
 }

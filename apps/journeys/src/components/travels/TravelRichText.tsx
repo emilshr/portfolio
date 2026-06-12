@@ -24,9 +24,7 @@ import { cn } from '@/lib/utils'
 
 type NodeTypes =
   | DefaultNodeTypes
-  | SerializedBlockNode<
-      BannerBlockProps | MediaBlockProps | MediaPlayerBlockProps | CodeBlockProps
-    >
+  | SerializedBlockNode<BannerBlockProps | MediaBlockProps | MediaPlayerBlockProps | CodeBlockProps>
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,

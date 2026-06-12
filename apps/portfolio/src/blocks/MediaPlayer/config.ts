@@ -27,10 +27,7 @@ export const MediaPlayerBlock: Block = {
       relationTo: 'media',
       required: true,
       filterOptions: {
-        or: [
-          { mimeType: { contains: 'video' } },
-          { mimeType: { contains: 'audio' } },
-        ],
+        or: [{ mimeType: { contains: 'video' } }, { mimeType: { contains: 'audio' } }],
       },
     },
     {
@@ -194,7 +191,8 @@ export const MediaPlayerBlock: Block = {
           type: 'text',
           label: 'Settings menu speeds',
           admin: {
-            description: 'Comma-separated values for the settings menu. Falls back to playback speeds.',
+            description:
+              'Comma-separated values for the settings menu. Falls back to playback speeds.',
           },
         },
         {

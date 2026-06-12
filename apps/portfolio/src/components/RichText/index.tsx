@@ -63,11 +63,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
       <MediaBlock {...node.fields} enableGutter={false} disableInnerContainer />
     ),
     mediaPlayer: ({ node }) => (
-      <MediaPlayerBlockComponent
-        {...node.fields}
-        enableGutter={false}
-        disableInnerContainer
-      />
+      <MediaPlayerBlockComponent {...node.fields} enableGutter={false} disableInnerContainer />
     ),
     code: ({ node }) => <CodeBlock {...node.fields} />,
     githubEmbed: ({ node }) => (

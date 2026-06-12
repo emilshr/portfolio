@@ -58,12 +58,18 @@ function RatingStars({ rating }: { rating: number | null | undefined }) {
   const normalized = Math.max(0, Math.min(5, rating))
 
   return (
-    <div className="flex items-center gap-2 text-sm text-muted-foreground" aria-label={`${normalized} out of 5 stars`}>
+    <div
+      className="flex items-center gap-2 text-sm text-muted-foreground"
+      aria-label={`${normalized} out of 5 stars`}
+    >
       <div className="flex items-center gap-1">
         {Array.from({ length: 5 }).map((_, index) => (
           <Star
             key={index}
-            className={cn('h-4 w-4', normalized >= index + 1 ? 'fill-primary text-primary' : 'text-muted-foreground')}
+            className={cn(
+              'h-4 w-4',
+              normalized >= index + 1 ? 'fill-primary text-primary' : 'text-muted-foreground',
+            )}
           />
         ))}
       </div>
@@ -80,15 +86,24 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
       <header className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(14rem,20rem)_1fr]">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted">
           {vehicle.coverImage ? (
-            <PayloadImage media={vehicle.coverImage} size="card" fill sizes="(max-width: 768px) 100vw, 30vw" />
+            <PayloadImage
+              media={vehicle.coverImage}
+              size="card"
+              fill
+              sizes="(max-width: 768px) 100vw, 30vw"
+            />
           ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">No cover image</div>
+            <div className="flex h-full items-center justify-center text-muted-foreground">
+              No cover image
+            </div>
           )}
         </div>
         <div className="flex flex-col justify-center gap-3">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Vehicle</p>
           <h2 className="font-display text-3xl font-semibold tracking-tight">{vehicle.name}</h2>
-          <p className="text-sm text-muted-foreground">Odometer: {formatOdometer(vehicle.odometer)}</p>
+          <p className="text-sm text-muted-foreground">
+            Odometer: {formatOdometer(vehicle.odometer)}
+          </p>
         </div>
       </header>
 
@@ -98,7 +113,10 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
 
       {vehicle.gallery && vehicle.gallery.length > 0 ? (
         <section aria-labelledby={`vehicle-gallery-${vehicle.id}`} className="space-y-6">
-          <h3 id={`vehicle-gallery-${vehicle.id}`} className="font-display text-2xl font-semibold tracking-tight">
+          <h3
+            id={`vehicle-gallery-${vehicle.id}`}
+            className="font-display text-2xl font-semibold tracking-tight"
+          >
             Gallery
           </h3>
           <TravelDetailGallery travelTitle={vehicle.name} items={vehicle.gallery} />
@@ -107,7 +125,10 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
 
       {vehicle.mods && vehicle.mods.length > 0 ? (
         <section aria-labelledby={`vehicle-mods-${vehicle.id}`} className="space-y-6">
-          <h3 id={`vehicle-mods-${vehicle.id}`} className="font-display text-2xl font-semibold tracking-tight">
+          <h3
+            id={`vehicle-mods-${vehicle.id}`}
+            className="font-display text-2xl font-semibold tracking-tight"
+          >
             Mods
           </h3>
 
@@ -121,7 +142,9 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
                 <article key={modId} className="rounded-xl border border-border p-5">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                      <h4 className="font-display text-xl font-semibold tracking-tight">{mod.name}</h4>
+                      <h4 className="font-display text-xl font-semibold tracking-tight">
+                        {mod.name}
+                      </h4>
                       {mod.productURL ? (
                         <Link
                           href={mod.productURL}

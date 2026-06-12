@@ -94,12 +94,7 @@ export function HeaderNavHighlightLink({
   if ('external' in rest && rest.external) {
     const { external: _external, ...anchorRest } = rest
     return (
-      <a
-        href={href}
-        className={className}
-        {...hoverHandlers}
-        {...anchorRest}
-      >
+      <a href={href} className={className} {...hoverHandlers} {...anchorRest}>
         {label}
       </a>
     )

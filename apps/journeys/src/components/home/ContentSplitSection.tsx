@@ -12,10 +12,7 @@ type ContentSplitSectionProps = {
 
 function hasContent(block: ContentSplitBlock): boolean {
   return Boolean(
-    block.heading?.trim() ||
-      block.lead?.trim() ||
-      block.content ||
-      isMedia(block.image),
+    block.heading?.trim() || block.lead?.trim() || block.content || isMedia(block.image),
   )
 }
 

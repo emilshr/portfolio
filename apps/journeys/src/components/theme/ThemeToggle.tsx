@@ -66,9 +66,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                 onClick={() => setTheme(option.value)}
                 className={cn(
                   labelClass,
-                  active
-                    ? 'text-foreground'
-                    : 'text-muted-foreground hover:text-foreground',
+                  active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
                 )}
                 aria-pressed={active}
                 aria-label={`${option.label} theme`}
@@ -77,10 +75,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                 {option.label}
                 {active ? (
                   prefersReducedMotion ? (
-                    <span
-                      className="absolute inset-x-0 bottom-0 h-px bg-foreground"
-                      aria-hidden
-                    />
+                    <span className="absolute inset-x-0 bottom-0 h-px bg-foreground" aria-hidden />
                   ) : (
                     <motion.span
                       layoutId="journeys-theme-underline"

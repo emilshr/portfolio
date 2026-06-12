@@ -20,37 +20,17 @@ export function RenderHomeBlocks({ blocks }: RenderHomeBlocksProps) {
 
         switch (blockType) {
           case 'contentSplit':
-            return (
-              <ContentSplitSection
-                key={block.id ?? `contentSplit-${index}`}
-                block={block}
-              />
-            )
+            return <ContentSplitSection key={block.id ?? `contentSplit-${index}`} block={block} />
           case 'imageMarquee':
-            return (
-              <ImageMarqueeSection
-                key={block.id ?? `imageMarquee-${index}`}
-                block={block}
-              />
-            )
+            return <ImageMarqueeSection key={block.id ?? `imageMarquee-${index}`} block={block} />
           case 'featuredTravels':
             return (
-              <FeaturedTravelsSection
-                key={block.id ?? `featuredTravels-${index}`}
-                block={block}
-              />
+              <FeaturedTravelsSection key={block.id ?? `featuredTravels-${index}`} block={block} />
             )
           case 'separator':
-            return (
-              <SeparatorSection key={block.id ?? `separator-${index}`} block={block} />
-            )
+            return <SeparatorSection key={block.id ?? `separator-${index}`} block={block} />
           case 'mediaPlayer':
-            return (
-              <MediaPlayerSection
-                key={block.id ?? `mediaPlayer-${index}`}
-                block={block}
-              />
-            )
+            return <MediaPlayerSection key={block.id ?? `mediaPlayer-${index}`} block={block} />
           default:
             return null
         }
