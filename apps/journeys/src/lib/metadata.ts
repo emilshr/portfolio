@@ -55,8 +55,7 @@ type JourneysHomeSEOSettings = Pick<
 >
 
 export function journeysHomeMetadata(settings: JourneysHomeSEOSettings): Metadata {
-  const title =
-    settings.meta?.title ?? formatPageTitle(settings.heroTitle || siteName)
+  const title = settings.meta?.title ?? formatPageTitle(settings.heroTitle || siteName)
   const description =
     settings.meta?.description || settings.heroSubtitle || 'Travel stories from the road.'
   const metaImage = settings.meta?.image
@@ -75,7 +74,7 @@ export function journeysHomeMetadata(settings: JourneysHomeSEOSettings): Metadat
   })
 }
 
-export function travelMetadata(travel: {
+export function articleMetadata(article: {
   title: string
   subtitle?: string | null
   excerpt?: string | null
@@ -88,39 +87,17 @@ export function travelMetadata(travel: {
   heroImage?: unknown
   coverImage?: unknown
 }): Metadata {
-  const title = travel.meta?.title ?? formatPageTitle(travel.title)
-  const description = travel.meta?.description || travel.excerpt || travel.subtitle
-  const metaImage = travel.meta?.image
-  const image =
-    (isMedia(metaImage) ? getAbsoluteMediaUrl(getMediaUrl(metaImage, 'og')) : null) ||
-    (isMedia(travel.heroImage) ? getAbsoluteMediaUrl(getMediaUrl(travel.heroImage, 'og')) : null) ||
-    (isMedia(travel.coverImage) ? getAbsoluteMediaUrl(getMediaUrl(travel.coverImage, 'og')) : null)
-
-  return buildPageMetadata({
-    title,
-    description,
-    path: `/${travel.slug}`,
-    image,
-  })
-}
-
-export function articleMetadata(article: {
-  title: string
-  excerpt?: string | null
-  slug: string
-  meta?: {
-    title?: string | null
-    description?: string | null
-    image?: unknown
-  } | null
-  heroImage?: unknown
-}): Metadata {
   const title = article.meta?.title ?? formatPageTitle(article.title)
-  const description = article.meta?.description || article.excerpt
+  const description = article.meta?.description || article.excerpt || article.subtitle
   const metaImage = article.meta?.image
   const image =
     (isMedia(metaImage) ? getAbsoluteMediaUrl(getMediaUrl(metaImage, 'og')) : null) ||
-    (isMedia(article.heroImage) ? getAbsoluteMediaUrl(getMediaUrl(article.heroImage, 'og')) : null)
+    (isMedia(article.heroImage)
+      ? getAbsoluteMediaUrl(getMediaUrl(article.heroImage, 'og'))
+      : null) ||
+    (isMedia(article.coverImage)
+      ? getAbsoluteMediaUrl(getMediaUrl(article.coverImage, 'og'))
+      : null)
 
   return buildPageMetadata({
     title,
@@ -130,22 +107,54 @@ export function articleMetadata(article: {
   })
 }
 
-export function vehiclesPageMetadata(vehicle: {
-  name: string
+export function galleryCollectionMetadata(collection: {
+  title: string
+  excerpt?: string | null
+  slug: string
   meta?: {
     title?: string | null
     description?: string | null
     image?: unknown
   } | null
   coverImage?: unknown
-} | null): Metadata {
+}): Metadata {
+  const title = collection.meta?.title ?? formatPageTitle(collection.title)
+  const description = collection.meta?.description || collection.excerpt
+  const metaImage = collection.meta?.image
+  const image =
+    (isMedia(metaImage) ? getAbsoluteMediaUrl(getMediaUrl(metaImage, 'og')) : null) ||
+    (isMedia(collection.coverImage)
+      ? getAbsoluteMediaUrl(getMediaUrl(collection.coverImage, 'og'))
+      : null)
+
+  return buildPageMetadata({
+    title,
+    description,
+    path: `/gallery/${collection.slug}`,
+    image,
+  })
+}
+
+export function vehiclesPageMetadata(
+  vehicle: {
+    name: string
+    meta?: {
+      title?: string | null
+      description?: string | null
+      image?: unknown
+    } | null
+    coverImage?: unknown
+  } | null,
+): Metadata {
   const title = vehicle?.meta?.title ?? formatPageTitle('Vehicles')
   const description = vehicle?.meta?.description || 'Motorcycles and upgrades from my garage.'
   const image =
     (isMedia(vehicle?.meta?.image)
       ? getAbsoluteMediaUrl(getMediaUrl(vehicle.meta.image, 'og'))
       : null) ||
-    (isMedia(vehicle?.coverImage) ? getAbsoluteMediaUrl(getMediaUrl(vehicle.coverImage, 'og')) : null)
+    (isMedia(vehicle?.coverImage)
+      ? getAbsoluteMediaUrl(getMediaUrl(vehicle.coverImage, 'og'))
+      : null)
 
   return buildPageMetadata({
     title,

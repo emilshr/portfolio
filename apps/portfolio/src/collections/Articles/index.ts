@@ -45,6 +45,12 @@ export const Articles: CollectionConfig = {
     slug: true,
     publishedAt: true,
     heroImage: true,
+    coverImage: true,
+    excerpt: true,
+    subtitle: true,
+    location: true,
+    tripDates: true,
+    tags: true,
     meta: {
       image: true,
       description: true,
@@ -76,6 +82,13 @@ export const Articles: CollectionConfig = {
       required: true,
     },
     {
+      name: 'subtitle',
+      type: 'text',
+      admin: {
+        description: 'Displayed under the title on the article detail hero.',
+      },
+    },
+    {
       name: 'excerpt',
       type: 'textarea',
       maxLength: 180,
@@ -93,6 +106,41 @@ export const Articles: CollectionConfig = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
+              admin: {
+                description: 'Full-width hero image on the article detail page.',
+              },
+            },
+            {
+              name: 'coverImage',
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: 'Thumbnail for grids and cards (can differ from hero).',
+              },
+            },
+            {
+              name: 'location',
+              type: 'group',
+              fields: [
+                { name: 'city', type: 'text' },
+                { name: 'country', type: 'text' },
+              ],
+            },
+            {
+              name: 'tripDates',
+              type: 'group',
+              fields: [
+                {
+                  name: 'start',
+                  type: 'date',
+                  admin: { date: { pickerAppearance: 'dayOnly' } },
+                },
+                {
+                  name: 'end',
+                  type: 'date',
+                  admin: { date: { pickerAppearance: 'dayOnly' } },
+                },
+              ],
             },
             {
               name: 'gallery',
@@ -168,6 +216,16 @@ export const Articles: CollectionConfig = {
       ],
     },
     {
+      name: 'tags',
+      type: 'relationship',
+      relationTo: 'tags',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Add or create tags to categorize this article.',
+      },
+    },
+    {
       name: 'lastUpdatedAt',
       type: 'date',
       admin: {
@@ -181,6 +239,15 @@ export const Articles: CollectionConfig = {
       admin: {
         date: { pickerAppearance: 'dayOnly' },
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Show in the Featured journeys homepage block when that block is added.',
       },
     },
     slugField(),

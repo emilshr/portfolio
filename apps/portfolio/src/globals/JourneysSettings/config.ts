@@ -59,9 +59,9 @@ export const JourneysSettings: GlobalConfig = {
               defaultValue: 'Travel stories from the road.',
             },
             {
-              name: 'featuredTravel',
+              name: 'featuredArticle',
               type: 'relationship',
-              relationTo: 'travels',
+              relationTo: 'articles',
               admin: {
                 description: 'Optional fallback hero image when no homepage hero image is set.',
               },
@@ -154,8 +154,8 @@ export const JourneysSettings: GlobalConfig = {
                       value: 'static',
                     },
                     {
-                      label: 'Travel page',
-                      value: 'travel',
+                      label: 'Article page',
+                      value: 'article',
                     },
                   ],
                   admin: {
@@ -169,7 +169,6 @@ export const JourneysSettings: GlobalConfig = {
                   options: [
                     { label: 'Home', value: '/' },
                     { label: 'Gallery', value: '/gallery' },
-                    { label: 'Posts', value: '/posts' },
                     { label: 'Articles', value: '/articles' },
                     { label: 'Vehicles', value: '/vehicles' },
                   ],
@@ -177,19 +176,19 @@ export const JourneysSettings: GlobalConfig = {
                   admin: {
                     condition: (_, siblingData) =>
                       siblingData?.linkType !== 'external' &&
-                      siblingData?.internalDestinationType !== 'travel',
+                      siblingData?.internalDestinationType !== 'article',
                     description: 'Choose a built-in route.',
                   },
                 },
                 {
-                  name: 'travel',
+                  name: 'article',
                   type: 'relationship',
-                  relationTo: 'travels',
+                  relationTo: 'articles',
                   admin: {
                     condition: (_, siblingData) =>
                       siblingData?.linkType !== 'external' &&
-                      siblingData?.internalDestinationType === 'travel',
-                    description: 'Choose a travel entry. Link resolves to /{slug}.',
+                      siblingData?.internalDestinationType === 'article',
+                    description: 'Choose an article. Link resolves to /articles/{slug}.',
                   },
                 },
                 {

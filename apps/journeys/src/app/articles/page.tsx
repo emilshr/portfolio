@@ -3,11 +3,11 @@ import type { Article } from '@repo/payload-types'
 
 import { ArticleLongCard } from '@/components/articles/ArticleLongCard'
 import { buildPageMetadata, formatPageTitle } from '@/lib/metadata'
-import { getPublishedArticles } from '@/lib/payload'
+import { getArticleYear, getArticleSortTimestamp, getPublishedArticles } from '@/lib/payload'
 
 export const metadata: Metadata = buildPageMetadata({
   title: formatPageTitle('Articles'),
-  description: 'Motorcycle stories, notes, and reviews.',
+  description: 'Travel stories, motorcycle notes, and road dispatches.',
   path: '/articles',
 })
 
@@ -16,22 +16,10 @@ type ArticleGroup = {
   articles: Article[]
 }
 
-function getArticleSortTimestamp(article: Article): number {
-  const source = article.publishedAt
-  if (!source) return 0
-  const timestamp = new Date(source).getTime()
-  return Number.isFinite(timestamp) ? timestamp : 0
-}
-
-function getArticleYear(article: Article): string {
-  const source = article.publishedAt
-  if (!source) return 'Unknown'
-  const year = new Date(source).getFullYear()
-  return Number.isFinite(year) ? String(year) : 'Unknown'
-}
-
 function groupArticlesByYear(articles: Article[]): ArticleGroup[] {
-  const sorted = [...articles].sort((a, b) => getArticleSortTimestamp(b) - getArticleSortTimestamp(a))
+  const sorted = [...articles].sort(
+    (a, b) => getArticleSortTimestamp(b) - getArticleSortTimestamp(a),
+  )
   const groups = new Map<string, Article[]>()
 
   for (const article of sorted) {
@@ -56,7 +44,7 @@ export default async function ArticlesPage() {
       <div className="page-container mb-12">
         <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Articles</h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          Motorcycle stories that are not always about travel.
+          Every journey and motorcycle story, captured in words and photographs.
         </p>
       </div>
 

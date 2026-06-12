@@ -70,7 +70,8 @@ export interface Config {
     pages: Page;
     posts: Post;
     articles: Article;
-    travels: Travel;
+    tags: Tag;
+    'gallery-collections': GalleryCollection;
     vehicles: Vehicle;
     experiences: Experience;
     media: Media;
@@ -92,7 +93,8 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
-    travels: TravelsSelect<false> | TravelsSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
+    'gallery-collections': GalleryCollectionsSelect<false> | GalleryCollectionsSelect<true>;
     vehicles: VehiclesSelect<false> | VehiclesSelect<true>;
     experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -757,72 +759,15 @@ export interface Article {
   id: string;
   title: string;
   /**
-   * Short teaser used in article lists and metadata fallback.
-   */
-  excerpt?: string | null;
-  heroImage?: (string | null) | Media;
-  gallery?:
-    | {
-        media: string | Media;
-        /**
-         * Optional override; defaults to media alt text.
-         */
-        alt?: string | null;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
-    description?: string | null;
-  };
-  lastUpdatedAt?: string | null;
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "travels".
- */
-export interface Travel {
-  id: string;
-  title: string;
-  /**
-   * Displayed under the title on the travel detail hero.
+   * Displayed under the title on the article detail hero.
    */
   subtitle?: string | null;
   /**
-   * Short teaser for cards and listings (max 160 characters).
+   * Short teaser used in article lists and metadata fallback.
    */
   excerpt?: string | null;
   /**
-   * Full-width hero image on the travel detail page.
+   * Full-width hero image on the article detail page.
    */
   heroImage?: (string | null) | Media;
   /**
@@ -841,10 +786,6 @@ export interface Travel {
     | {
         media: string | Media;
         /**
-         * Deprecated legacy field retained for old gallery entries.
-         */
-        image?: (string | null) | Media;
-        /**
          * Optional override; defaults to media alt text.
          */
         alt?: string | null;
@@ -875,12 +816,96 @@ export interface Travel {
     image?: (string | null) | Media;
     description?: string | null;
   };
+  /**
+   * Add or create tags to categorize this article.
+   */
+  tags?: (string | Tag)[] | null;
   lastUpdatedAt?: string | null;
   publishedAt?: string | null;
   /**
-   * Show in the Featured Travels homepage block when that block is added.
+   * Show in the Featured journeys homepage block when that block is added.
    */
   featured?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery-collections".
+ */
+export interface GalleryCollection {
+  id: string;
+  title: string;
+  /**
+   * Short description shown on the gallery listing card.
+   */
+  excerpt?: string | null;
+  /**
+   * Optional cover for listing cards and detail hero. Leave empty to use the first image in the collection.
+   */
+  coverImage?: (string | null) | Media;
+  /**
+   * Images must belong to the gallery folder configured in Gallery Settings.
+   */
+  images?:
+    | {
+        media: string | Media;
+        /**
+         * Optional override; defaults to media alt text.
+         */
+        alt?: string | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Full description shown on the gallery collection detail page.
+   */
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1071,8 +1096,8 @@ export interface Redirect {
           value: string | Post;
         } | null)
       | ({
-          relationTo: 'travels';
-          value: string | Travel;
+          relationTo: 'articles';
+          value: string | Article;
         } | null);
     url?: string | null;
   };
@@ -1208,8 +1233,12 @@ export interface PayloadLockedDocument {
         value: string | Article;
       } | null)
     | ({
-        relationTo: 'travels';
-        value: string | Travel;
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'gallery-collections';
+        value: string | GalleryCollection;
       } | null)
     | ({
         relationTo: 'vehicles';
@@ -1586,38 +1615,6 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
-  excerpt?: T;
-  heroImage?: T;
-  gallery?:
-    | T
-    | {
-        media?: T;
-        alt?: T;
-        caption?: T;
-        id?: T;
-      };
-  content?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  lastUpdatedAt?: T;
-  publishedAt?: T;
-  generateSlug?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "travels_select".
- */
-export interface TravelsSelect<T extends boolean = true> {
-  title?: T;
   subtitle?: T;
   excerpt?: T;
   heroImage?: T;
@@ -1638,7 +1635,6 @@ export interface TravelsSelect<T extends boolean = true> {
     | T
     | {
         media?: T;
-        image?: T;
         alt?: T;
         caption?: T;
         id?: T;
@@ -1651,9 +1647,52 @@ export interface TravelsSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
+  tags?: T;
   lastUpdatedAt?: T;
   publishedAt?: T;
   featured?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery-collections_select".
+ */
+export interface GalleryCollectionsSelect<T extends boolean = true> {
+  title?: T;
+  excerpt?: T;
+  coverImage?: T;
+  images?:
+    | T
+    | {
+        media?: T;
+        alt?: T;
+        caption?: T;
+        id?: T;
+      };
+  description?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -2022,7 +2061,7 @@ export interface JourneysSetting {
   /**
    * Optional fallback hero image when no homepage hero image is set.
    */
-  featuredTravel?: (string | null) | Travel;
+  featuredArticle?: (string | null) | Article;
   /**
    * Sections below the hero. Order controls display order.
    */
@@ -2037,15 +2076,15 @@ export interface JourneysSetting {
         label: string;
         linkType: 'internal' | 'external';
         openInNewTab?: boolean | null;
-        internalDestinationType?: ('static' | 'travel') | null;
+        internalDestinationType?: ('static' | 'article') | null;
         /**
          * Choose a built-in route.
          */
-        internalPath?: ('/' | '/gallery' | '/posts' | '/articles' | '/vehicles') | null;
+        internalPath?: ('/' | '/gallery' | '/articles' | '/vehicles') | null;
         /**
-         * Choose a travel entry. Link resolves to /{slug}.
+         * Choose an article. Link resolves to /articles/{slug}.
          */
-        travel?: (string | null) | Travel;
+        article?: (string | null) | Article;
         /**
          * External URL like https://example.com. (Legacy internal URLs still supported.)
          */
@@ -2220,7 +2259,7 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
   heroImage?: T;
   heroTitle?: T;
   heroSubtitle?: T;
-  featuredTravel?: T;
+  featuredArticle?: T;
   homeLayout?:
     | T
     | {
@@ -2238,7 +2277,7 @@ export interface JourneysSettingsSelect<T extends boolean = true> {
         openInNewTab?: T;
         internalDestinationType?: T;
         internalPath?: T;
-        travel?: T;
+        article?: T;
         url?: T;
         id?: T;
       };
@@ -2343,8 +2382,8 @@ export interface TaskSchedulePublish {
           value: string | Article;
         } | null)
       | ({
-          relationTo: 'travels';
-          value: string | Travel;
+          relationTo: 'gallery-collections';
+          value: string | GalleryCollection;
         } | null)
       | ({
           relationTo: 'vehicles';

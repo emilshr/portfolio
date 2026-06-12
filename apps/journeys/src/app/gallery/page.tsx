@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
-import { BentoGallery } from '@/components/gallery/BentoGallery'
+import { GalleryCollectionCard } from '@/components/gallery/GalleryCollectionCard'
 import { buildPageMetadata, formatPageTitle } from '@/lib/metadata'
-import { getGalleryItems, getGallerySettings } from '@/lib/payload'
+import { getGallerySettings, getPublishedGalleryCollections } from '@/lib/payload'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getGallerySettings()
@@ -14,14 +14,25 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GalleryPage() {
-  const items = await getGalleryItems()
+  const collections = await getPublishedGalleryCollections()
 
   return (
     <div className="page-container py-12 md:py-16">
       <header className="mb-10">
         <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Gallery</h1>
+        <p className="mt-3 max-w-2xl text-muted-foreground">
+          Photo collections from trips and expeditions.
+        </p>
       </header>
-      <BentoGallery items={items} />
+      {collections.length > 0 ? (
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {collections.map((collection) => (
+            <GalleryCollectionCard key={collection.id} collection={collection} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-muted-foreground">No gallery collections yet.</p>
+      )}
     </div>
   )
 }

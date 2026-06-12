@@ -2,7 +2,7 @@ import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'paylo
 
 import { revalidateJourneys } from '@/utilities/revalidateJourneys'
 
-export const revalidateArticle: CollectionAfterChangeHook = async ({
+export const revalidateGalleryCollection: CollectionAfterChangeHook = async ({
   doc,
   previousDoc,
   req: { context },
@@ -13,13 +13,13 @@ export const revalidateArticle: CollectionAfterChangeHook = async ({
 
   if (doc._status === 'published' && doc.slug) {
     await revalidateJourneys({
-      tags: ['articles', 'gallery', 'gallery-collections', `article:${doc.slug}`],
+      tags: ['gallery', 'gallery-collections', `gallery-collection:${doc.slug}`],
     })
   }
 
   if (previousDoc?._status === 'published' && doc._status !== 'published' && previousDoc.slug) {
     await revalidateJourneys({
-      tags: ['articles', 'gallery', 'gallery-collections', `article:${previousDoc.slug}`],
+      tags: ['gallery', 'gallery-collections', `gallery-collection:${previousDoc.slug}`],
     })
   }
 
@@ -29,7 +29,7 @@ export const revalidateArticle: CollectionAfterChangeHook = async ({
 export const revalidateDelete: CollectionAfterDeleteHook = async ({ doc, req: { context } }) => {
   if (!context.disableRevalidate && doc?.slug) {
     await revalidateJourneys({
-      tags: ['articles', 'gallery', 'gallery-collections', `article:${doc.slug}`],
+      tags: ['gallery', 'gallery-collections', `gallery-collection:${doc.slug}`],
     })
   }
 

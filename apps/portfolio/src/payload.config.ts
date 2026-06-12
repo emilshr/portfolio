@@ -2,15 +2,16 @@ import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { resendAdapter } from '@payloadcms/email-resend'
 import sharp from 'sharp'
 import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
+import { buildConfig, PayloadRequest, type SharpDependency } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Experiences } from './collections/Experiences'
 import { Articles } from './collections/Articles'
+import { GalleryCollections } from './collections/GalleryCollections'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
-import { Travels } from './collections/Travels'
+import { Tags } from './collections/Tags'
 import { Users } from './collections/Users'
 import { Vehicles } from './collections/Vehicles'
 import { GallerySettings } from './globals/GallerySettings/config'
@@ -57,11 +58,21 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || '',
   }),
-  collections: [Pages, Posts, Articles, Travels, Vehicles, Experiences, Media, Users],
+  collections: [
+    Pages,
+    Posts,
+    Articles,
+    Tags,
+    GalleryCollections,
+    Vehicles,
+    Experiences,
+    Media,
+    Users,
+  ],
   globals: [SiteSettings, JourneysSettings, GallerySettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
-  sharp,
+  sharp: sharp as unknown as SharpDependency,
   typescript: {
     outputFile: path.resolve(dirname, '../../../packages/payload-types/payload-types.ts'),
   },

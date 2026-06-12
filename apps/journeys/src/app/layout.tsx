@@ -11,6 +11,8 @@ import { getSiteURL } from '@/lib/metadata'
 
 import '@/styles/globals.css'
 
+export const dynamic = 'force-dynamic'
+
 const unbounded = Unbounded({
   subsets: ['latin'],
   variable: '--font-unbounded',

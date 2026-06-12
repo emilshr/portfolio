@@ -8,9 +8,12 @@ export function Main({ children }: { children: ReactNode }) {
   const isHome = pathname === '/'
   const topLevelSegment = pathname.replace(/^\//, '')
   const isTopLevelRoute = topLevelSegment.length > 0 && !topLevelSegment.includes('/')
-  const nonTravelTopLevelRoutes = new Set(['gallery', 'posts', 'articles', 'vehicles'])
-  const isTravelDetail = isTopLevelRoute && !nonTravelTopLevelRoutes.has(topLevelSegment)
-  const shouldOverlayHero = isHome || isTravelDetail
+  const isArticleDetail = pathname.startsWith('/articles/') && pathname !== '/articles'
+  const isGalleryDetail = pathname.startsWith('/gallery/') && pathname !== '/gallery'
+  const nonArticleDetailTopLevelRoutes = new Set(['gallery', 'articles', 'vehicles'])
+  const isLegacyTravelDetail =
+    isTopLevelRoute && !nonArticleDetailTopLevelRoutes.has(topLevelSegment)
+  const shouldOverlayHero = isHome || isArticleDetail || isGalleryDetail || isLegacyTravelDetail
 
   return <main className={shouldOverlayHero ? undefined : 'pt-16'}>{children}</main>
 }

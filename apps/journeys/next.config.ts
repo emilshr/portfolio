@@ -54,6 +54,25 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(dirname, '../..'),
   },
+  async redirects() {
+    return [
+      {
+        source: '/posts',
+        destination: '/articles',
+        permanent: true,
+      },
+      {
+        source: '/posts/:path*',
+        destination: '/articles/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:slug((?!gallery|articles|vehicles|api|_next)[^/]+)',
+        destination: '/articles/:slug',
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     return [
       {

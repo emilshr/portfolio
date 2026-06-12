@@ -1,5 +1,13 @@
 import { PayloadSDK } from '@payloadcms/sdk'
-import type { Article, Config, GallerySetting, JourneysSetting, Travel, Vehicle } from '@repo/payload-types'
+import type {
+  Article,
+  Config,
+  GalleryCollection,
+  GallerySetting,
+  JourneysSetting,
+  Media,
+  Vehicle,
+} from '@repo/payload-types'
 import { unstable_cache } from 'next/cache'
 
 import { getPayloadApiUrl, isProductionDeploy } from '@/lib/env'
@@ -12,35 +20,15 @@ export type HeaderMenuItem = {
   openInNewTab?: boolean | null
 }
 
-const FEATURED_TRAVELS_MIN_LIMIT = 1
-const FEATURED_TRAVELS_MAX_LIMIT = 12
-const FEATURED_TRAVELS_DEFAULT_LIMIT = 6
+const FEATURED_ARTICLES_MIN_LIMIT = 1
+const FEATURED_ARTICLES_MAX_LIMIT = 12
+const FEATURED_ARTICLES_DEFAULT_LIMIT = 6
 
-type JourneysSettingsSnapshot = Pick<JourneysSetting, 'heroTitle' | 'heroSubtitle' | 'homeLayout'> & {
+type JourneysSettingsSnapshot = Pick<
+  JourneysSetting,
+  'heroTitle' | 'heroSubtitle' | 'homeLayout'
+> & {
   headerMenu: HeaderMenuItem[]
-}
-
-type RichTextNode = {
-  text?: string | null
-  children?: RichTextNode[] | null
-}
-
-function extractPlainTextFromRichText(node: RichTextNode | null | undefined): string {
-  if (!node) return ''
-
-  const chunks: string[] = []
-
-  const visit = (current: RichTextNode) => {
-    if (typeof current.text === 'string' && current.text.trim()) {
-      chunks.push(current.text.trim())
-    }
-    if (Array.isArray(current.children)) {
-      current.children.forEach(visit)
-    }
-  }
-
-  visit(node)
-  return chunks.join(' ').trim()
 }
 
 const getSDK = (): PayloadSDK<Config> | null => {
@@ -76,103 +64,132 @@ const defaultJourneysSettings: Pick<
   headerMenu: [],
 }
 
+function resolveArticleSlugFromRelationship(value: unknown): string {
+  if (!value || typeof value !== 'object') return ''
+  const slug = (value as { slug?: unknown }).slug
+  return typeof slug === 'string' ? slug.trim() : ''
+}
+
+async function safePayloadFetch<T>(label: string, fallback: T, fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn()
+  } catch (error) {
+    console.warn(`[journeys] ${label} failed:`, error)
+    return fallback
+  }
+}
+
 export const getJourneysSettings = unstable_cache(
   async () => {
     const sdk = getSDK()
     if (!sdk) return defaultJourneysSettings
-    const settings = await sdk.findGlobal({ slug: 'journeys-settings', depth: 2 })
-    const rawMenu = (settings as { headerMenu?: unknown }).headerMenu
-    const headerMenu: HeaderMenuItem[] = Array.isArray(rawMenu)
-      ? rawMenu.reduce<HeaderMenuItem[]>((acc, item, index) => {
-          if (!item || typeof item !== 'object') return acc
-          const candidate = item as {
-            id?: unknown
-            label?: unknown
-            url?: unknown
-            linkType?: unknown
-            internalDestinationType?: unknown
-            internalPath?: unknown
-            travel?: unknown
-            openInNewTab?: unknown
-          }
-          if (typeof candidate.label !== 'string') return acc
 
-          const label = candidate.label.trim()
-          const resolvedInternalUrl = (() => {
-            if (candidate.internalDestinationType === 'travel') {
-              const travel =
-                candidate.travel && typeof candidate.travel === 'object'
-                  ? (candidate.travel as { slug?: unknown })
-                  : null
-              return typeof travel?.slug === 'string' && travel.slug.trim()
-                ? `/${travel.slug.trim()}`
+    return safePayloadFetch('getJourneysSettings', defaultJourneysSettings, async () => {
+      const settings = await sdk.findGlobal({ slug: 'journeys-settings', depth: 2 })
+      const rawMenu = (settings as { headerMenu?: unknown }).headerMenu
+      const headerMenu: HeaderMenuItem[] = Array.isArray(rawMenu)
+        ? rawMenu.reduce<HeaderMenuItem[]>((acc, item, index) => {
+            if (!item || typeof item !== 'object') return acc
+            const candidate = item as {
+              id?: unknown
+              label?: unknown
+              url?: unknown
+              linkType?: unknown
+              internalDestinationType?: unknown
+              internalPath?: unknown
+              article?: unknown
+              travel?: unknown
+              openInNewTab?: unknown
+            }
+            if (typeof candidate.label !== 'string') return acc
+
+            const label = candidate.label.trim()
+            const resolvedInternalUrl = (() => {
+              if (
+                candidate.internalDestinationType === 'article' ||
+                candidate.internalDestinationType === 'travel'
+              ) {
+                const slug =
+                  resolveArticleSlugFromRelationship(candidate.article) ||
+                  resolveArticleSlugFromRelationship(candidate.travel)
+                return slug ? `/articles/${slug}` : ''
+              }
+              if (typeof candidate.internalPath === 'string') {
+                const path = candidate.internalPath.trim()
+                if (path === '/posts') return '/articles'
+                return path
+              }
+              if (typeof candidate.url === 'string' && candidate.url.startsWith('/')) {
+                const path = candidate.url.trim()
+                if (path === '/posts') return '/articles'
+                return path
+              }
+              return ''
+            })()
+
+            const resolvedExternalUrl =
+              typeof candidate.url === 'string' && /^https?:\/\//i.test(candidate.url)
+                ? candidate.url.trim()
                 : ''
-            }
-            if (typeof candidate.internalPath === 'string') return candidate.internalPath.trim()
-            if (typeof candidate.url === 'string' && candidate.url.startsWith('/')) {
-              return candidate.url.trim()
-            }
-            return ''
-          })()
 
-          const resolvedExternalUrl =
-            typeof candidate.url === 'string' && /^https?:\/\//i.test(candidate.url)
-              ? candidate.url.trim()
-              : ''
+            const url =
+              candidate.linkType === 'external'
+                ? resolvedExternalUrl
+                : resolvedInternalUrl || resolvedExternalUrl
 
-          const url =
-            candidate.linkType === 'external'
-              ? resolvedExternalUrl
-              : resolvedInternalUrl || resolvedExternalUrl
+            if (!label || !url) return acc
 
-          if (!label || !url) return acc
+            acc.push({
+              id: typeof candidate.id === 'string' ? candidate.id : `header-menu-${index}`,
+              label,
+              url,
+              openInNewTab: Boolean(candidate.openInNewTab),
+            })
+            return acc
+          }, [])
+        : []
 
-          acc.push({
-            id: typeof candidate.id === 'string' ? candidate.id : `header-menu-${index}`,
-            label,
-            url,
-            openInNewTab: Boolean(candidate.openInNewTab),
-          })
-          return acc
-        }, [])
-      : []
-
-    return {
-      ...settings,
-      headerMenu,
-    } as JourneysSettingsSnapshot
+      return {
+        ...settings,
+        headerMenu,
+      } as JourneysSettingsSnapshot
+    })
   },
   ['journeys-settings'],
   { tags: ['journeys-settings'] },
 )
 
-export const getPublishedTravels = unstable_cache(
-  async (limit?: number) => {
-    const sdk = getSDK()
-    if (!sdk) return [] as Travel[]
-    const result = await sdk.find({
-      collection: 'travels',
-      depth: 2,
-      limit: limit ?? 100,
-      ...publishedAndSorted,
-    })
-    return result.docs
-  },
-  ['published-travels'],
-  { tags: ['travels'] },
-)
+export function getArticleSortTimestamp(article: Article): number {
+  const tripStart = article.tripDates?.start
+  const publishedAt = article.publishedAt
+  const source = tripStart ?? publishedAt
+  if (!source) return 0
+
+  const timestamp = new Date(source).getTime()
+  return Number.isFinite(timestamp) ? timestamp : 0
+}
+
+export function getArticleYear(article: Article): string {
+  const source = article.tripDates?.start ?? article.publishedAt
+  if (!source) return 'Unknown'
+  const year = new Date(source).getFullYear()
+  return Number.isFinite(year) ? String(year) : 'Unknown'
+}
 
 export const getPublishedArticles = unstable_cache(
   async (limit?: number) => {
     const sdk = getSDK()
     if (!sdk) return [] as Article[]
-    const result = await sdk.find({
-      collection: 'articles',
-      depth: 2,
-      limit: limit ?? 100,
-      ...publishedAndSorted,
+
+    return safePayloadFetch('getPublishedArticles', [] as Article[], async () => {
+      const result = await sdk.find({
+        collection: 'articles',
+        depth: 2,
+        limit: limit ?? 1000,
+        ...publishedAndSorted,
+      })
+      return result.docs
     })
-    return result.docs
   },
   ['published-articles'],
   { tags: ['articles'] },
@@ -182,13 +199,16 @@ export const getPublishedVehicles = unstable_cache(
   async () => {
     const sdk = getSDK()
     if (!sdk) return [] as Vehicle[]
-    const result = await sdk.find({
-      collection: 'vehicles',
-      depth: 2,
-      limit: 100,
-      ...publishedAndSorted,
+
+    return safePayloadFetch('getPublishedVehicles', [] as Vehicle[], async () => {
+      const result = await sdk.find({
+        collection: 'vehicles',
+        depth: 2,
+        limit: 100,
+        ...publishedAndSorted,
+      })
+      return result.docs
     })
-    return result.docs
   },
   ['published-vehicles'],
   { tags: ['vehicles'] },
@@ -196,64 +216,37 @@ export const getPublishedVehicles = unstable_cache(
 
 function normalizeFeaturedLimit(limit?: number | null): number {
   if (typeof limit !== 'number' || Number.isNaN(limit)) {
-    return FEATURED_TRAVELS_DEFAULT_LIMIT
+    return FEATURED_ARTICLES_DEFAULT_LIMIT
   }
 
   const normalized = Math.floor(limit)
-  return Math.min(FEATURED_TRAVELS_MAX_LIMIT, Math.max(FEATURED_TRAVELS_MIN_LIMIT, normalized))
+  return Math.min(FEATURED_ARTICLES_MAX_LIMIT, Math.max(FEATURED_ARTICLES_MIN_LIMIT, normalized))
 }
 
-function getTravelSortTimestamp(travel: Travel): number {
-  const tripStart = travel.tripDates?.start
-  const publishedAt = travel.publishedAt
-  const source = tripStart ?? publishedAt
-  if (!source) return 0
-
-  const timestamp = new Date(source).getTime()
-  return Number.isFinite(timestamp) ? timestamp : 0
-}
-
-export function getFeaturedTravels(limit = FEATURED_TRAVELS_DEFAULT_LIMIT): Promise<Travel[]> {
+export function getFeaturedArticles(limit = FEATURED_ARTICLES_DEFAULT_LIMIT): Promise<Article[]> {
   const normalizedLimit = normalizeFeaturedLimit(limit)
 
   return unstable_cache(
     async () => {
       const sdk = getSDK()
-      if (!sdk) return [] as Travel[]
-      const result = await sdk.find({
-        collection: 'travels',
-        depth: 2,
-        limit: 100,
-        where: {
-          and: [publishedWhere, { featured: { equals: true } }],
-        },
-      })
-      return result.docs
-        .sort((a, b) => getTravelSortTimestamp(b) - getTravelSortTimestamp(a))
-        .slice(0, normalizedLimit)
-    },
-    ['featured-travels', String(normalizedLimit)],
-    { tags: ['travels'] },
-  )()
-}
+      if (!sdk) return [] as Article[]
 
-export function getTravelBySlug(slug: string): Promise<Travel | null> {
-  return unstable_cache(
-    async () => {
-      const sdk = getSDK()
-      if (!sdk) return null
-      const result = await sdk.find({
-        collection: 'travels',
-        depth: 2,
-        limit: 1,
-        where: {
-          and: [publishedWhere, { slug: { equals: slug } }],
-        },
+      return safePayloadFetch('getFeaturedArticles', [] as Article[], async () => {
+        const result = await sdk.find({
+          collection: 'articles',
+          depth: 2,
+          limit: 100,
+          where: {
+            and: [publishedWhere, { featured: { equals: true } }],
+          },
+        })
+        return result.docs
+          .sort((a, b) => getArticleSortTimestamp(b) - getArticleSortTimestamp(a))
+          .slice(0, normalizedLimit)
       })
-      return result.docs[0] ?? null
     },
-    [`travel-${slug}`],
-    { tags: ['travels', `travel:${slug}`] },
+    ['featured-articles', String(normalizedLimit)],
+    { tags: ['articles'] },
   )()
 }
 
@@ -262,15 +255,18 @@ export function getArticleBySlug(slug: string): Promise<Article | null> {
     async () => {
       const sdk = getSDK()
       if (!sdk) return null
-      const result = await sdk.find({
-        collection: 'articles',
-        depth: 2,
-        limit: 1,
-        where: {
-          and: [publishedWhere, { slug: { equals: slug } }],
-        },
+
+      return safePayloadFetch('getArticleBySlug', null, async () => {
+        const result = await sdk.find({
+          collection: 'articles',
+          depth: 2,
+          limit: 1,
+          where: {
+            and: [publishedWhere, { slug: { equals: slug } }],
+          },
+        })
+        return result.docs[0] ?? null
       })
-      return result.docs[0] ?? null
     },
     [`article-${slug}`],
     { tags: ['articles', `article:${slug}`] },
@@ -281,8 +277,11 @@ export const getGallerySettings = unstable_cache(
   async () => {
     const sdk = getSDK()
     if (!sdk) return null
-    const settings = await sdk.findGlobal({ slug: 'gallery-settings', depth: 2 })
-    return settings as GallerySetting
+
+    return safePayloadFetch('getGallerySettings', null, async () => {
+      const settings = await sdk.findGlobal({ slug: 'gallery-settings', depth: 2 })
+      return settings as GallerySetting
+    })
   },
   ['gallery-settings'],
   { tags: ['gallery-settings'] },
@@ -297,95 +296,72 @@ export const getLatestVehicleForMetadata = unstable_cache(
   { tags: ['vehicles'] },
 )
 
-export const getGalleryItems = unstable_cache(
+export function resolveGalleryCollectionCover(
+  collection: GalleryCollection,
+): Media | string | null {
+  if (isMedia(collection.coverImage)) {
+    return collection.coverImage
+  }
+
+  const firstImage = collection.images?.[0]
+  if (firstImage?.media && isMedia(firstImage.media)) {
+    return firstImage.media
+  }
+
+  if (typeof firstImage?.media === 'string') {
+    return firstImage.media
+  }
+
+  return null
+}
+
+export const getPublishedGalleryCollections = unstable_cache(
   async () => {
     const sdk = getSDK()
-    if (!sdk) return [] as GalleryItem[]
+    if (!sdk) return [] as GalleryCollection[]
 
-    const [settings, travels, articles] = await Promise.all([
-      getGallerySettings(),
-      getPublishedTravels(),
-      getPublishedArticles(),
-    ])
-
-    const folderId =
-      settings?.folder && typeof settings.folder === 'object' ? settings.folder.id : settings?.folder
-
-    if (!folderId) return [] as GalleryItem[]
-
-    const mediaResult = await sdk.find({
-      collection: 'media',
-      depth: 1,
-      limit: 500,
-      sort: '-createdAt',
-      where: {
-        folder: { equals: folderId },
+    return safePayloadFetch(
+      'getPublishedGalleryCollections',
+      [] as GalleryCollection[],
+      async () => {
+        const result = await sdk.find({
+          collection: 'gallery-collections',
+          depth: 2,
+          limit: 100,
+          ...publishedAndSorted,
+        })
+        return result.docs
       },
-    })
-
-    const sourceByMediaId = new Map<string, GalleryItem['source']>()
-
-    for (const travel of travels) {
-      if (!travel.gallery?.length) continue
-      for (const entry of travel.gallery) {
-        const media = entry.media || entry.image
-        if (!media || typeof media === 'string' || !isMedia(media)) continue
-        if (!sourceByMediaId.has(media.id)) {
-          sourceByMediaId.set(media.id, {
-            type: 'travel',
-            href: `/${travel.slug}`,
-            title: travel.title,
-          })
-        }
-      }
-    }
-
-    for (const article of articles) {
-      if (!article.gallery?.length) continue
-      for (const entry of article.gallery) {
-        const media = entry.media
-        if (!media || typeof media === 'string' || !isMedia(media)) continue
-        if (!sourceByMediaId.has(media.id)) {
-          sourceByMediaId.set(media.id, {
-            type: 'article',
-            href: `/articles/${article.slug}`,
-            title: article.title,
-          })
-        }
-      }
-    }
-
-    const items: GalleryItem[] = []
-
-    for (const media of mediaResult.docs) {
-      if (!isMedia(media)) continue
-      const url = getMediaUrl(media, 'large')
-      if (!url) continue
-      const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
-      const mimeType = media.mimeType ?? null
-      const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
-      const mediaCaption = extractPlainTextFromRichText((media.caption?.root as RichTextNode | undefined) ?? null)
-      const source = sourceByMediaId.get(media.id) ?? null
-
-      items.push({
-        id: media.id,
-        url,
-        alt: media.alt || 'Gallery media',
-        caption: mediaCaption || null,
-        thumbnailUrl,
-        kind,
-        mimeType,
-        source,
-      })
-    }
-
-    return items
+    )
   },
-  ['gallery-items'],
-  { tags: ['gallery', 'travels'] },
+  ['published-gallery-collections'],
+  { tags: ['gallery', 'gallery-collections'] },
 )
 
-export type GalleryItem = {
+export function getGalleryCollectionBySlug(slug: string): Promise<GalleryCollection | null> {
+  return unstable_cache(
+    async () => {
+      const sdk = getSDK()
+      if (!sdk) return null
+
+      return safePayloadFetch('getGalleryCollectionBySlug', null, async () => {
+        const result = await sdk.find({
+          collection: 'gallery-collections',
+          depth: 2,
+          limit: 1,
+          where: {
+            and: [publishedWhere, { slug: { equals: slug } }],
+          },
+        })
+        return result.docs[0] ?? null
+      })
+    },
+    [`gallery-collection-${slug}`],
+    { tags: ['gallery', 'gallery-collections', `gallery-collection:${slug}`] },
+  )()
+}
+
+export type GalleryCollectionImageItem = {
   id: string
   url: string
   thumbnailUrl: string
@@ -393,9 +369,32 @@ export type GalleryItem = {
   caption?: string | null
   kind: 'image' | 'video'
   mimeType: string | null
-  source?: {
-    type: 'article' | 'travel'
-    href: string
-    title: string
-  } | null
+}
+
+export function mapGalleryCollectionImages(
+  collection: GalleryCollection,
+): GalleryCollectionImageItem[] {
+  const items: GalleryCollectionImageItem[] = []
+
+  for (const entry of collection.images ?? []) {
+    const media = entry.media
+    if (!media || typeof media === 'string' || !isMedia(media)) continue
+    const url = getMediaUrl(media, 'large')
+    if (!url) continue
+    const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
+    const mimeType = media.mimeType ?? null
+    const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
+
+    items.push({
+      id: media.id,
+      url,
+      thumbnailUrl,
+      alt: entry.alt || media.alt || collection.title,
+      caption: entry.caption || null,
+      kind,
+      mimeType,
+    })
+  }
+
+  return items
 }

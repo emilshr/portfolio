@@ -3,19 +3,10 @@ import { notFound } from 'next/navigation'
 
 import { ArticleDetail } from '@/components/articles/ArticleDetail'
 import { articleMetadata } from '@/lib/metadata'
-import { getArticleBySlug, getPublishedArticles } from '@/lib/payload'
+import { getArticleBySlug } from '@/lib/payload'
 
 type PageProps = {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  try {
-    const articles = await getPublishedArticles()
-    return articles.map((article) => ({ slug: article.slug }))
-  } catch {
-    return []
-  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

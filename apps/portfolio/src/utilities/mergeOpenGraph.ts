@@ -6,9 +6,7 @@ type MergeOpenGraphDefaults = {
   description?: string
 }
 
-const getDefaultOpenGraph = (
-  defaults?: MergeOpenGraphDefaults,
-): Metadata['openGraph'] => ({
+const getDefaultOpenGraph = (defaults?: MergeOpenGraphDefaults): Metadata['openGraph'] => ({
   type: 'website',
   description: defaults?.description ?? 'I specialize in building things for the web.',
   images: [
@@ -29,6 +27,6 @@ export const mergeOpenGraph = (
   return {
     ...defaultOpenGraph,
     ...og,
-    images: og?.images ? og.images : defaultOpenGraph.images,
+    images: og?.images ? og.images : defaultOpenGraph?.images,
   }
 }

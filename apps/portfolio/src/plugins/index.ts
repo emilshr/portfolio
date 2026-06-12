@@ -4,28 +4,28 @@ import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 
-import { Page, Post, Travel } from '@repo/payload-types'
+import { Article, Page, Post } from '@repo/payload-types'
 import { getJourneysSiteURL } from '@/utilities/getJourneysSiteURL'
 import { getServerSideURL } from '@/utilities/getURL'
 import { storagePlugins } from '@/storage'
 
-const generateTitle: GenerateTitle<Post | Page | Travel> = ({ doc, collectionSlug }) => {
+const generateTitle: GenerateTitle<Post | Page | Article> = ({ doc, collectionSlug }) => {
   if (!doc?.title) {
-    return collectionSlug === 'travels' ? 'Journeys' : 'Emil'
+    return collectionSlug === 'articles' ? 'Journeys' : 'Emil'
   }
 
-  if (collectionSlug === 'travels') {
+  if (collectionSlug === 'articles') {
     return `${doc.title} | Journeys`
   }
 
   return `${doc.title} | Emil`
 }
 
-const generateURL: GenerateURL<Post | Page | Travel> = ({ doc, collectionSlug }) => {
-  if (collectionSlug === 'travels') {
+const generateURL: GenerateURL<Post | Page | Article> = ({ doc, collectionSlug }) => {
+  if (collectionSlug === 'articles') {
     const journeysURL = getJourneysSiteURL()
     if (!doc?.slug) return journeysURL
-    return `${journeysURL}/${doc.slug}`
+    return `${journeysURL}/articles/${doc.slug}`
   }
 
   const url = getServerSideURL()
@@ -37,7 +37,7 @@ const generateURL: GenerateURL<Post | Page | Travel> = ({ doc, collectionSlug })
 export const plugins: Plugin[] = [
   ...storagePlugins,
   redirectsPlugin({
-    collections: ['pages', 'posts', 'travels'],
+    collections: ['pages', 'posts', 'articles'],
     overrides: {
       // @ts-expect-error - valid override
       fields: ({ defaultFields }) => {

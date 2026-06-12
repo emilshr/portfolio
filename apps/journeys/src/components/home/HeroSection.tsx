@@ -1,11 +1,11 @@
-import type { JourneysSetting, Media, Travel } from '@repo/payload-types'
+import type { Article, JourneysSetting, Media } from '@repo/payload-types'
 
 import { ParallaxHeroCover } from '@/components/home/ParallaxHeroCover'
 import { isMedia } from '@/lib/media'
 
 type HeroSettings = Pick<
   JourneysSetting,
-  'heroImage' | 'heroTitle' | 'heroSubtitle' | 'featuredTravel'
+  'heroImage' | 'heroTitle' | 'heroSubtitle' | 'featuredArticle'
 >
 
 type HeroSectionProps = {
@@ -17,11 +17,11 @@ function resolveHeroMedia(settings: HeroSettings): Media | null {
     return settings.heroImage
   }
 
-  const featured = settings.featuredTravel
+  const featured = settings.featuredArticle
   if (featured && typeof featured === 'object') {
-    const travel = featured as Travel
-    if (isMedia(travel.heroImage)) return travel.heroImage
-    if (isMedia(travel.coverImage)) return travel.coverImage
+    const article = featured as Article
+    if (isMedia(article.heroImage)) return article.heroImage
+    if (isMedia(article.coverImage)) return article.coverImage
   }
 
   return null
@@ -35,7 +35,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
       <ParallaxHeroCover media={heroMedia} />
       <div id="hero-cover-sentinel" className="h-0 w-full" aria-hidden />
       <div className="w-full py-10 text-center md:py-16">
-        <h1 className="w-full font-display text-4xl sm:text-7xl font-bold uppercase leading-[0.95] tracking-[-0.03em] text-foreground">
+        <h1 className="w-full font-display text-4xl font-bold uppercase leading-[0.95] tracking-[-0.03em] text-foreground sm:text-7xl">
           {settings.heroTitle || 'BurntClutchProject'}
         </h1>
         {settings.heroSubtitle ? (

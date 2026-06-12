@@ -7,5 +7,5 @@ export const revalidateJourneysSettings: GlobalAfterChangeHook = async ({ req })
     return
   }
 
-  await revalidateJourneys({ tags: ['journeys-settings', 'travels'] })
+  await revalidateJourneys({ tags: ['journeys-settings', 'articles'] })
 }

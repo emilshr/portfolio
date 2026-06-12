@@ -21,7 +21,7 @@ const fallbackMenuItems: HeaderMenuItem[] = [
 
 const solidHeaderClass =
   'border-b border-border/60 bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/50'
-const nonTravelTopLevelRoutes = new Set(['gallery', 'posts', 'articles', 'vehicles'])
+const nonArticleDetailTopLevelRoutes = new Set(['gallery', 'articles', 'vehicles'])
 
 type SiteHeaderProps = {
   menuItems: HeaderMenuItem[]
@@ -36,8 +36,13 @@ export function SiteHeader({ menuItems }: SiteHeaderProps) {
   const isHome = pathname === '/'
   const topLevelSegment = pathname.replace(/^\//, '')
   const isTopLevelRoute = topLevelSegment.length > 0 && !topLevelSegment.includes('/')
-  const isTravelDetail = isTopLevelRoute && !nonTravelTopLevelRoutes.has(topLevelSegment)
-  const isOverlayHeroRoute = isHome || isTravelDetail
+  const isArticleDetail = pathname.startsWith('/articles/') && pathname !== '/articles'
+  const isGalleryDetail = pathname.startsWith('/gallery/') && pathname !== '/gallery'
+  const isOverlayHeroRoute =
+    isHome ||
+    isArticleDetail ||
+    isGalleryDetail ||
+    (isTopLevelRoute && !nonArticleDetailTopLevelRoutes.has(topLevelSegment))
   const [pastCover, setPastCover] = useState(false)
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -203,7 +208,9 @@ export function SiteHeader({ menuItems }: SiteHeaderProps) {
                       initial={prefersReducedMotion ? undefined : { opacity: 0, y: 12 }}
                       animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
                       exit={prefersReducedMotion ? undefined : { opacity: 0, y: 8 }}
-                      transition={prefersReducedMotion ? undefined : { duration: 0.24, ease: 'easeOut' }}
+                      transition={
+                        prefersReducedMotion ? undefined : { duration: 0.24, ease: 'easeOut' }
+                      }
                       className="w-full"
                     >
                       {external ? (

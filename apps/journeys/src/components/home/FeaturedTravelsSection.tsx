@@ -1,7 +1,7 @@
 import type { FeaturedTravelsBlock } from '@repo/payload-types'
 
 import { TravelGrid } from '@/components/home/TravelGrid'
-import { getFeaturedTravels } from '@/lib/payload'
+import { getFeaturedArticles } from '@/lib/payload'
 
 type FeaturedTravelsSectionProps = {
   block: FeaturedTravelsBlock
@@ -9,13 +9,13 @@ type FeaturedTravelsSectionProps = {
 
 export async function FeaturedTravelsSection({ block }: FeaturedTravelsSectionProps) {
   const limit = typeof block.limit === 'number' ? block.limit : 6
-  const travels = await getFeaturedTravels(limit)
+  const articles = await getFeaturedArticles(limit)
 
-  if (travels.length === 0) return null
+  if (articles.length === 0) return null
 
   return (
     <TravelGrid
-      travels={travels}
+      articles={articles}
       title={block.heading ?? 'Featured journeys'}
       description={block.description}
       showViewAllLink
