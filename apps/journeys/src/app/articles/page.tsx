@@ -52,22 +52,22 @@ export default async function ArticlesPage() {
   const groups = groupArticlesByYear(articles)
 
   return (
-    <div className="pt-[var(--space-8)] pb-[var(--space-16)]">
-      <div className="mx-auto mb-[var(--space-12)] w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)]">
+    <div className="pt-8 pb-16">
+      <div className="page-container mb-12">
         <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Articles</h1>
-        <p className="mt-[var(--space-3)] max-w-2xl text-muted-foreground">
+        <p className="mt-3 max-w-2xl text-muted-foreground">
           Motorcycle stories that are not always about travel.
         </p>
       </div>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-[var(--space-14)] px-[clamp(1.5rem,5vw,4rem)]">
+      <div className="page-container flex flex-col gap-14">
         {groups.map((group, index) => (
-          <section key={group.year} className="space-y-[var(--space-8)]">
+          <section key={group.year} className="space-y-8">
             {index > 0 ? <hr className="border-border/60" aria-hidden /> : null}
-            <h2 className="pt-[var(--space-6)] font-display text-2xl font-semibold tracking-tight md:text-3xl">
+            <h2 className="pt-6 font-display text-2xl font-semibold tracking-tight md:text-3xl">
               {group.year}
             </h2>
-            <div className="space-y-[var(--space-8)]">
+            <div className="space-y-8">
               {group.articles.map((article) => (
                 <ArticleLongCard key={article.id} article={article} />
               ))}

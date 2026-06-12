@@ -17,8 +17,8 @@ export default async function GalleryPage() {
   const items = await getGalleryItems()
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)] py-[var(--space-12)] md:py-[var(--space-16)]">
-      <header className="mb-[var(--space-10)]">
+    <div className="page-container py-12 md:py-16">
+      <header className="mb-10">
         <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Gallery</h1>
       </header>
       <BentoGallery items={items} />

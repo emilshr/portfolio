@@ -17,7 +17,7 @@ export function TravelCard({ travel, className }: TravelCardProps) {
   const image = travel.coverImage || travel.heroImage
 
   return (
-    <article className={cn('group flex flex-col gap-[var(--space-4)]', className)}>
+    <article className={cn('group flex flex-col gap-4', className)}>
       <Link
         href={`/${travel.slug}`}
         className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -34,7 +34,7 @@ export function TravelCard({ travel, className }: TravelCardProps) {
           <div className="flex h-full items-center justify-center text-muted-foreground">No image</div>
         )}
       </Link>
-      <div className="flex flex-col gap-[var(--space-2)]">
+      <div className="flex flex-col gap-2">
         {(location || dates) && (
           <p className="text-xs uppercase tracking-wider text-muted-foreground">
             {[location, dates].filter(Boolean).join(' · ')}

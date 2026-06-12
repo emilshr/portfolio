@@ -55,7 +55,7 @@ function MarqueeImageTile({ item }: { item: MarqueeImage }) {
 
 function StaticMarqueeStrip({ images }: { images: MarqueeImage[] }) {
   return (
-    <div className="flex w-full gap-3 overflow-x-auto px-[clamp(1.5rem,5vw,4rem)] py-[var(--space-10)] motion-reduce:overflow-x-auto">
+    <div className="flex w-full gap-3 overflow-x-auto px-page-x py-10 motion-reduce:overflow-x-auto">
       {images.map((item) => (
         <MarqueeImageTile key={item.id} item={item} />
       ))}
@@ -85,7 +85,7 @@ export function ImageMarqueeSection({ block }: ImageMarqueeSectionProps) {
   }
 
   return (
-    <section className={cn('w-full py-[var(--space-10)]')}>
+    <section className={cn('w-full py-10')}>
       <ScrollVelocityContainer>
         <ScrollVelocityRow baseVelocity={baseVelocity} direction={direction}>
           {images.map((item) => (

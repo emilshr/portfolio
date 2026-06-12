@@ -76,8 +76,8 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
   const [preview, setPreview] = useState<{ modId: string; index: number | null } | null>(null)
 
   return (
-    <article className="space-y-[var(--space-10)]">
-      <header className="grid grid-cols-1 gap-[var(--space-6)] md:grid-cols-[minmax(14rem,20rem)_1fr]">
+    <article className="space-y-10">
+      <header className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(14rem,20rem)_1fr]">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted">
           {vehicle.coverImage ? (
             <PayloadImage media={vehicle.coverImage} size="card" fill sizes="(max-width: 768px) 100vw, 30vw" />
@@ -85,7 +85,7 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
             <div className="flex h-full items-center justify-center text-muted-foreground">No cover image</div>
           )}
         </div>
-        <div className="flex flex-col justify-center gap-[var(--space-3)]">
+        <div className="flex flex-col justify-center gap-3">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Vehicle</p>
           <h2 className="font-display text-3xl font-semibold tracking-tight">{vehicle.name}</h2>
           <p className="text-sm text-muted-foreground">Odometer: {formatOdometer(vehicle.odometer)}</p>
@@ -97,7 +97,7 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
       </div>
 
       {vehicle.gallery && vehicle.gallery.length > 0 ? (
-        <section aria-labelledby={`vehicle-gallery-${vehicle.id}`} className="space-y-[var(--space-6)]">
+        <section aria-labelledby={`vehicle-gallery-${vehicle.id}`} className="space-y-6">
           <h3 id={`vehicle-gallery-${vehicle.id}`} className="font-display text-2xl font-semibold tracking-tight">
             Gallery
           </h3>
@@ -106,20 +106,20 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
       ) : null}
 
       {vehicle.mods && vehicle.mods.length > 0 ? (
-        <section aria-labelledby={`vehicle-mods-${vehicle.id}`} className="space-y-[var(--space-6)]">
+        <section aria-labelledby={`vehicle-mods-${vehicle.id}`} className="space-y-6">
           <h3 id={`vehicle-mods-${vehicle.id}`} className="font-display text-2xl font-semibold tracking-tight">
             Mods
           </h3>
 
-          <div className="space-y-[var(--space-8)]">
+          <div className="space-y-8">
             {vehicle.mods.map((mod) => {
               const modId = mod.id || `${vehicle.id}-${mod.name}`
               const previewItems = buildModPreviewItems(mod)
               const isOpen = preview?.modId === modId
 
               return (
-                <article key={modId} className="rounded-xl border border-border p-[var(--space-5)]">
-                  <div className="flex flex-wrap items-start justify-between gap-[var(--space-4)]">
+                <article key={modId} className="rounded-xl border border-border p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                       <h4 className="font-display text-xl font-semibold tracking-tight">{mod.name}</h4>
                       {mod.productURL ? (
@@ -137,7 +137,7 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
                   </div>
 
                   {previewItems.length > 0 ? (
-                    <div className="mt-[var(--space-5)]">
+                    <div className="mt-5">
                       <BentoGrid className="auto-rows-[120px] sm:auto-rows-[140px]">
                         {previewItems.map((item, index) => (
                           <BentoCard
@@ -171,7 +171,7 @@ export function VehicleSection({ vehicle }: VehicleSectionProps) {
                   ) : null}
 
                   {mod.review ? (
-                    <div className="mt-[var(--space-5)] max-w-3xl">
+                    <div className="mt-5 max-w-3xl">
                       <TravelRichText data={mod.review} />
                     </div>
                   ) : null}

@@ -107,7 +107,7 @@ export function SiteHeader({ menuItems }: SiteHeaderProps) {
           heroOverlayHeader ? 'border-transparent bg-transparent' : solidHeaderClass,
         )}
       >
-        <div className="relative mx-auto grid h-16 w-full max-w-6xl grid-cols-1 items-center px-0 sm:px-[clamp(1.5rem,5vw,4rem)]">
+        <div className="relative mx-auto grid h-16 w-full max-w-6xl grid-cols-1 items-center px-0 sm:px-page-x">
           <div className="absolute left-0 top-0 z-10 flex h-16 items-center justify-start">
             <button
               type="button"

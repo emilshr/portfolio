@@ -21,9 +21,9 @@ export function TravelGrid({
   }
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)] py-[var(--space-16)]">
-      <div className="mb-[var(--space-10)] flex flex-wrap items-end justify-between gap-[var(--space-4)]">
-        <div className="space-y-[var(--space-3)]">
+    <section className="page-container py-16">
+      <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-3">
           <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">{title}</h2>
           {description ? (
             <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
@@ -41,7 +41,7 @@ export function TravelGrid({
           </HeaderNavHighlightLink>
         ) : null}
       </div>
-      <div className="grid grid-cols-1 gap-[var(--space-10)] sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
         {travels.map((travel) => (
           <TravelCard key={travel.id} travel={travel} />
         ))}

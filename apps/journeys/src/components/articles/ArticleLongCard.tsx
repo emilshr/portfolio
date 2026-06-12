@@ -9,7 +9,7 @@ type ArticleLongCardProps = {
 
 export function ArticleLongCard({ article }: ArticleLongCardProps) {
   return (
-    <article className="group grid grid-cols-1 gap-[var(--space-5)] sm:grid-cols-[minmax(15rem,22rem)_1fr] sm:items-start">
+    <article className="group grid grid-cols-1 gap-5 sm:grid-cols-[minmax(15rem,22rem)_1fr] sm:items-start">
       <Link
         href={`/articles/${article.slug}`}
         className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -26,7 +26,7 @@ export function ArticleLongCard({ article }: ArticleLongCardProps) {
           <div className="flex h-full items-center justify-center text-muted-foreground">No image</div>
         )}
       </Link>
-      <div className="flex flex-col gap-[var(--space-3)]">
+      <div className="flex flex-col gap-3">
         <p className="text-xs uppercase tracking-wider text-muted-foreground">Article</p>
         <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
           <Link

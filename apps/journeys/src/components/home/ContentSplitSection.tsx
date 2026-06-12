@@ -29,8 +29,8 @@ export function ContentSplitSection({ block }: ContentSplitSectionProps) {
   const richContent = block.content as DefaultTypedEditorState | null | undefined
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-[clamp(1.5rem,5vw,4rem)] py-(--space-16) md:py-24">
-      <div className="grid items-start gap-(--space-10) md:grid-cols-2 md:gap-(--space-12)">
+    <section className="page-container py-16 md:py-24">
+      <div className="grid items-start gap-10 md:grid-cols-2 md:gap-12">
         {image ? (
           <div
             className={cn(
@@ -50,7 +50,7 @@ export function ContentSplitSection({ block }: ContentSplitSectionProps) {
 
         <div
           className={cn(
-            'flex flex-col gap-(--space-6)',
+            'flex flex-col gap-6',
             imageOnRight ? 'md:order-1' : 'md:order-2',
             !image && 'md:col-span-2',
           )}
