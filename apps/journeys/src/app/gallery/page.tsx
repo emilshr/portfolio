@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 
 import { BentoGallery } from '@/components/gallery/BentoGallery'
-import { buildPageMetadata } from '@/lib/metadata'
+import { buildPageMetadata, formatPageTitle } from '@/lib/metadata'
 import { getGalleryItems, getGallerySettings } from '@/lib/payload'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getGallerySettings()
   return buildPageMetadata({
-    title: settings?.meta?.title || 'Gallery',
+    title: settings?.meta?.title ?? formatPageTitle('Gallery'),
     description: settings?.meta?.description || 'Photographs from every journey.',
     path: '/gallery',
   })

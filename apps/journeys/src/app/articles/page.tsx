@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import type { Article } from '@repo/payload-types'
 
 import { ArticleLongCard } from '@/components/articles/ArticleLongCard'
-import { buildPageMetadata } from '@/lib/metadata'
+import { buildPageMetadata, formatPageTitle } from '@/lib/metadata'
 import { getPublishedArticles } from '@/lib/payload'
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Articles',
+  title: formatPageTitle('Articles'),
   description: 'Motorcycle stories, notes, and reviews.',
   path: '/articles',
 })

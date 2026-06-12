@@ -10,6 +10,10 @@ export function getSiteURL(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL || 'https://burntclutchproject.com').replace(/\/$/, '')
 }
 
+export function formatPageTitle(pageTitle: string, site = siteName): string {
+  return pageTitle === site ? pageTitle : `${pageTitle} | ${site}`
+}
+
 export function buildPageMetadata({
   title,
   description,
@@ -23,13 +27,12 @@ export function buildPageMetadata({
 }): Metadata {
   const siteURL = getSiteURL()
   const url = `${siteURL}${path}`
-  const metaTitle = title === siteName ? title : `${title} | ${siteName}`
 
   return {
-    title: metaTitle,
+    title,
     description: description ?? undefined,
     openGraph: {
-      title: metaTitle,
+      title,
       description: description ?? undefined,
       url,
       siteName,
@@ -38,7 +41,7 @@ export function buildPageMetadata({
     },
     twitter: {
       card: image ? 'summary_large_image' : 'summary',
-      title: metaTitle,
+      title,
       description: description ?? undefined,
       ...(image ? { images: [image] } : {}),
     },
@@ -52,7 +55,8 @@ type JourneysHomeSEOSettings = Pick<
 >
 
 export function journeysHomeMetadata(settings: JourneysHomeSEOSettings): Metadata {
-  const title = settings.meta?.title || settings.heroTitle || 'Journeys'
+  const title =
+    settings.meta?.title ?? formatPageTitle(settings.heroTitle || siteName)
   const description =
     settings.meta?.description || settings.heroSubtitle || 'Travel stories from the road.'
   const metaImage = settings.meta?.image
@@ -84,7 +88,7 @@ export function travelMetadata(travel: {
   heroImage?: unknown
   coverImage?: unknown
 }): Metadata {
-  const title = travel.meta?.title || travel.title
+  const title = travel.meta?.title ?? formatPageTitle(travel.title)
   const description = travel.meta?.description || travel.excerpt || travel.subtitle
   const metaImage = travel.meta?.image
   const image =
@@ -111,7 +115,7 @@ export function articleMetadata(article: {
   } | null
   heroImage?: unknown
 }): Metadata {
-  const title = article.meta?.title || article.title
+  const title = article.meta?.title ?? formatPageTitle(article.title)
   const description = article.meta?.description || article.excerpt
   const metaImage = article.meta?.image
   const image =
@@ -135,7 +139,7 @@ export function vehiclesPageMetadata(vehicle: {
   } | null
   coverImage?: unknown
 } | null): Metadata {
-  const title = vehicle?.meta?.title || 'Vehicles'
+  const title = vehicle?.meta?.title ?? formatPageTitle('Vehicles')
   const description = vehicle?.meta?.description || 'Motorcycles and upgrades from my garage.'
   const image =
     (isMedia(vehicle?.meta?.image)
