@@ -1,17 +1,16 @@
 import type { Metadata } from 'next'
 import { Outfit, Unbounded } from 'next/font/google'
-import type { ReactNode } from 'react'
+import Script from 'next/script'
+import { Suspense, type ReactNode } from 'react'
 
 import { Main } from '@/components/layout/Main'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
-import { getJourneysSettings } from '@/lib/payload'
+import { SiteHeaderLoader } from '@/components/layout/SiteHeaderLoader'
 import { Providers } from '@/components/providers'
 import { getSiteURL } from '@/lib/metadata'
 
 import '@/styles/globals.css'
-
-export const dynamic = 'force-dynamic'
 
 const unbounded = Unbounded({
   subsets: ['latin'],
@@ -38,21 +37,22 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 }
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID_JOURNEYS
   const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC
-  const settings = await getJourneysSettings()
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${unbounded.variable} ${outfit.variable} min-h-screen antialiased`}>
         <Providers>
-          <SiteHeader menuItems={settings.headerMenu ?? []} />
+          <Suspense fallback={<SiteHeader menuItems={[]} />}>
+            <SiteHeaderLoader />
+          </Suspense>
           <Main>{children}</Main>
           <SiteFooter />
         </Providers>
         {umamiWebsiteId && umamiSrc ? (
-          <script async defer src={umamiSrc} data-website-id={umamiWebsiteId} />
+          <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
         ) : null}
       </body>
     </html>

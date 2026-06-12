@@ -1,13 +1,16 @@
 'use client'
 
-import type { Media } from '@repo/payload-types'
 import type { MediaPlayerBlock as MediaPlayerBlockProps } from '@repo/payload-types'
-import { MediaPlayerBlockView } from '@repo/ui/media-player-block-view'
+import dynamic from 'next/dynamic'
 
-import { cn } from '@/utilities/ui'
-import { getMediaUrl } from '@/utilities/getMediaUrl'
-
-import { mapMediaPlayerBlockToConfig } from './mapConfig'
+const MediaPlayerBlockComponentClient = dynamic(
+  () =>
+    import('@/blocks/MediaPlayer/Component.client').then((mod) => mod.MediaPlayerBlockComponent),
+  {
+    ssr: false,
+    loading: () => <div className="my-8 h-48 animate-pulse rounded-lg bg-muted" />,
+  },
+)
 
 type Props = MediaPlayerBlockProps & {
   className?: string
@@ -15,40 +18,6 @@ type Props = MediaPlayerBlockProps & {
   disableInnerContainer?: boolean
 }
 
-function resolveMediaSource(media: Media | string | null | undefined): {
-  src: string
-  mimeType: string | null
-} | null {
-  if (!media || typeof media !== 'object') return null
-
-  const src = getMediaUrl(media.url, media.updatedAt)
-  if (!src) return null
-
-  return {
-    src,
-    mimeType: media.mimeType ?? null,
-  }
-}
-
 export const MediaPlayerBlockComponent: React.FC<Props> = (props) => {
-  const { className, enableGutter = true, disableInnerContainer, media } = props
-
-  const source = resolveMediaSource(media)
-  if (!source) return null
-
-  const config = mapMediaPlayerBlockToConfig(props)
-
-  return (
-    <div
-      className={cn(
-        'my-8',
-        {
-          container: enableGutter && !disableInnerContainer,
-        },
-        className,
-      )}
-    >
-      <MediaPlayerBlockView src={source.src} mimeType={source.mimeType} config={config} />
-    </div>
-  )
+  return <MediaPlayerBlockComponentClient {...props} />
 }

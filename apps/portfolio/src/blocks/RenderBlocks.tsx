@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, Suspense } from 'react'
 
 import type { Page } from '@repo/payload-types'
 
@@ -34,9 +34,14 @@ const blockComponents = {
   workExperience: WorkExperienceBlockComponent,
 }
 
+function blockKey(block: NonNullable<Page['layout']>[number], index: number): string {
+  if ('id' in block && block.id) return String(block.id)
+  return `${block.blockType}-${index}`
+}
+
 export const RenderBlocks: React.FC<{
   blocks: Page['layout']
-}> = async (props) => {
+}> = (props) => {
   const { blocks } = props
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -44,23 +49,21 @@ export const RenderBlocks: React.FC<{
 
   return (
     <Fragment>
-      {await Promise.all(
-        blocks.map(async (block, index) => {
-          const { blockType } = block
-          if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType as keyof typeof blockComponents]
-            if (Block) {
-              return (
-                <Fragment key={index}>
-                  {/* @ts-expect-error block props vary */}
-                  <Block {...block} disableInnerContainer />
-                </Fragment>
-              )
-            }
+      {blocks.map((block, index) => {
+        const { blockType } = block
+        if (blockType && blockType in blockComponents) {
+          const Block = blockComponents[blockType as keyof typeof blockComponents]
+          if (Block) {
+            return (
+              <Suspense key={blockKey(block, index)} fallback={null}>
+                {/* @ts-expect-error block props vary */}
+                <Block {...block} disableInnerContainer />
+              </Suspense>
+            )
           }
-          return null
-        }),
-      )}
+        }
+        return null
+      })}
     </Fragment>
   )
 }

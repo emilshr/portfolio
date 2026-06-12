@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 
-export const dynamic = 'force-dynamic'
-
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { PostLayout } from '@/components/chiri/PostLayout'
 import { RenderBlocks } from '@/blocks/RenderBlocks'

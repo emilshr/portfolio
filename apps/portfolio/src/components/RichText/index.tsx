@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic'
+
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { MediaPlayerBlockComponent } from '@/blocks/MediaPlayer/Component'
 import {
@@ -12,7 +14,11 @@ import {
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 
-import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import type { CodeBlockProps } from '@/blocks/Code/Component'
+
+const CodeBlock = dynamic(() =>
+  import('@/blocks/Code/Component').then((mod) => mod.CodeBlock),
+)
 import { AlertBannerBlockComponent } from '@/blocks/AlertBanner/Component'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { ContentBlock } from '@/blocks/Content/Component'

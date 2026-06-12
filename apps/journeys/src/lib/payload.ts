@@ -9,6 +9,7 @@ import type {
   Vehicle,
 } from '@repo/payload-types'
 import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
 
 import { getPayloadApiUrl, isProductionDeploy } from '@/lib/env'
 import { getMediaUrl, isMedia } from '@/lib/media'
@@ -79,7 +80,7 @@ async function safePayloadFetch<T>(label: string, fallback: T, fn: () => Promise
   }
 }
 
-export const getJourneysSettings = unstable_cache(
+const getJourneysSettingsUncached = unstable_cache(
   async () => {
     const sdk = getSDK()
     if (!sdk) return defaultJourneysSettings
@@ -159,6 +160,8 @@ export const getJourneysSettings = unstable_cache(
   { tags: ['journeys-settings'] },
 )
 
+export const getJourneysSettings = cache(getJourneysSettingsUncached)
+
 export function getArticleSortTimestamp(article: Article): number {
   const tripStart = article.tripDates?.start
   const publishedAt = article.publishedAt
@@ -176,24 +179,30 @@ export function getArticleYear(article: Article): string {
   return Number.isFinite(year) ? String(year) : 'Unknown'
 }
 
-export const getPublishedArticles = unstable_cache(
-  async (limit?: number) => {
-    const sdk = getSDK()
-    if (!sdk) return [] as Article[]
+const PUBLISHED_ARTICLES_DEFAULT_LIMIT = 100
 
-    return safePayloadFetch('getPublishedArticles', [] as Article[], async () => {
-      const result = await sdk.find({
-        collection: 'articles',
-        depth: 2,
-        limit: limit ?? 1000,
-        ...publishedAndSorted,
+export function getPublishedArticles(limit = PUBLISHED_ARTICLES_DEFAULT_LIMIT): Promise<Article[]> {
+  const normalizedLimit = Math.max(1, Math.floor(limit))
+
+  return unstable_cache(
+    async () => {
+      const sdk = getSDK()
+      if (!sdk) return [] as Article[]
+
+      return safePayloadFetch('getPublishedArticles', [] as Article[], async () => {
+        const result = await sdk.find({
+          collection: 'articles',
+          depth: 2,
+          limit: normalizedLimit,
+          ...publishedAndSorted,
+        })
+        return result.docs
       })
-      return result.docs
-    })
-  },
-  ['published-articles'],
-  { tags: ['articles'] },
-)
+    },
+    ['published-articles', String(normalizedLimit)],
+    { tags: ['articles'] },
+  )()
+}
 
 export const getPublishedVehicles = unstable_cache(
   async () => {

@@ -1,6 +1,6 @@
 import RichText from '@/components/RichText'
 import type { AboutBlock as AboutBlockProps } from '@repo/payload-types'
-import { Media } from '@/components/Media'
+import { ImageMedia } from '@/components/Media/ImageMedia'
 
 export const AboutBlockComponent: React.FC<AboutBlockProps> = ({
   avatar,
@@ -29,7 +29,7 @@ export const AboutBlockComponent: React.FC<AboutBlockProps> = ({
         {avatar && typeof avatar === 'object' ? (
           <div className="shrink-0 rounded-full bg-(--selection)/50 p-1 shadow-[0_4px_20px_rgba(0,0,0,0.06)] ring-1 ring-white/40 backdrop-blur-md dark:bg-white/6 dark:shadow-[0_4px_24px_rgba(0,0,0,0.35)] dark:ring-white/12 max-sm:self-start max-sm:p-0.75">
             <div className="relative size-32 overflow-hidden rounded-full border border-border bg-white/5 shadow-inner max-sm:size-19">
-              <Media
+              <ImageMedia
                 resource={avatar}
                 fill
                 className="size-full"

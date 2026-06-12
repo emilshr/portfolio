@@ -3,6 +3,8 @@
 import Link from 'next/link'
 
 import type { Post } from '@repo/payload-types'
+
+type PostListRowPost = Pick<Post, 'id' | 'title' | 'slug' | 'publishedAt'>
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
 import { cn } from '@/utilities/ui'
 
@@ -18,7 +20,7 @@ import { FormattedDate } from './FormattedDate'
 import { HoverFocusItem, HoverFocusText } from './hoverFocusList'
 
 type Props = {
-  post: Post
+  post: PostListRowPost
   settings: SiteSettingsData
   dateOnRight: boolean
   dottedDivider: boolean

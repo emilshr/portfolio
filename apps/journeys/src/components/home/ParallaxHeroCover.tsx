@@ -1,6 +1,7 @@
 'use client'
 
 import type { Media } from '@repo/payload-types'
+import { useReducedMotion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 
 import { PayloadImage } from '@/components/media/PayloadImage'
@@ -14,10 +15,10 @@ type ParallaxHeroCoverProps = {
 export function ParallaxHeroCover({ media }: ParallaxHeroCoverProps) {
   const sectionRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reducedMotion) return
+    if (prefersReducedMotion) return
 
     let raf = 0
 
@@ -44,7 +45,7 @@ export function ParallaxHeroCover({ media }: ParallaxHeroCoverProps) {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
     }
-  }, [])
+  }, [prefersReducedMotion])
 
   return (
     <div

@@ -15,8 +15,13 @@ export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = 
   const { docs } = await payload.find({
     collection: 'posts',
     sort: '-publishedAt',
-    limit: 1000,
+    limit: 100,
     depth: 0,
+    select: {
+      title: true,
+      slug: true,
+      publishedAt: true,
+    },
     where: { _status: { equals: 'published' } },
   })
 
