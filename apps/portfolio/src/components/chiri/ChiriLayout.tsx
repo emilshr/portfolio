@@ -68,10 +68,16 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
         }}
       >
         <ThemeProvider initialTheme={initialTheme}>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-(--bg-primary) focus:px-4 focus:py-2"
+          >
+            Skip to content
+          </a>
           <SiteTopFlickeringGrid />
           <AdminBar adminBarProps={{ preview: preview ?? false }} />
           <div className="page-content layout-wrapper relative z-10">
-            <main>{children}</main>
+            <main id="main-content">{children}</main>
             <Footer settings={settings} />
           </div>
         </ThemeProvider>

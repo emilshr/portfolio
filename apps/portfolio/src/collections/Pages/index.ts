@@ -18,6 +18,7 @@ import { SpacerBlock } from '../../blocks/Spacer/config'
 import { WorkExperienceBlock } from '../../blocks/WorkExperience/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { publishedAtStatusIndexes } from '../shared/indexes'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
@@ -129,6 +130,7 @@ export const Pages: CollectionConfig<'pages'> = {
     beforeChange: [populatePublishedAt],
     afterDelete: [revalidateDelete],
   },
+  indexes: publishedAtStatusIndexes,
   versions: {
     drafts: {
       autosave: { interval: 100 },

@@ -5,6 +5,10 @@ import path from 'path'
 import { buildConfig, PayloadRequest, type SharpDependency } from 'payload'
 import { fileURLToPath } from 'url'
 
+import { isAdmin } from './access/isAdmin'
+import type { User } from '@repo/payload-types'
+import { validateProductionEnv } from './env'
+
 import { Experiences } from './collections/Experiences'
 import { Articles } from './collections/Articles'
 import { GalleryCollections } from './collections/GalleryCollections'
@@ -25,14 +29,18 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 const allowedOrigins = getAllowedOrigins()
 
+validateProductionEnv()
+
 export default buildConfig({
   cors: allowedOrigins,
   csrf: allowedOrigins,
   admin: {
-    autoLogin: {
-      email: process.env.SEED_ADMIN_EMAIL || 'admin@example.com',
-      password: process.env.SEED_ADMIN_PASSWORD || 'changeme',
-    },
+    ...(process.env.NODE_ENV === 'development' && {
+      autoLogin: {
+        email: process.env.SEED_ADMIN_EMAIL || 'admin@example.com',
+        password: process.env.SEED_ADMIN_PASSWORD || 'changeme',
+      },
+    }),
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
@@ -57,7 +65,14 @@ export default buildConfig({
   }),
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || '',
+    connectOptions: {
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+    },
   }),
+  graphQL: {
+    disable: true,
+  },
   collections: [
     Pages,
     Posts,
@@ -79,7 +94,7 @@ export default buildConfig({
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {
-        if (req.user) return true
+        if (req.user) return isAdmin(req.user as User)
         const secret = process.env.CRON_SECRET
         if (!secret) return false
         const authHeader = req.headers.get('authorization')

@@ -3,6 +3,9 @@ import type { NextConfig } from 'next'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { getPrimaryProductionURL, getProductionURLs } from './src/utilities/siteURLs'
+import { validateProductionEnv } from './src/env'
+
+validateProductionEnv()
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
@@ -29,7 +32,7 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
-    qualities: [100],
+    qualities: [75, 85, 100],
     remotePatterns: [
       ...[NEXT_PUBLIC_SERVER_URL, ...productionURLs].map((item) => {
         const url = new URL(item)

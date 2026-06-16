@@ -1,5 +1,4 @@
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPublicPayload, PUBLIC_PAYLOAD_QUERY } from '@/utilities/payloadPublicQuery'
 
 import { BackButton } from '@/components/chiri/BackButton'
 import { postListUl } from '@/components/chiri/classNames'
@@ -9,7 +8,7 @@ import type { PostListByYearBlock as PostListByYearBlockProps } from '@repo/payl
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = async () => {
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPublicPayload()
   const settings = await getSiteSettings()
 
   const { docs } = await payload.find({
@@ -22,7 +21,7 @@ export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = 
       slug: true,
       publishedAt: true,
     },
-    where: { _status: { equals: 'published' } },
+    ...PUBLIC_PAYLOAD_QUERY,
   })
 
   const groups = docs.reduce(

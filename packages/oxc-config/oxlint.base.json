@@ -11,6 +11,15 @@
     "typescript/no-explicit-any": "warn",
     "typescript/no-empty-object-type": "warn",
     "typescript/ban-ts-comment": "warn",
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/aria-props": "error",
+    "jsx-a11y/role-has-required-aria-props": "error",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "jsx-a11y/html-has-lang": "warn",
+    "jsx-a11y/no-redundant-roles": "warn",
     "typescript/no-unused-vars": [
       "warn",
       {

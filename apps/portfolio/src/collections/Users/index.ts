@@ -1,18 +1,22 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminOnly } from '../../access/adminOnly'
+import { adminOrSelf } from '../../access/adminOrSelf'
 import { authenticated } from '../../access/authenticated'
+import { isAdmin } from '../../access/isAdmin'
+import type { User } from '@repo/payload-types'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
     admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    create: adminOnly,
+    delete: adminOnly,
+    read: adminOrSelf,
+    update: adminOrSelf,
   },
   admin: {
-    defaultColumns: ['name', 'email'],
+    defaultColumns: ['name', 'email', 'roles'],
     useAsTitle: 'name',
   },
   auth: {
@@ -23,6 +27,21 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+    },
+    {
+      name: 'roles',
+      type: 'select',
+      hasMany: true,
+      defaultValue: ['editor'],
+      options: [
+        { label: 'Admin', value: 'admin' },
+        { label: 'Editor', value: 'editor' },
+      ],
+      required: true,
+      saveToJWT: true,
+      access: {
+        update: ({ req: { user } }) => isAdmin(user as User | null),
+      },
     },
   ],
   timestamps: true,

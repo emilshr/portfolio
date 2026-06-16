@@ -60,9 +60,20 @@ async function seed() {
         name: 'Admin',
         email: adminEmail,
         password: adminPassword,
+        roles: ['admin'],
       },
     })
     payload.logger.info(`Created admin user: ${adminEmail}`)
+  } else if (!adminUser.roles?.includes('admin')) {
+    adminUser = await payload.update({
+      collection: 'users',
+      id: adminUser.id,
+      context: seedContext,
+      data: {
+        roles: ['admin'],
+      },
+    })
+    payload.logger.info(`Promoted existing user to admin: ${adminEmail}`)
   }
 
   // Site settings

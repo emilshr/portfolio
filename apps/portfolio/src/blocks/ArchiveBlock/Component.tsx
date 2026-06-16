@@ -1,7 +1,6 @@
 import type { Post, ArchiveBlock as ArchiveBlockProps } from '@repo/payload-types'
 
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPublicPayload, PUBLIC_PAYLOAD_QUERY } from '@/utilities/payloadPublicQuery'
 import React from 'react'
 import RichText from '@/components/RichText'
 
@@ -21,14 +20,14 @@ export const ArchiveBlock: React.FC<
   let posts: Post[] = []
 
   if (populateBy === 'collection') {
-    const payload = await getPayload({ config: configPromise })
+    const payload = await getPublicPayload()
 
     const fetchedPosts = await payload.find({
       collection: 'posts',
       depth: 0,
       limit,
       sort: '-publishedAt',
-      where: { _status: { equals: 'published' } },
+      ...PUBLIC_PAYLOAD_QUERY,
     })
 
     posts = fetchedPosts.docs

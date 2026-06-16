@@ -4,6 +4,8 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Page } from '@repo/payload-types'
 
+import { revalidateDocumentCacheTags } from '@/utilities/revalidateDocumentCache'
+
 export const revalidatePage: CollectionAfterChangeHook<Page> = ({
   doc,
   previousDoc,
@@ -17,9 +19,9 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       revalidatePath(path)
       revalidateTag('pages-sitemap', 'max')
+      revalidateDocumentCacheTags('pages', doc)
     }
 
-    // If the page was previously published, we need to revalidate the old path
     if (previousDoc?._status === 'published' && doc._status !== 'published') {
       const oldPath = previousDoc.slug === 'home' ? '/' : `/${previousDoc.slug}`
 
@@ -27,6 +29,12 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       revalidatePath(oldPath)
       revalidateTag('pages-sitemap', 'max')
+      revalidateDocumentCacheTags('pages', previousDoc)
+    }
+
+    if (previousDoc?.slug !== doc.slug) {
+      revalidateDocumentCacheTags('pages', previousDoc)
+      revalidateDocumentCacheTags('pages', doc)
     }
   }
   return doc
@@ -37,6 +45,9 @@ export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { 
     const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`
     revalidatePath(path)
     revalidateTag('pages-sitemap', 'max')
+    if (doc) {
+      revalidateDocumentCacheTags('pages', doc)
+    }
   }
 
   return doc

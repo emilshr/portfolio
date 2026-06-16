@@ -1,5 +1,4 @@
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPublicPayload, PUBLIC_PAYLOAD_QUERY } from '@/utilities/payloadPublicQuery'
 
 import { WorkExperience } from '@/components/chiri/WorkExperience'
 import type { WorkExperienceBlock as WorkExperienceBlockProps } from '@repo/payload-types'
@@ -9,7 +8,7 @@ export const WorkExperienceBlockComponent: React.FC<WorkExperienceBlockProps> = 
   heading,
   limit,
 }) => {
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPublicPayload()
   const settings = await getSiteSettings()
 
   const { docs } = await payload.find({
@@ -17,7 +16,7 @@ export const WorkExperienceBlockComponent: React.FC<WorkExperienceBlockProps> = 
     sort: 'order',
     limit: limit ?? 100,
     depth: 1,
-    where: { _status: { equals: 'published' } },
+    ...PUBLIC_PAYLOAD_QUERY,
   })
 
   return <WorkExperience experiences={docs} settings={settings} heading={heading ?? 'Work'} />

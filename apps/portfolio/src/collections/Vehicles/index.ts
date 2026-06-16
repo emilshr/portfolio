@@ -15,6 +15,7 @@ import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { generateJourneysPreviewPath } from '../../utilities/generateJourneysPreviewPath'
 import { revalidateDelete, revalidateVehicle } from './hooks/revalidateVehicle'
 
 import {
@@ -63,9 +64,15 @@ export const Vehicles: CollectionConfig = {
     defaultColumns: ['name', 'odometer', 'publishedAt', 'updatedAt'],
     group: 'Journeys',
     livePreview: {
-      url: () => '/vehicles',
+      url: ({ data }) =>
+        generateJourneysPreviewPath({
+          path: data?.slug ? `/vehicles#${encodeURIComponent(data.slug)}` : '/vehicles',
+        }),
     },
-    preview: () => '/vehicles',
+    preview: (data) =>
+      generateJourneysPreviewPath({
+        path: data?.slug ? `/vehicles#${encodeURIComponent(data.slug as string)}` : '/vehicles',
+      }),
     useAsTitle: 'name',
   },
   fields: [

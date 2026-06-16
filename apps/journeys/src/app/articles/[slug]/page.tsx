@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
 import { ArticleDetail } from '@/components/articles/ArticleDetail'
@@ -11,14 +12,16 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const article = await getArticleBySlug(slug)
+  const { isEnabled: draft } = await draftMode()
+  const article = await getArticleBySlug(slug, draft)
   if (!article) return {}
   return articleMetadata(article)
 }
 
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params
-  const article = await getArticleBySlug(slug)
+  const { isEnabled: draft } = await draftMode()
+  const article = await getArticleBySlug(slug, draft)
 
   if (!article) {
     notFound()

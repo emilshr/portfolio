@@ -1,23 +1,28 @@
 import { Feed } from 'feed'
 import sanitizeHtml from 'sanitize-html'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 
+import { getPublicPayload, PUBLIC_PAYLOAD_QUERY } from './payloadPublicQuery'
 import { getSiteSettings } from './getSiteSettings'
 import { getServerSideURL } from './getURL'
 
 export async function generateFeedInstance() {
   const settings = await getSiteSettings()
   const siteUrl = getServerSideURL()
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPublicPayload()
 
   const { docs: posts } = await payload.find({
     collection: 'posts',
     sort: '-publishedAt',
     limit: 1000,
     depth: 0,
-    where: { _status: { equals: 'published' } },
+    select: {
+      title: true,
+      slug: true,
+      content: true,
+      publishedAt: true,
+    },
+    ...PUBLIC_PAYLOAD_QUERY,
   })
 
   const feed = new Feed({

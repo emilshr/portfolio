@@ -73,6 +73,7 @@ export const Archive: Block = {
         condition: (_, siblingData) => siblingData.populateBy === 'selection',
       },
       hasMany: true,
+      maxDepth: 1,
       label: 'Selection',
       relationTo: ['posts'],
     },

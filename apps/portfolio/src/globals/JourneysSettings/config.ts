@@ -62,6 +62,7 @@ export const JourneysSettings: GlobalConfig = {
               name: 'featuredArticle',
               type: 'relationship',
               relationTo: 'articles',
+              maxDepth: 1,
               admin: {
                 description: 'Optional fallback hero image when no homepage hero image is set.',
               },
@@ -184,6 +185,7 @@ export const JourneysSettings: GlobalConfig = {
                   name: 'article',
                   type: 'relationship',
                   relationTo: 'articles',
+                  maxDepth: 1,
                   admin: {
                     condition: (_, siblingData) =>
                       siblingData?.linkType !== 'external' &&

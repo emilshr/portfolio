@@ -46,6 +46,51 @@ const getSDK = (): PayloadSDK<Config> | null => {
   return new PayloadSDK<Config>({ baseURL })
 }
 
+const articleListSelect = {
+  title: true,
+  slug: true,
+  publishedAt: true,
+  excerpt: true,
+  subtitle: true,
+  heroImage: true,
+  coverImage: true,
+  featured: true,
+  tripDates: true,
+  location: true,
+  tags: true,
+  meta: true,
+  updatedAt: true,
+  createdAt: true,
+} as const
+
+const articleDetailSelect = {
+  ...articleListSelect,
+  content: true,
+  gallery: true,
+} as const
+
+const vehicleListSelect = {
+  name: true,
+  slug: true,
+  odometer: true,
+  publishedAt: true,
+  coverImage: true,
+  details: true,
+  meta: true,
+  updatedAt: true,
+  createdAt: true,
+} as const
+
+const galleryCollectionListSelect = {
+  title: true,
+  slug: true,
+  coverImage: true,
+  images: true,
+  publishedAt: true,
+  updatedAt: true,
+  createdAt: true,
+} as const
+
 const publishedWhere = {
   _status: { equals: 'published' as const },
 }
@@ -86,7 +131,7 @@ const getJourneysSettingsUncached = unstable_cache(
     if (!sdk) return defaultJourneysSettings
 
     return safePayloadFetch('getJourneysSettings', defaultJourneysSettings, async () => {
-      const settings = await sdk.findGlobal({ slug: 'journeys-settings', depth: 2 })
+      const settings = await sdk.findGlobal({ slug: 'journeys-settings', depth: 1 })
       const rawMenu = (settings as { headerMenu?: unknown }).headerMenu
       const headerMenu: HeaderMenuItem[] = Array.isArray(rawMenu)
         ? rawMenu.reduce<HeaderMenuItem[]>((acc, item, index) => {
@@ -192,11 +237,12 @@ export function getPublishedArticles(limit = PUBLISHED_ARTICLES_DEFAULT_LIMIT): 
       return safePayloadFetch('getPublishedArticles', [] as Article[], async () => {
         const result = await sdk.find({
           collection: 'articles',
-          depth: 2,
+          depth: 1,
           limit: normalizedLimit,
+          select: articleListSelect,
           ...publishedAndSorted,
         })
-        return result.docs
+        return result.docs as Article[]
       })
     },
     ['published-articles', String(normalizedLimit)],
@@ -212,11 +258,12 @@ export const getPublishedVehicles = unstable_cache(
     return safePayloadFetch('getPublishedVehicles', [] as Vehicle[], async () => {
       const result = await sdk.find({
         collection: 'vehicles',
-        depth: 2,
+        depth: 1,
         limit: 100,
+        select: vehicleListSelect,
         ...publishedAndSorted,
       })
-      return result.docs
+      return result.docs as Vehicle[]
     })
   },
   ['published-vehicles'],
@@ -243,15 +290,15 @@ export function getFeaturedArticles(limit = FEATURED_ARTICLES_DEFAULT_LIMIT): Pr
       return safePayloadFetch('getFeaturedArticles', [] as Article[], async () => {
         const result = await sdk.find({
           collection: 'articles',
-          depth: 2,
-          limit: 100,
+          depth: 1,
+          limit: normalizedLimit,
+          sort: '-publishedAt',
+          select: articleListSelect,
           where: {
             and: [publishedWhere, { featured: { equals: true } }],
           },
         })
-        return result.docs
-          .sort((a, b) => getArticleSortTimestamp(b) - getArticleSortTimestamp(a))
-          .slice(0, normalizedLimit)
+        return result.docs as Article[]
       })
     },
     ['featured-articles', String(normalizedLimit)],
@@ -259,7 +306,26 @@ export function getFeaturedArticles(limit = FEATURED_ARTICLES_DEFAULT_LIMIT): Pr
   )()
 }
 
-export function getArticleBySlug(slug: string): Promise<Article | null> {
+export async function getArticleBySlug(slug: string, draft = false): Promise<Article | null> {
+  if (draft) {
+    const sdk = getSDK()
+    if (!sdk) return null
+
+    return safePayloadFetch('getArticleBySlug', null, async () => {
+      const result = await sdk.find({
+        collection: 'articles',
+        depth: 2,
+        draft: true,
+        limit: 1,
+        select: articleDetailSelect,
+        where: {
+          slug: { equals: slug },
+        },
+      })
+      return (result.docs[0] as Article | undefined) ?? null
+    })
+  }
+
   return unstable_cache(
     async () => {
       const sdk = getSDK()
@@ -270,11 +336,12 @@ export function getArticleBySlug(slug: string): Promise<Article | null> {
           collection: 'articles',
           depth: 2,
           limit: 1,
+          select: articleDetailSelect,
           where: {
             and: [publishedWhere, { slug: { equals: slug } }],
           },
         })
-        return result.docs[0] ?? null
+        return (result.docs[0] as Article | undefined) ?? null
       })
     },
     [`article-${slug}`],
@@ -335,11 +402,12 @@ export const getPublishedGalleryCollections = unstable_cache(
       async () => {
         const result = await sdk.find({
           collection: 'gallery-collections',
-          depth: 2,
+          depth: 1,
           limit: 100,
+          select: galleryCollectionListSelect,
           ...publishedAndSorted,
         })
-        return result.docs
+        return result.docs as GalleryCollection[]
       },
     )
   },
@@ -356,13 +424,14 @@ export function getGalleryCollectionBySlug(slug: string): Promise<GalleryCollect
       return safePayloadFetch('getGalleryCollectionBySlug', null, async () => {
         const result = await sdk.find({
           collection: 'gallery-collections',
-          depth: 2,
+          depth: 1,
           limit: 1,
+          select: galleryCollectionListSelect,
           where: {
             and: [publishedWhere, { slug: { equals: slug } }],
           },
         })
-        return result.docs[0] ?? null
+        return (result.docs[0] as GalleryCollection | undefined) ?? null
       })
     },
     [`gallery-collection-${slug}`],

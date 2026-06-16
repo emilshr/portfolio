@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-export function Main({ children }: { children: ReactNode }) {
+export function Main({ children, id }: { children: ReactNode; id?: string }) {
   const pathname = usePathname()
   const isHome = pathname === '/'
   const topLevelSegment = pathname.replace(/^\//, '')
@@ -15,5 +15,9 @@ export function Main({ children }: { children: ReactNode }) {
     isTopLevelRoute && !nonArticleDetailTopLevelRoutes.has(topLevelSegment)
   const shouldOverlayHero = isHome || isArticleDetail || isGalleryDetail || isLegacyTravelDetail
 
-  return <main className={shouldOverlayHero ? undefined : 'pt-16'}>{children}</main>
+  return (
+    <main id={id} className={shouldOverlayHero ? undefined : 'pt-16'}>
+      {children}
+    </main>
+  )
 }

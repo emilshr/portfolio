@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
+import { draftMode } from 'next/headers'
 import { Outfit, Unbounded } from 'next/font/google'
 import Script from 'next/script'
 import { Suspense, type ReactNode } from 'react'
 
+import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Main } from '@/components/layout/Main'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
@@ -37,7 +39,8 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const { isEnabled: draft } = await draftMode()
   const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID_JOURNEYS
   const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC
 
@@ -45,12 +48,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${unbounded.variable} ${outfit.variable} min-h-screen antialiased`}>
         <Providers>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:shadow"
+          >
+            Skip to content
+          </a>
           <Suspense fallback={<SiteHeader menuItems={[]} />}>
             <SiteHeaderLoader />
           </Suspense>
-          <Main>{children}</Main>
+          <Main id="main-content">{children}</Main>
           <SiteFooter />
         </Providers>
+        {draft ? <LivePreviewListener /> : null}
         {umamiWebsiteId && umamiSrc ? (
           <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
         ) : null}

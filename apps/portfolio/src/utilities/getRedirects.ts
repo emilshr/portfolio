@@ -1,15 +1,18 @@
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
 
+import { getPublicPayload, PUBLIC_PAYLOAD_QUERY } from './payloadPublicQuery'
+
+const REDIRECTS_LIMIT = 500
+
 export async function getRedirects(depth = 1) {
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPublicPayload()
 
   const { docs: redirects } = await payload.find({
     collection: 'redirects',
     depth,
-    limit: 0,
+    limit: REDIRECTS_LIMIT,
     pagination: false,
+    ...PUBLIC_PAYLOAD_QUERY,
   })
 
   return redirects

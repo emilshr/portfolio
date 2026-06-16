@@ -14,6 +14,7 @@ describe('API', () => {
   it('fetches users', async () => {
     const users = await payload.find({
       collection: 'users',
+      limit: 10,
     })
     expect(users).toBeDefined()
   })

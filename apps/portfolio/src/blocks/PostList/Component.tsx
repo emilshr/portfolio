@@ -1,5 +1,4 @@
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPublicPayload, PUBLIC_PAYLOAD_QUERY } from '@/utilities/payloadPublicQuery'
 
 import { PostList } from '@/components/chiri/PostList'
 import type { PostListBlock as PostListBlockProps } from '@repo/payload-types'
@@ -10,7 +9,7 @@ export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
   limit = 5,
   showViewAll,
 }) => {
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPublicPayload()
   const settings = await getSiteSettings()
 
   const { docs, totalDocs } = await payload.find({
@@ -18,7 +17,7 @@ export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
     sort: '-publishedAt',
     limit: limit ?? 5,
     depth: 0,
-    where: { _status: { equals: 'published' } },
+    ...PUBLIC_PAYLOAD_QUERY,
   })
 
   const listLimit = limit ?? 5

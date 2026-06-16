@@ -32,10 +32,11 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run CI checks (Turbo)
-        run: pnpm turbo run lint check-types build
+        run: pnpm turbo run lint check-types build test:int
         env:
           MONGODB_URI: mongodb://127.0.0.1:27017/portfolio-ci
           PAYLOAD_SECRET: ci-test-secret-min-32-chars-long
           NEXT_PUBLIC_SERVER_URL: http://localhost:3000
           CRON_SECRET: ci-cron-secret
           PREVIEW_SECRET: ci-preview-secret
+          REVALIDATE_SECRET: ci-revalidate-secret

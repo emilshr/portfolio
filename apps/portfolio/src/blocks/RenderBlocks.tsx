@@ -62,7 +62,16 @@ export const RenderBlocks: React.FC<{
             )
           }
         }
-        return null
+
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`[RenderBlocks] Unknown block type: ${String(blockType)}`)
+        }
+
+        return (
+          <p key={blockKey(block, index)} className="text-sm text-muted-foreground">
+            This section is unavailable.
+          </p>
+        )
       })}
     </Fragment>
   )

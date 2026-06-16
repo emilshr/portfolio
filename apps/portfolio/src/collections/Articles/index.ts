@@ -20,7 +20,8 @@ import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
 import { NeoDBEmbed } from '../../blocks/NeoDBEmbed/config'
 import { XPostEmbed } from '../../blocks/XPostEmbed/config'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { featuredArticleIndexes, publishedAtStatusIndexes } from '../shared/indexes'
+import { generateJourneysPreviewPath } from '../../utilities/generateJourneysPreviewPath'
 import { revalidateArticle, revalidateDelete } from './hooks/revalidateArticle'
 
 import {
@@ -60,19 +61,20 @@ export const Articles: CollectionConfig = {
     defaultColumns: ['title', 'slug', 'publishedAt', 'updatedAt'],
     group: 'Journeys',
     livePreview: {
-      url: ({ data, req }) =>
-        generatePreviewPath({
-          slug: data?.slug,
-          collection: 'articles',
-          req,
-        }),
+      url: ({ data }) => {
+        if (!data?.slug) return null
+        return generateJourneysPreviewPath({
+          path: `/articles/${encodeURIComponent(data.slug)}`,
+        })
+      },
     },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: data?.slug as string,
-        collection: 'articles',
-        req,
-      }),
+    preview: (data) => {
+      const slug = data?.slug as string | undefined
+      if (!slug) return null
+      return generateJourneysPreviewPath({
+        path: `/articles/${encodeURIComponent(slug)}`,
+      })
+    },
     useAsTitle: 'title',
   },
   fields: [
@@ -220,6 +222,7 @@ export const Articles: CollectionConfig = {
       type: 'relationship',
       relationTo: 'tags',
       hasMany: true,
+      maxDepth: 0,
       admin: {
         position: 'sidebar',
         description: 'Add or create tags to categorize this article.',
@@ -257,6 +260,7 @@ export const Articles: CollectionConfig = {
     beforeChange: [populatePublishedAt],
     afterDelete: [revalidateDelete],
   },
+  indexes: [...publishedAtStatusIndexes, ...featuredArticleIndexes],
   versions: {
     drafts: {
       autosave: { interval: 100 },

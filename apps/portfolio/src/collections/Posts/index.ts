@@ -20,6 +20,7 @@ import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
 import { NeoDBEmbed } from '../../blocks/NeoDBEmbed/config'
 import { XPostEmbed } from '../../blocks/XPostEmbed/config'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { publishedAtStatusIndexes } from '../shared/indexes'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
@@ -159,6 +160,7 @@ export const Posts: CollectionConfig<'posts'> = {
     beforeChange: [populatePublishedAt],
     afterDelete: [revalidateDelete],
   },
+  indexes: publishedAtStatusIndexes,
   versions: {
     drafts: {
       autosave: { interval: 100 },

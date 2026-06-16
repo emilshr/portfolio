@@ -12,6 +12,7 @@ export function ThemeToggle() {
       type="button"
       className="flex cursor-pointer items-center border-none bg-transparent p-1 text-(--text-secondary)"
       aria-label="Toggle theme"
+      aria-pressed={theme === 'dark'}
       onClick={toggle}
     >
       <svg
