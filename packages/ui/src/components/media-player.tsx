@@ -57,6 +57,7 @@ import {
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "./tooltip";
 
@@ -736,7 +737,8 @@ function MediaPlayerImpl(props: MediaPlayerProps) {
   const RootPrimitive = asChild ? SlotPrimitive.Slot : "div";
 
   return (
-    <MediaPlayerContext.Provider value={contextValue}>
+    <TooltipProvider delayDuration={tooltipDelayDuration}>
+      <MediaPlayerContext.Provider value={contextValue}>
       <RootPrimitive
         aria-labelledby={labelId}
         aria-describedby={descriptionId}
@@ -772,7 +774,8 @@ function MediaPlayerImpl(props: MediaPlayerProps) {
         {children}
         <MediaPlayerVolumeIndicator />
       </RootPrimitive>
-    </MediaPlayerContext.Provider>
+      </MediaPlayerContext.Provider>
+    </TooltipProvider>
   );
 }
 
