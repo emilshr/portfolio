@@ -1,4 +1,5 @@
 import type { Article } from '@repo/payload-types'
+import Link from 'next/link'
 
 import { HeaderNavHighlightLink } from '@/components/layout/HeaderNavHighlight'
 import { PayloadImage } from '@/components/media/PayloadImage'
@@ -17,9 +18,8 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
 
   return (
     <article className={cn('group flex flex-col gap-4', className)}>
-      <HeaderNavHighlightLink
+      <Link
         href={`/articles/${article.slug}`}
-        heroOverlay={false}
         className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {image ? (
@@ -35,7 +35,7 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
             No image
           </div>
         )}
-      </HeaderNavHighlightLink>
+      </Link>
       <div className="flex flex-col gap-2">
         {(location || dates) && (
           <p className="text-xs uppercase tracking-wider text-muted-foreground">
