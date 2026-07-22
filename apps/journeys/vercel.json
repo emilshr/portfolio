@@ -6,6 +6,7 @@
     "PAYLOAD_API_URL": "https://emilshr.com/api",
     "NEXT_PUBLIC_PAYLOAD_API_URL": "https://emilshr.com/api",
     "NEXT_PUBLIC_MEDIA_BASE_URL": "https://emilshr.com",
+    "NEXT_PUBLIC_MEDIA_HOST": "media.emilshr.com",
     "NEXT_PUBLIC_SITE_URL": "https://www.burntclutchproject.com"
   }
 }
