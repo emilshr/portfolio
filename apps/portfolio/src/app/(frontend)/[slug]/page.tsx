@@ -16,8 +16,10 @@ type Args = {
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
+  const [{ isEnabled: draft }, { slug = 'home' }] = await Promise.all([
+    draftMode(),
+    paramsPromise,
+  ])
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
 

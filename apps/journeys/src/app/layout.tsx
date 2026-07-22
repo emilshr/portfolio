@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { draftMode } from 'next/headers'
 import { Outfit, Unbounded } from 'next/font/google'
 import Script from 'next/script'
 import { Suspense, type ReactNode } from 'react'
 
-import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Main } from '@/components/layout/Main'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
@@ -13,6 +13,10 @@ import { Providers } from '@/components/providers'
 import { getSiteURL } from '@/lib/metadata'
 
 import '@/styles/globals.css'
+
+const LivePreviewListener = dynamic(() =>
+  import('@/components/LivePreviewListener').then((mod) => mod.LivePreviewListener),
+)
 
 const unbounded = Unbounded({
   subsets: ['latin'],
