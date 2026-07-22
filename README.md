@@ -51,8 +51,8 @@ Shared versions live under `catalog:` in `pnpm-workspace.yaml`. Workspace packag
 
 ## Prerequisites
 
-- Node.js `^18.20.2` or `>=20.9.0`
-- pnpm `^9` / `^10` / `^11` (repo pins `pnpm@10.12.4` via `packageManager`)
+- Node.js `24.17.0` (pinned via `engines`)
+- pnpm `11.10.0` (pinned via `packageManager`)
 - Docker (for local MongoDB)
 
 ## Development
