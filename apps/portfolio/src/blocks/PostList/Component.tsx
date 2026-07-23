@@ -9,8 +9,7 @@ export const PostListBlockComponent: React.FC<PostListBlockProps> = async ({
   limit = 5,
   showViewAll,
 }) => {
-  const payload = await getPublicPayload()
-  const settings = await getSiteSettings()
+  const [payload, settings] = await Promise.all([getPublicPayload(), getSiteSettings()])
 
   const { docs, totalDocs } = await payload.find({
     collection: 'posts',

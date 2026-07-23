@@ -8,8 +8,7 @@ export const WorkExperienceBlockComponent: React.FC<WorkExperienceBlockProps> = 
   heading,
   limit,
 }) => {
-  const payload = await getPublicPayload()
-  const settings = await getSiteSettings()
+  const [payload, settings] = await Promise.all([getPublicPayload(), getSiteSettings()])
 
   const { docs } = await payload.find({
     collection: 'experiences',

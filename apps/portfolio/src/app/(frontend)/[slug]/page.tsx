@@ -5,21 +5,25 @@ import { PostLayout } from '@/components/chiri/PostLayout'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { draftMode } from 'next/headers'
 import { cache } from 'react'
 
+import type { User } from '@repo/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getDocumentQueryAccess } from '@/utilities/getDocumentQueryAccess'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 type Args = {
   params: Promise<{ slug?: string }>
 }
 
+type SlugQueryArgs = {
+  slug: string
+  draft: boolean
+  user?: User
+}
+
 export default async function Page({ params: paramsPromise }: Args) {
-  const [{ isEnabled: draft }, { slug = 'home' }] = await Promise.all([
-    draftMode(),
-    paramsPromise,
-  ])
+  const [{ slug = 'home' }, access] = await Promise.all([paramsPromise, getDocumentQueryAccess()])
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
 
@@ -27,13 +31,21 @@ export default async function Page({ params: paramsPromise }: Args) {
     return <PayloadRedirects url="/posts" />
   }
 
-  const post = await queryPostBySlug({ slug: decodedSlug, draft })
-  if (post) {
-    const settings = await getSiteSettings()
-    return <PostLayout post={post} settings={settings} />
+  const queryArgs: SlugQueryArgs = {
+    slug: decodedSlug,
+    draft: access.draft,
+    user: access.user,
   }
 
-  const page = await queryPageBySlug({ slug: decodedSlug, draft })
+  const [post, page, settings] = await Promise.all([
+    queryPostBySlug(queryArgs),
+    queryPageBySlug(queryArgs),
+    getSiteSettings(),
+  ])
+
+  if (post) {
+    return <PostLayout post={post} settings={settings} />
+  }
 
   if (!page) {
     return <PayloadRedirects url={url} />
@@ -50,15 +62,15 @@ export default async function Page({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = 'home' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
+  const queryArgs: SlugQueryArgs = { slug: decodedSlug, draft: false }
 
-  const post = await queryPostBySlug({ slug: decodedSlug, draft: false })
+  const [post, page] = await Promise.all([queryPostBySlug(queryArgs), queryPageBySlug(queryArgs)])
+
   if (post) return generateMeta({ doc: post })
-
-  const page = await queryPageBySlug({ slug: decodedSlug, draft: false })
   return generateMeta({ doc: page })
 }
 
-const queryPostBySlug = cache(async ({ slug, draft }: { slug: string; draft: boolean }) => {
+const queryPostBySlug = cache(async ({ slug, draft, user }: SlugQueryArgs) => {
   const payload = await getPayload({ config: configPromise })
   const result = await payload.find({
     collection: 'posts',
@@ -66,7 +78,8 @@ const queryPostBySlug = cache(async ({ slug, draft }: { slug: string; draft: boo
     depth: 1,
     limit: 1,
     pagination: false,
-    overrideAccess: draft,
+    overrideAccess: false,
+    ...(user ? { user } : {}),
     select: {
       createdAt: true,
       title: true,
@@ -82,7 +95,7 @@ const queryPostBySlug = cache(async ({ slug, draft }: { slug: string; draft: boo
   return result.docs?.[0] || null
 })
 
-const queryPageBySlug = cache(async ({ slug, draft }: { slug: string; draft: boolean }) => {
+const queryPageBySlug = cache(async ({ slug, draft, user }: SlugQueryArgs) => {
   const payload = await getPayload({ config: configPromise })
   const result = await payload.find({
     collection: 'pages',
@@ -90,7 +103,8 @@ const queryPageBySlug = cache(async ({ slug, draft }: { slug: string; draft: boo
     depth: 1,
     limit: 1,
     pagination: false,
-    overrideAccess: draft,
+    overrideAccess: false,
+    ...(user ? { user } : {}),
     select: {
       title: true,
       slug: true,

@@ -1,4 +1,5 @@
 import React, { Fragment, Suspense } from 'react'
+import dynamic from 'next/dynamic'
 
 import type { Page } from '@repo/payload-types'
 
@@ -9,13 +10,16 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContactCTABlockComponent } from '@/blocks/ContactCTA/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
-import { MediaPlayerBlockComponent } from '@/blocks/MediaPlayer/Component'
 import { PostListBlockComponent } from '@/blocks/PostList/Component'
 import { PostListByYearBlockComponent } from '@/blocks/PostListByYear/Component'
 import { SectionHeadingBlockComponent } from '@/blocks/SectionHeading/Component'
 import { SeparatorBlockComponent } from '@/blocks/Separator/Component'
 import { SpacerBlockComponent } from '@/blocks/Spacer/Component'
 import { WorkExperienceBlockComponent } from '@/blocks/WorkExperience/Component'
+
+const MediaPlayerBlockComponent = dynamic(() =>
+  import('@/blocks/MediaPlayer/Component').then((mod) => mod.MediaPlayerBlockComponent),
+)
 
 const blockComponents = {
   alertBanner: AlertBannerBlockComponent,
