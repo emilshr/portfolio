@@ -8,8 +8,7 @@ import type { PostListByYearBlock as PostListByYearBlockProps } from '@repo/payl
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 export const PostListByYearBlockComponent: React.FC<PostListByYearBlockProps> = async () => {
-  const payload = await getPublicPayload()
-  const settings = await getSiteSettings()
+  const [payload, settings] = await Promise.all([getPublicPayload(), getSiteSettings()])
 
   const { docs } = await payload.find({
     collection: 'posts',

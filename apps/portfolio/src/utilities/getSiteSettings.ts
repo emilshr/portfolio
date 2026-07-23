@@ -1,6 +1,6 @@
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
+
+import { getPublicPayload, PUBLIC_PAYLOAD_QUERY } from './payloadPublicQuery'
 
 export type SiteSettingsData = {
   site: {
@@ -73,10 +73,11 @@ export const defaultSiteSettings: SiteSettingsData = {
 }
 
 const getSiteSettingsUncached = async (): Promise<SiteSettingsData> => {
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPublicPayload()
   const settings = await payload.findGlobal({
     slug: 'site-settings',
     depth: 0,
+    ...PUBLIC_PAYLOAD_QUERY,
   })
 
   if (!settings) return defaultSiteSettings

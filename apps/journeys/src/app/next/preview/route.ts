@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import type { NextRequest } from 'next/server'
 
 import { getPayloadApiUrl } from '@/lib/env'
+import { getSafePreviewRedirect } from '@/lib/isSafePreviewPath'
 
 export type PreviewSearchParams = {
   path: string
@@ -18,8 +19,13 @@ export async function GET(req: NextRequest): Promise<Response> {
     return new Response('You are not allowed to preview this page', { status: 403 })
   }
 
-  if (!path?.startsWith('/')) {
+  if (!path) {
     return new Response('Insufficient search params', { status: 404 })
+  }
+
+  const safePath = getSafePreviewRedirect(path, req.nextUrl.origin)
+  if (!safePath) {
+    return new Response('This endpoint can only be used for relative previews', { status: 400 })
   }
 
   const apiUrl = getPayloadApiUrl()
@@ -42,5 +48,5 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const draft = await draftMode()
   draft.enable()
-  redirect(path)
+  redirect(safePath)
 }

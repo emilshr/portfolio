@@ -7,9 +7,8 @@ import { getSiteSettings } from './getSiteSettings'
 import { getServerSideURL } from './getURL'
 
 export async function generateFeedInstance() {
-  const settings = await getSiteSettings()
+  const [settings, payload] = await Promise.all([getSiteSettings(), getPublicPayload()])
   const siteUrl = getServerSideURL()
-  const payload = await getPublicPayload()
 
   const { docs: posts } = await payload.find({
     collection: 'posts',

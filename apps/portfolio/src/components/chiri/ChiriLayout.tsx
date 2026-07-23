@@ -1,15 +1,21 @@
 import type { ReactNode } from 'react'
 import { Analytics } from '@vercel/analytics/next'
-import { cookies } from 'next/headers'
+import dynamic from 'next/dynamic'
+import { cookies, headers } from 'next/headers'
 import Script from 'next/script'
+import { getPayload } from 'payload'
 
-import { AdminBar } from '@/components/AdminBar'
+import configPromise from '@payload-config'
 import { isChiriTheme } from '@/lib/chiri-theme'
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
 import { Footer } from './Footer'
 import { SiteTopFlickeringGrid } from './SiteTopFlickeringGrid'
 import { ThemeManager } from './ThemeManager'
 import { ThemeProvider } from './ThemeProvider'
+
+const AdminBar = dynamic(() =>
+  import('@/components/AdminBar').then((mod) => mod.AdminBar),
+)
 
 type Props = {
   children: ReactNode
@@ -21,11 +27,23 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
   const widthValue = Math.min(parseFloat(settings.general.contentWidth || '35'), 50)
   const shouldUseCustomWidth = widthValue > 25
   const finalWidth = shouldUseCustomWidth ? `${widthValue}rem` : '25rem'
-  const cookieTheme = (await cookies()).get('chiri-theme')?.value
+  const cookieStore = await cookies()
+  const cookieTheme = cookieStore.get('chiri-theme')?.value
   const initialTheme = isChiriTheme(cookieTheme) ? cookieTheme : undefined
   const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC
   const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID_PORTFOLIO
   const hasUmami = Boolean(umamiSrc && umamiWebsiteId)
+
+  let showAdminBar = Boolean(preview)
+  if (!showAdminBar && cookieStore.get('payload-token')?.value) {
+    try {
+      const payload = await getPayload({ config: configPromise })
+      const { user } = await payload.auth({ headers: await headers() })
+      showAdminBar = Boolean(user)
+    } catch {
+      showAdminBar = false
+    }
+  }
 
   return (
     <html
@@ -75,7 +93,7 @@ export async function ChiriLayout({ children, settings, preview }: Props) {
             Skip to content
           </a>
           <SiteTopFlickeringGrid />
-          <AdminBar adminBarProps={{ preview: preview ?? false }} />
+          {showAdminBar ? <AdminBar adminBarProps={{ preview: preview ?? false }} /> : null}
           <div className="page-content layout-wrapper relative z-10">
             <main id="main-content">{children}</main>
             <Footer settings={settings} />

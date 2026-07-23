@@ -5,7 +5,7 @@ import React from 'react'
 import RichText from '@/components/RichText'
 
 import { PostList } from '@/components/chiri/PostList'
-import { getSiteSettings } from '@/utilities/getSiteSettings'
+import { getSiteSettings, type SiteSettingsData } from '@/utilities/getSiteSettings'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -15,12 +15,13 @@ export const ArchiveBlock: React.FC<
   const { id, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
 
   const limit = limitFromProps || 10
-  const settings = await getSiteSettings()
 
   let posts: Post[] = []
+  let settings: SiteSettingsData
 
   if (populateBy === 'collection') {
-    const payload = await getPublicPayload()
+    const [payload, siteSettings] = await Promise.all([getPublicPayload(), getSiteSettings()])
+    settings = siteSettings
 
     const fetchedPosts = await payload.find({
       collection: 'posts',
@@ -31,10 +32,13 @@ export const ArchiveBlock: React.FC<
     })
 
     posts = fetchedPosts.docs
-  } else if (selectedDocs?.length) {
-    posts = selectedDocs
-      .map((post) => (typeof post.value === 'object' ? post.value : null))
-      .filter(Boolean) as Post[]
+  } else {
+    settings = await getSiteSettings()
+    if (selectedDocs?.length) {
+      posts = selectedDocs
+        .map((post) => (typeof post.value === 'object' ? post.value : null))
+        .filter(Boolean) as Post[]
+    }
   }
 
   return (
