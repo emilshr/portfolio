@@ -18,9 +18,7 @@ export function validateProductionEnv(): void {
   const missing = required.filter((key) => !process.env[key]?.trim())
 
   if (missing.length > 0) {
-    throw new Error(
-      `Missing required production environment variables: ${missing.join(', ')}`,
-    )
+    throw new Error(`Missing required production environment variables: ${missing.join(', ')}`)
   }
 
   if (process.env.VERCEL === '1') {
@@ -29,7 +27,6 @@ export function validateProductionEnv(): void {
       'R2_ACCESS_KEY_ID',
       'R2_SECRET_ACCESS_KEY',
       'R2_ENDPOINT',
-      'R2_PUBLIC_URL',
     ] as const
 
     const missingR2 = r2Required.filter((key) => !process.env[key]?.trim())
