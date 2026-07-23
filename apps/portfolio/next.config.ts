@@ -26,6 +26,9 @@ const nextConfig: NextConfig = {
   sassOptions: {
     loadPaths: ['./node_modules/@payloadcms/ui/dist/scss/'],
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   images: {
     localPatterns: [
       {

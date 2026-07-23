@@ -11,6 +11,7 @@ export interface Props {
   pictureClassName?: string
   imgClassName?: string
   onClick?: () => void
+  onError?: () => void
   onLoad?: () => void
   loading?: 'lazy' | 'eager' // for NextImage only
   priority?: boolean // for NextImage only
