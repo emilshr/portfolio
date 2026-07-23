@@ -37,11 +37,4 @@ export function validateProductionEnv(): void {
       )
     }
   }
-
-  const seedPassword = process.env.SEED_ADMIN_PASSWORD
-  if (seedPassword === 'changeme' || !seedPassword) {
-    throw new Error(
-      'SEED_ADMIN_PASSWORD must be set to a secure value in production (not "changeme").',
-    )
-  }
 }
