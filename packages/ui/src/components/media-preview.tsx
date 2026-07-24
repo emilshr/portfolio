@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
-import { type ReactNode, useCallback, useEffect, useMemo, useRef } from "react"
+import { type MouseEvent, type ReactNode, useCallback, useEffect, useMemo, useRef } from "react"
 
 import { cn } from "../lib/utils"
 import { Button } from "./button"
@@ -88,6 +88,17 @@ export function MediaPreview({
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [goNext, goPrev, isOpen, onClose])
 
+  const handleOverlayClick = useCallback(
+    (event: MouseEvent<HTMLDialogElement>) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+      // Keep media and chrome interactive; only backdrop/empty areas dismiss.
+      if (target.closest("img, video, button, a, [data-media-preview-interactive]")) return
+      onClose()
+    },
+    [onClose],
+  )
+
   if (!isOpen || !item) return null
 
   return (
@@ -96,6 +107,7 @@ export function MediaPreview({
       aria-label="Fullscreen media preview"
       className="fixed inset-0 z-50 m-0 flex h-full max-h-none w-full max-w-none flex-col border-0 bg-black/95 p-0 backdrop:bg-black/80"
       onClose={onClose}
+      onClick={handleOverlayClick}
     >
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <p className="truncate text-sm text-white/80">{title || fallbackTitle}</p>
@@ -104,7 +116,7 @@ export function MediaPreview({
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-white hover:bg-white/10"
+          className="cursor-pointer text-white hover:bg-white/10"
           aria-label="Close preview"
         >
           <X className="h-5 w-5" />
@@ -112,7 +124,11 @@ export function MediaPreview({
       </div>
 
       <div className="relative flex flex-1 items-center justify-center px-4 pb-4">
-        {renderAnnotation ? <div className="absolute left-4 top-2 z-10 max-w-md">{renderAnnotation(item)}</div> : null}
+        {renderAnnotation ? (
+          <div data-media-preview-interactive className="absolute left-4 top-2 z-10 max-w-md">
+            {renderAnnotation(item)}
+          </div>
+        ) : null}
 
         {hasMultiple ? (
           <Button
@@ -120,7 +136,7 @@ export function MediaPreview({
             variant="ghost"
             size="icon"
             onClick={goPrev}
-            className="absolute left-2 z-10 text-white hover:bg-white/10 md:left-4"
+            className="absolute left-2 z-10 cursor-pointer text-white hover:bg-white/10 md:left-4"
             aria-label="Previous media"
           >
             <ChevronLeft className="h-6 w-6" />
@@ -153,7 +169,7 @@ export function MediaPreview({
             variant="ghost"
             size="icon"
             onClick={goNext}
-            className="absolute right-2 z-10 text-white hover:bg-white/10 md:right-4"
+            className="absolute right-2 z-10 cursor-pointer text-white hover:bg-white/10 md:right-4"
             aria-label="Next media"
           >
             <ChevronRight className="h-6 w-6" />
@@ -166,7 +182,7 @@ export function MediaPreview({
       ) : null}
 
       {hasMultiple ? (
-        <div className="border-t border-white/10 px-4 py-3">
+        <div data-media-preview-interactive className="border-t border-white/10 px-4 py-3">
           <div className="mx-auto flex max-w-4xl gap-2 overflow-x-auto pb-1" aria-label="Media thumbnails">
             {items.map((thumb, thumbIndex) => {
               const active = thumbIndex === currentIndex
@@ -177,7 +193,7 @@ export function MediaPreview({
                   aria-current={active ? "true" : undefined}
                   onClick={() => onIndexChange(thumbIndex)}
                   className={cn(
-                    "relative h-14 w-14 shrink-0 overflow-hidden rounded-md border-2 transition-all",
+                    "relative h-14 w-14 shrink-0 cursor-pointer overflow-hidden rounded-md border-2 transition-all",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white",
                     active ? "border-white opacity-100" : "border-transparent opacity-60 grayscale",
                   )}

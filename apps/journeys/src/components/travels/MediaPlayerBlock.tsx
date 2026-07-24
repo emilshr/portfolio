@@ -63,6 +63,7 @@ export function MediaPlayerBlockComponent(props: Props) {
             size="sm"
             onClick={() => setPreviewIndex(0)}
             aria-label="Open video in fullscreen"
+            className="cursor-pointer"
           >
             <Expand className="h-4 w-4" />
             Fullscreen preview

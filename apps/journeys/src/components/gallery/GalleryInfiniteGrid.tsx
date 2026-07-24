@@ -86,7 +86,7 @@ export function GalleryInfiniteGrid({
             <button
               type="button"
               onClick={() => setPreviewIndex(index)}
-              className="group relative h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="group relative h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label={`Open ${item.alt || 'gallery media'}`}
             >
               {item.kind === 'video' ? (

@@ -32,7 +32,7 @@ export function RichTextImagePreview({ src, alt, width, height }: RichTextImageP
       <button
         type="button"
         onClick={() => setPreviewIndex(0)}
-        className="group relative block w-full"
+        className="group relative block w-full cursor-pointer"
         aria-label={`Open ${alt} in fullscreen`}
       >
         <Image
