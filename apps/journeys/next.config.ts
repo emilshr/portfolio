@@ -33,7 +33,12 @@ const payloadOrigin = payloadApiUrl.replace(/\/api\/?$/, '').replace(/\/$/, '')
 const r2Hostname = parseHostname(process.env.NEXT_PUBLIC_MEDIA_HOST || process.env.R2_PUBLIC_URL)
 const mediaBaseHostname = parseHostname(process.env.NEXT_PUBLIC_MEDIA_BASE_URL)
 
-const remotePatterns: NonNullable<NextConfig['images']>['remotePatterns'] = []
+const remotePatterns: NonNullable<NextConfig['images']>['remotePatterns'] = [
+  {
+    hostname: 'api.microlink.io',
+    protocol: 'https',
+  },
+]
 
 if (r2Hostname) {
   remotePatterns.push({

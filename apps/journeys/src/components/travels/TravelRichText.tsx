@@ -2,12 +2,13 @@ import {
   type DefaultTypedEditorState,
   type DefaultNodeTypes,
   type SerializedBlockNode,
+  type SerializedLinkNode,
 } from '@payloadcms/richtext-lexical'
 import {
   type JSXConvertersFunction,
-  LinkJSXConverter,
   RichText as RichTextConverter,
 } from '@payloadcms/richtext-lexical/react'
+import { PreviewableLink } from '@repo/ui/previewable-link'
 
 import type {
   BannerBlock as BannerBlockProps,
@@ -26,9 +27,38 @@ type NodeTypes =
   | DefaultNodeTypes
   | SerializedBlockNode<BannerBlockProps | MediaBlockProps | MediaPlayerBlockProps | CodeBlockProps>
 
+/** Journeys internal doc resolution is still a stub; keep safe fallback. */
+const internalDocToHref = (_args: { linkNode: SerializedLinkNode }) => '/'
+
+const linkFields = (newTab: boolean | null | undefined) => ({
+  rel: newTab ? ('noopener noreferrer' as const) : undefined,
+  target: newTab ? ('_blank' as const) : undefined,
+})
+
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
-  ...LinkJSXConverter({ internalDocToHref: () => '/' }),
+  autolink: ({ node, nodesToJSX }) => {
+    const children = nodesToJSX({ nodes: node.children })
+    const { rel, target } = linkFields(node.fields.newTab)
+    return (
+      <PreviewableLink href={node.fields.url ?? '#'} rel={rel} target={target}>
+        {children}
+      </PreviewableLink>
+    )
+  },
+  link: ({ node, nodesToJSX }) => {
+    const children = nodesToJSX({ nodes: node.children })
+    const { rel, target } = linkFields(node.fields.newTab)
+    const href =
+      node.fields.linkType === 'internal'
+        ? internalDocToHref({ linkNode: node })
+        : (node.fields.url ?? '#')
+    return (
+      <PreviewableLink href={href} rel={rel} target={target}>
+        {children}
+      </PreviewableLink>
+    )
+  },
   blocks: {
     banner: ({ node }) => {
       const { content, style } = node.fields

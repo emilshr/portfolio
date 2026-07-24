@@ -37,6 +37,10 @@ const nextConfig: NextConfig = {
     ],
     qualities: [75, 85, 100],
     remotePatterns: [
+      {
+        hostname: 'api.microlink.io',
+        protocol: 'https',
+      },
       ...[NEXT_PUBLIC_SERVER_URL, ...productionURLs].map((item) => {
         const url = new URL(item)
 
