@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
-import { type ReactNode, useCallback, useEffect, useMemo, useRef } from "react"
+import { type MouseEvent, type ReactNode, useCallback, useEffect, useMemo, useRef } from "react"
 
 import { cn } from "../lib/utils"
 import { Button } from "./button"
@@ -88,6 +88,17 @@ export function MediaPreview({
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [goNext, goPrev, isOpen, onClose])
 
+  const handleOverlayClick = useCallback(
+    (event: MouseEvent<HTMLDialogElement>) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+      // Keep media and chrome interactive; only backdrop/empty areas dismiss.
+      if (target.closest("img, video, button, a, [data-media-preview-interactive]")) return
+      onClose()
+    },
+    [onClose],
+  )
+
   if (!isOpen || !item) return null
 
   return (
@@ -96,6 +107,7 @@ export function MediaPreview({
       aria-label="Fullscreen media preview"
       className="fixed inset-0 z-50 m-0 flex h-full max-h-none w-full max-w-none flex-col border-0 bg-black/95 p-0 backdrop:bg-black/80"
       onClose={onClose}
+      onClick={handleOverlayClick}
     >
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <p className="truncate text-sm text-white/80">{title || fallbackTitle}</p>
@@ -112,7 +124,11 @@ export function MediaPreview({
       </div>
 
       <div className="relative flex flex-1 items-center justify-center px-4 pb-4">
-        {renderAnnotation ? <div className="absolute left-4 top-2 z-10 max-w-md">{renderAnnotation(item)}</div> : null}
+        {renderAnnotation ? (
+          <div data-media-preview-interactive className="absolute left-4 top-2 z-10 max-w-md">
+            {renderAnnotation(item)}
+          </div>
+        ) : null}
 
         {hasMultiple ? (
           <Button
@@ -166,7 +182,7 @@ export function MediaPreview({
       ) : null}
 
       {hasMultiple ? (
-        <div className="border-t border-white/10 px-4 py-3">
+        <div data-media-preview-interactive className="border-t border-white/10 px-4 py-3">
           <div className="mx-auto flex max-w-4xl gap-2 overflow-x-auto pb-1" aria-label="Media thumbnails">
             {items.map((thumb, thumbIndex) => {
               const active = thumbIndex === currentIndex
