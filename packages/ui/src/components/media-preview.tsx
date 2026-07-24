@@ -34,6 +34,7 @@ export function MediaPreview({
   renderAnnotation,
 }: MediaPreviewProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const activeThumbRef = useRef<HTMLButtonElement>(null)
   const isOpen = currentIndex !== null
   const item = currentIndex !== null ? items[currentIndex] : null
 
@@ -65,6 +66,16 @@ export function MediaPreview({
       dialog.close()
     }
   }, [isOpen])
+
+  useEffect(() => {
+    if (currentIndex === null) return
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    activeThumbRef.current?.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      inline: "center",
+      block: "nearest",
+    })
+  }, [currentIndex])
 
   useEffect(() => {
     if (!isOpen) return
@@ -173,6 +184,7 @@ export function MediaPreview({
               return (
                 <button
                   key={thumb.id}
+                  ref={active ? activeThumbRef : undefined}
                   type="button"
                   aria-current={active ? "true" : undefined}
                   onClick={() => onIndexChange(thumbIndex)}
