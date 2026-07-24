@@ -5,12 +5,71 @@ import { MediaPreview } from '@repo/ui/media-preview'
 import Image from 'next/image'
 
 import { loadGalleryPage } from '@/app/gallery/actions'
+import { GalleryArticleHint } from '@/components/gallery/GalleryArticleHint'
 import type { GalleryFolderMediaItem } from '@/lib/payload'
+import { cn } from '@/lib/utils'
 
 type GalleryInfiniteGridProps = {
   initialItems: GalleryFolderMediaItem[]
   initialHasNextPage: boolean
   initialPage: number
+}
+
+function GalleryGridTile({
+  item,
+  index,
+  onOpen,
+}: {
+  item: GalleryFolderMediaItem
+  index: number
+  onOpen: (index: number) => void
+}) {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
+      {!loaded ? (
+        <div className="absolute inset-0 animate-pulse bg-muted" aria-hidden="true" />
+      ) : null}
+      <button
+        type="button"
+        onClick={() => onOpen(index)}
+        className="group relative h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        aria-label={`Open ${item.alt || 'gallery media'}`}
+      >
+        {item.kind === 'video' ? (
+          <video
+            className={cn(
+              'h-full w-full object-cover transition-all duration-500 group-hover:scale-105 motion-reduce:transition-none',
+              loaded ? 'opacity-100' : 'opacity-0',
+            )}
+            muted
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            onLoadedData={() => setLoaded(true)}
+            onError={() => setLoaded(true)}
+          >
+            <source src={item.thumbnailUrl || item.url} type={item.mimeType ?? undefined} />
+          </video>
+        ) : (
+          <Image
+            src={item.thumbnailUrl || item.url}
+            alt={item.alt}
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            unoptimized
+            onLoad={() => setLoaded(true)}
+            onError={() => setLoaded(true)}
+            className={cn(
+              'object-cover transition-all duration-500 group-hover:scale-105 motion-reduce:transition-none',
+              loaded ? 'opacity-100' : 'opacity-0',
+            )}
+          />
+        )}
+      </button>
+    </div>
+  )
 }
 
 export function GalleryInfiniteGrid({
@@ -79,38 +138,12 @@ export function GalleryInfiniteGrid({
     <>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4">
         {items.map((item, index) => (
-          <div
+          <GalleryGridTile
             key={item.id}
-            className="relative aspect-square overflow-hidden rounded-xl border border-border bg-muted"
-          >
-            <button
-              type="button"
-              onClick={() => setPreviewIndex(index)}
-              className="group relative h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              aria-label={`Open ${item.alt || 'gallery media'}`}
-            >
-              {item.kind === 'video' ? (
-                <video
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
-                  muted
-                  playsInline
-                  preload="metadata"
-                  aria-hidden="true"
-                >
-                  <source src={item.thumbnailUrl || item.url} type={item.mimeType ?? undefined} />
-                </video>
-              ) : (
-                <Image
-                  src={item.thumbnailUrl || item.url}
-                  alt={item.alt}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  unoptimized
-                  className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
-                />
-              )}
-            </button>
-          </div>
+            item={item}
+            index={index}
+            onOpen={setPreviewIndex}
+          />
         ))}
       </div>
 
@@ -127,6 +160,11 @@ export function GalleryInfiniteGrid({
         currentIndex={previewIndex}
         onIndexChange={setPreviewIndex}
         onClose={() => setPreviewIndex(null)}
+        renderAnnotation={(item) => {
+          const related = items.find((entry) => entry.id === item.id)?.relatedArticle
+          if (!related) return null
+          return <GalleryArticleHint key={item.id} article={related} />
+        }}
       />
     </>
   )

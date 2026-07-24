@@ -1,7 +1,7 @@
 "use client"
 
-import { ChevronLeft, ChevronRight, X } from "lucide-react"
-import { type ReactNode, useCallback, useEffect, useMemo, useRef } from "react"
+import { ChevronLeft, ChevronRight, Loader2, X } from "lucide-react"
+import { type ReactNode, useCallback, useEffect, useMemo, useState, useRef } from "react"
 
 import { cn } from "../lib/utils"
 import { Button } from "./button"
@@ -37,6 +37,9 @@ export function MediaPreview({
   const activeThumbRef = useRef<HTMLButtonElement>(null)
   const isOpen = currentIndex !== null
   const item = currentIndex !== null ? items[currentIndex] : null
+  const [loadedItemId, setLoadedItemId] = useState<string | null>(null)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const isMediaLoading = Boolean(item && loadedItemId !== item.id)
 
   const hasMultiple = items.length > 1
   const fallbackTitle = useMemo(() => {
@@ -54,6 +57,10 @@ export function MediaPreview({
     onIndexChange(currentIndex === items.length - 1 ? 0 : currentIndex + 1)
   }, [currentIndex, hasMultiple, items.length, onIndexChange])
 
+  const markLoaded = useCallback((itemId: string) => {
+    setLoadedItemId(itemId)
+  }, [])
+
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
@@ -68,14 +75,31 @@ export function MediaPreview({
   }, [isOpen])
 
   useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const sync = () => setPrefersReducedMotion(media.matches)
+    sync()
+    media.addEventListener("change", sync)
+    return () => media.removeEventListener("change", sync)
+  }, [])
+
+  useEffect(() => {
     if (currentIndex === null) return
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     activeThumbRef.current?.scrollIntoView({
       behavior: prefersReducedMotion ? "auto" : "smooth",
       inline: "center",
       block: "nearest",
     })
-  }, [currentIndex])
+  }, [currentIndex, prefersReducedMotion])
+
+  const handleImageRef = useCallback(
+    (node: HTMLImageElement | null) => {
+      if (!item) return
+      if (node?.complete && node.naturalWidth > 0) {
+        markLoaded(item.id)
+      }
+    },
+    [item, markLoaded],
+  )
 
   useEffect(() => {
     if (!isOpen) return
@@ -101,10 +125,15 @@ export function MediaPreview({
 
   if (!isOpen || !item) return null
 
+  const mediaTransitionClass = prefersReducedMotion
+    ? undefined
+    : "transition-opacity duration-300 ease-out"
+
   return (
     <dialog
       ref={dialogRef}
       aria-label="Fullscreen media preview"
+      aria-busy={isMediaLoading}
       className="fixed inset-0 z-50 m-0 flex h-full max-h-none w-full max-w-none flex-col border-0 bg-black/95 p-0 backdrop:bg-black/80"
       onClose={onClose}
     >
@@ -123,8 +152,6 @@ export function MediaPreview({
       </div>
 
       <div className="relative flex flex-1 items-center justify-center px-4 pb-4">
-        {renderAnnotation ? <div className="absolute left-4 top-2 z-10 max-w-md">{renderAnnotation(item)}</div> : null}
-
         {hasMultiple ? (
           <Button
             type="button"
@@ -139,23 +166,52 @@ export function MediaPreview({
         ) : null}
 
         <div className="relative flex h-full w-full max-h-[calc(100vh-16rem)] max-w-6xl items-center justify-center">
+          {isMediaLoading ? (
+            <div
+              className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center"
+              aria-hidden="true"
+            >
+              <Loader2 className="h-8 w-8 animate-spin text-white/80" />
+            </div>
+          ) : null}
+
           {item.kind === "video" ? (
             <video
               key={item.id}
               controls
               autoPlay
-              className="max-h-full max-w-full rounded-md"
+              onLoadedData={() => markLoaded(item.id)}
+              onError={() => markLoaded(item.id)}
+              className={cn(
+                "max-h-full max-w-full rounded-md",
+                mediaTransitionClass,
+                isMediaLoading ? "opacity-0" : "opacity-100",
+              )}
               aria-label={item.alt || "Preview video"}
             >
               <source src={item.url} type={item.mimeType ?? undefined} />
             </video>
           ) : (
             <img
+              key={item.id}
+              ref={handleImageRef}
               src={item.url}
               alt={item.alt || "Preview image"}
-              className="max-h-full max-w-full rounded-md object-contain"
+              onLoad={() => markLoaded(item.id)}
+              onError={() => markLoaded(item.id)}
+              className={cn(
+                "max-h-full max-w-full rounded-md object-contain",
+                mediaTransitionClass,
+                isMediaLoading ? "opacity-0" : "opacity-100",
+              )}
             />
           )}
+
+          {renderAnnotation ? (
+            <div className="absolute bottom-3 left-3 z-10 max-w-xs sm:bottom-4 sm:left-4 sm:max-w-sm">
+              {renderAnnotation(item)}
+            </div>
+          ) : null}
         </div>
 
         {hasMultiple ? (

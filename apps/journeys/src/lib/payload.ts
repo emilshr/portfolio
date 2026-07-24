@@ -363,6 +363,11 @@ export const getLatestVehicleForMetadata = unstable_cache(
 
 export const GALLERY_PAGE_LIMIT = 24
 
+export type GalleryRelatedArticle = {
+  title: string
+  slug: string
+}
+
 export type GalleryFolderMediaItem = {
   id: string
   url: string
@@ -370,6 +375,7 @@ export type GalleryFolderMediaItem = {
   alt: string
   kind: 'image' | 'video'
   mimeType: string | null
+  relatedArticle?: GalleryRelatedArticle | null
 }
 
 export type GalleryFolderMediaPage = {
@@ -399,7 +405,95 @@ function mapMediaToGalleryItem(media: Media): GalleryFolderMediaItem | null {
     alt: media.alt || '',
     kind,
     mimeType,
+    relatedArticle: null,
   }
+}
+
+function resolveMediaId(value: unknown): string | null {
+  if (typeof value === 'string' && value.length > 0) return value
+  if (value && typeof value === 'object' && 'id' in value) {
+    const id = (value as { id?: unknown }).id
+    return typeof id === 'string' && id.length > 0 ? id : null
+  }
+  return null
+}
+
+function collectArticleMediaIds(
+  article: Pick<Article, 'gallery' | 'heroImage' | 'coverImage'>,
+): string[] {
+  const ids: string[] = []
+  const push = (value: unknown) => {
+    const id = resolveMediaId(value)
+    if (id) ids.push(id)
+  }
+
+  push(article.heroImage)
+  push(article.coverImage)
+  if (Array.isArray(article.gallery)) {
+    for (const entry of article.gallery) push(entry)
+  }
+
+  return ids
+}
+
+async function attachRelatedArticles(
+  sdk: PayloadSDK<Config>,
+  items: GalleryFolderMediaItem[],
+): Promise<GalleryFolderMediaItem[]> {
+  if (items.length === 0) return items
+
+  const mediaIds = items.map((item) => item.id)
+  const mediaIdSet = new Set(mediaIds)
+
+  const articles = await safePayloadFetch(
+    'attachRelatedArticles',
+    [] as Article[],
+    async () => {
+      const result = await sdk.find({
+        collection: 'articles',
+        depth: 0,
+        limit: 100,
+        sort: '-publishedAt',
+        select: {
+          title: true,
+          slug: true,
+          publishedAt: true,
+          gallery: true,
+          heroImage: true,
+          coverImage: true,
+        },
+        where: {
+          and: [
+            publishedWhere,
+            {
+              or: [
+                { gallery: { in: mediaIds } },
+                { heroImage: { in: mediaIds } },
+                { coverImage: { in: mediaIds } },
+              ],
+            },
+          ],
+        },
+      })
+      return result.docs as Article[]
+    },
+  )
+
+  const relatedByMediaId = new Map<string, GalleryRelatedArticle>()
+
+  for (const article of articles) {
+    if (!article.slug || !article.title) continue
+    const related = { title: article.title, slug: article.slug }
+    for (const mediaId of collectArticleMediaIds(article)) {
+      if (!mediaIdSet.has(mediaId) || relatedByMediaId.has(mediaId)) continue
+      relatedByMediaId.set(mediaId, related)
+    }
+  }
+
+  return items.map((item) => ({
+    ...item,
+    relatedArticle: relatedByMediaId.get(item.id) ?? null,
+  }))
 }
 
 const emptyGalleryFolderMediaPage = (page: number): GalleryFolderMediaPage => ({
@@ -435,9 +529,11 @@ async function fetchGalleryFolderMediaPage({
       },
     })
 
-    const items = (result.docs as Media[])
+    const mapped = (result.docs as Media[])
       .map(mapMediaToGalleryItem)
       .filter((item): item is GalleryFolderMediaItem => item !== null)
+
+    const items = await attachRelatedArticles(sdk, mapped)
 
     return {
       items,
@@ -459,7 +555,7 @@ export function getGalleryFolderMediaPage({
     return unstable_cache(
       () => fetchGalleryFolderMediaPage({ page: 1, limit: GALLERY_PAGE_LIMIT }),
       ['gallery-folder-media-page-1'],
-      { tags: ['gallery', 'gallery-settings'] },
+      { tags: ['gallery', 'gallery-settings', 'articles'] },
     )()
   }
 
