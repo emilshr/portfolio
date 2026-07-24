@@ -107,34 +107,6 @@ export function articleMetadata(article: {
   })
 }
 
-export function galleryCollectionMetadata(collection: {
-  title: string
-  excerpt?: string | null
-  slug: string
-  meta?: {
-    title?: string | null
-    description?: string | null
-    image?: unknown
-  } | null
-  coverImage?: unknown
-}): Metadata {
-  const title = collection.meta?.title ?? formatPageTitle(collection.title)
-  const description = collection.meta?.description || collection.excerpt
-  const metaImage = collection.meta?.image
-  const image =
-    (isMedia(metaImage) ? getAbsoluteMediaUrl(getMediaUrl(metaImage, 'og')) : null) ||
-    (isMedia(collection.coverImage)
-      ? getAbsoluteMediaUrl(getMediaUrl(collection.coverImage, 'og'))
-      : null)
-
-  return buildPageMetadata({
-    title,
-    description,
-    path: `/gallery/${collection.slug}`,
-    image,
-  })
-}
-
 export function vehiclesPageMetadata(
   vehicle: {
     name: string
