@@ -1,8 +1,11 @@
 /**
- * One-time migration:
- * Convert article/vehicle/gallery-collection gallery arrays from `{ media }` rows → media ID arrays
+ * One-time migration: convert article/vehicle/gallery-collection gallery arrays
+ * from `{ media }` rows → media ID arrays.
  *
  *   pnpm migrate:gallery-has-many
+ *
+ * To remove a previously seeded Archive collection:
+ *   pnpm delete:archive-gallery
  */
 import { config as dotenvConfig } from 'dotenv'
 import path from 'path'
