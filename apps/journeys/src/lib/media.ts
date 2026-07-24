@@ -107,3 +107,15 @@ export function formatTripDates(
 
   return dates.end ? formatter.format(new Date(dates.end)) : null
 }
+
+export function formatPublishedAt(date?: string | null): string | null {
+  if (!date) return null
+
+  const formatted = new Intl.DateTimeFormat('en', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(date))
+
+  return `Published ${formatted}`
+}
