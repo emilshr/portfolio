@@ -10,13 +10,16 @@ import { useMemo, useState } from 'react'
 import { getMediaUrl, isMedia } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
-type TravelGalleryEntry = {
+/** Legacy array-row shape before hasMany upload migration. */
+type LegacyGalleryEntry = {
   id?: string | null
   media?: Media | string | null
   image?: Media | string | null
   alt?: string | null
   caption?: string | null
 }
+
+type TravelGalleryItem = Media | string | LegacyGalleryEntry | null | undefined
 
 type RichTextNode = {
   text?: string | null
@@ -25,7 +28,7 @@ type RichTextNode = {
 
 type TravelDetailGalleryProps = {
   travelTitle: string
-  items: TravelGalleryEntry[]
+  items: TravelGalleryItem[]
 }
 
 const spanPatterns = [
@@ -55,10 +58,29 @@ function extractPlainTextFromRichText(node: RichTextNode | null | undefined): st
   return chunks.join(' ').trim()
 }
 
-function toPreviewItems(travelTitle: string, entries: TravelGalleryEntry[]): MediaPreviewItem[] {
+function resolveGalleryMedia(item: TravelGalleryItem): {
+  media: Media | null
+  altOverride?: string | null
+  captionOverride?: string | null
+  rowId?: string | null
+} {
+  if (!item) return { media: null }
+  if (isMedia(item)) return { media: item, rowId: item.id }
+  if (typeof item === 'string') return { media: null }
+
+  const media = item.media || item.image
+  return {
+    media: isMedia(media) ? media : null,
+    altOverride: item.alt,
+    captionOverride: item.caption,
+    rowId: item.id,
+  }
+}
+
+function toPreviewItems(travelTitle: string, entries: TravelGalleryItem[]): MediaPreviewItem[] {
   return entries.reduce<MediaPreviewItem[]>((acc, entry, index) => {
-    const media = entry.media || entry.image
-    if (!isMedia(media)) return acc
+    const { media, altOverride, captionOverride, rowId } = resolveGalleryMedia(entry)
+    if (!media) return acc
 
     const url = getMediaUrl(media, 'large')
     if (!url) return acc
@@ -69,15 +91,15 @@ function toPreviewItems(travelTitle: string, entries: TravelGalleryEntry[]): Med
     const mediaCaption = extractPlainTextFromRichText(
       (media.caption?.root as RichTextNode | undefined) ?? null,
     )
-    const caption = entry.caption?.trim() || mediaCaption || null
+    const caption = captionOverride?.trim() || mediaCaption || null
 
     acc.push({
-      id: entry.id || `${media.id}-${index}`,
+      id: rowId || `${media.id}-${index}`,
       url,
       thumbnailUrl: thumb,
       kind,
       mimeType,
-      alt: entry.alt || media.alt || travelTitle,
+      alt: altOverride || media.alt || travelTitle,
       caption,
     })
     return acc

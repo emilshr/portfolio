@@ -380,12 +380,18 @@ export function resolveGalleryCollectionCover(
   }
 
   const firstImage = collection.images?.[0]
-  if (firstImage?.media && isMedia(firstImage.media)) {
-    return firstImage.media
+  if (isMedia(firstImage)) {
+    return firstImage
+  }
+  if (typeof firstImage === 'string') {
+    return firstImage
   }
 
-  if (typeof firstImage?.media === 'string') {
-    return firstImage.media
+  // Legacy array-row shape `{ media }` before hasMany migration
+  if (firstImage && typeof firstImage === 'object' && 'media' in firstImage) {
+    const media = (firstImage as { media?: Media | string | null }).media
+    if (isMedia(media)) return media
+    if (typeof media === 'string') return media
   }
 
   return null
@@ -455,8 +461,25 @@ export function mapGalleryCollectionImages(
   const items: GalleryCollectionImageItem[] = []
 
   for (const entry of collection.images ?? []) {
-    const media = entry.media
-    if (!media || typeof media === 'string' || !isMedia(media)) continue
+    let media: Media | null = null
+    let altOverride: string | null | undefined
+    let captionOverride: string | null | undefined
+
+    if (isMedia(entry)) {
+      media = entry
+    } else if (entry && typeof entry === 'object' && 'media' in entry) {
+      // Legacy array-row shape `{ media, alt, caption }`
+      const legacy = entry as {
+        media?: Media | string | null
+        alt?: string | null
+        caption?: string | null
+      }
+      media = isMedia(legacy.media) ? legacy.media : null
+      altOverride = legacy.alt
+      captionOverride = legacy.caption
+    }
+
+    if (!media) continue
     const url = getMediaUrl(media, 'large')
     if (!url) continue
     const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
@@ -467,8 +490,8 @@ export function mapGalleryCollectionImages(
       id: media.id,
       url,
       thumbnailUrl,
-      alt: entry.alt || media.alt || collection.title,
-      caption: entry.caption || null,
+      alt: altOverride || media.alt || collection.title,
+      caption: captionOverride || null,
       kind,
       mimeType,
     })

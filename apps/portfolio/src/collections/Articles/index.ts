@@ -19,7 +19,9 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
 import { NeoDBEmbed } from '../../blocks/NeoDBEmbed/config'
 import { XPostEmbed } from '../../blocks/XPostEmbed/config'
+import { galleryMediaField } from '../../fields/galleryMedia'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { validateGalleryMediaInFolder } from '../../hooks/validateGalleryMediaInFolder'
 import { featuredArticleIndexes, publishedAtStatusIndexes } from '../shared/indexes'
 import { generateJourneysPreviewPath } from '../../utilities/generateJourneysPreviewPath'
 import { revalidateArticle, revalidateDelete } from './hooks/revalidateArticle'
@@ -144,27 +146,7 @@ export const Articles: CollectionConfig = {
                 },
               ],
             },
-            {
-              name: 'gallery',
-              type: 'array',
-              labels: { singular: 'Media Item', plural: 'Gallery Media' },
-              fields: [
-                {
-                  name: 'media',
-                  type: 'upload',
-                  relationTo: 'media',
-                  required: true,
-                },
-                {
-                  name: 'alt',
-                  type: 'text',
-                  admin: {
-                    description: 'Optional override; defaults to media alt text.',
-                  },
-                },
-                { name: 'caption', type: 'text' },
-              ],
-            },
+            galleryMediaField(),
             {
               name: 'content',
               type: 'richText',
@@ -257,7 +239,7 @@ export const Articles: CollectionConfig = {
   ],
   hooks: {
     afterChange: [revalidateArticle],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [populatePublishedAt, validateGalleryMediaInFolder({ fieldName: 'gallery' })],
     afterDelete: [revalidateDelete],
   },
   indexes: [...publishedAtStatusIndexes, ...featuredArticleIndexes],
