@@ -56,6 +56,22 @@ const nextConfig: NextConfig = {
             ]
           })()
         : []),
+      // Allow optimizer follow-through if a media URL is ever an R2 S3 API host.
+      ...(process.env.R2_ENDPOINT
+        ? (() => {
+            try {
+              const url = new URL(process.env.R2_ENDPOINT)
+              return [
+                {
+                  hostname: url.hostname,
+                  protocol: url.protocol.replace(':', '') as 'http' | 'https',
+                },
+              ]
+            } catch {
+              return []
+            }
+          })()
+        : []),
     ],
   },
   reactStrictMode: true,
