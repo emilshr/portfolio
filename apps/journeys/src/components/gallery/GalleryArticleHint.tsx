@@ -12,17 +12,23 @@ type GalleryArticleHintProps = {
 }
 
 export function GalleryArticleHint({ article }: GalleryArticleHintProps) {
-  const [expanded, setExpanded] = useState(false)
+  const [pinned, setPinned] = useState(false)
+  const [hovered, setHovered] = useState(false)
   const panelId = useId()
+  const expanded = pinned || hovered
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <button
         type="button"
         aria-expanded={expanded}
         aria-controls={panelId}
         aria-label={expanded ? 'Hide article hint' : 'Show related article'}
-        onClick={() => setExpanded((open) => !open)}
+        onClick={() => setPinned((open) => !open)}
         className={cn(
           'flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-black/55 text-white shadow-sm backdrop-blur-sm',
           'transition-colors hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white',
