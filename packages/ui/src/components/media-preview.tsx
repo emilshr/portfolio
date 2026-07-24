@@ -136,6 +136,7 @@ export function MediaPreview({
 
   if (!isOpen || !item) return null
 
+  const annotation = renderAnnotation?.(item) ?? null
   const mediaTransitionClass = prefersReducedMotion
     ? undefined
     : "transition-opacity duration-300 ease-out"
@@ -177,56 +178,58 @@ export function MediaPreview({
           </Button>
         ) : null}
 
-        <div className="relative flex h-full w-full max-h-[calc(100vh-16rem)] max-w-6xl items-center justify-center">
-          {isMediaLoading ? (
-            <div
-              className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center"
-              aria-hidden="true"
-            >
-              <Loader2 className="h-8 w-8 animate-spin text-white/80" />
-            </div>
-          ) : null}
-
-          {item.kind === "video" ? (
-            <video
-              key={item.id}
-              controls
-              autoPlay
-              onLoadedData={() => markLoaded(item.id)}
-              onError={() => markLoaded(item.id)}
-              className={cn(
-                "max-h-full max-w-full rounded-md",
-                mediaTransitionClass,
-                isMediaLoading ? "opacity-0" : "opacity-100",
-              )}
-              aria-label={item.alt || "Preview video"}
-            >
-              <source src={item.url} type={item.mimeType ?? undefined} />
-            </video>
-          ) : (
-            <img
-              key={item.id}
-              ref={handleImageRef}
-              src={item.url}
-              alt={item.alt || "Preview image"}
-              onLoad={() => markLoaded(item.id)}
-              onError={() => markLoaded(item.id)}
-              className={cn(
-                "max-h-full max-w-full rounded-md object-contain",
-                mediaTransitionClass,
-                isMediaLoading ? "opacity-0" : "opacity-100",
-              )}
-            />
-          )}
-
-          {renderAnnotation ? (
+        <div className="flex h-full w-full max-h-[calc(100vh-16rem)] max-w-6xl flex-col items-center justify-center">
+          {annotation ? (
             <div
               data-media-preview-interactive
-              className="absolute bottom-3 left-3 z-10 max-w-xs sm:bottom-4 sm:left-4 sm:max-w-sm"
+              className="mb-3 w-full max-w-xl shrink-0 px-2 text-center sm:mb-4"
             >
-              {renderAnnotation(item)}
+              {annotation}
             </div>
           ) : null}
+
+          <div className="relative flex min-h-0 w-full flex-1 items-center justify-center">
+            {isMediaLoading ? (
+              <div
+                className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center"
+                aria-hidden="true"
+              >
+                <Loader2 className="h-8 w-8 animate-spin text-white/80" />
+              </div>
+            ) : null}
+
+            {item.kind === "video" ? (
+              <video
+                key={item.id}
+                controls
+                autoPlay
+                onLoadedData={() => markLoaded(item.id)}
+                onError={() => markLoaded(item.id)}
+                className={cn(
+                  "max-h-full max-w-full rounded-md",
+                  mediaTransitionClass,
+                  isMediaLoading ? "opacity-0" : "opacity-100",
+                )}
+                aria-label={item.alt || "Preview video"}
+              >
+                <source src={item.url} type={item.mimeType ?? undefined} />
+              </video>
+            ) : (
+              <img
+                key={item.id}
+                ref={handleImageRef}
+                src={item.url}
+                alt={item.alt || "Preview image"}
+                onLoad={() => markLoaded(item.id)}
+                onError={() => markLoaded(item.id)}
+                className={cn(
+                  "max-h-full max-w-full rounded-md object-contain",
+                  mediaTransitionClass,
+                  isMediaLoading ? "opacity-0" : "opacity-100",
+                )}
+              />
+            )}
+          </div>
         </div>
 
         {hasMultiple ? (
