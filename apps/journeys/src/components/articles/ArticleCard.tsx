@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { HeaderNavHighlightLink } from '@/components/layout/HeaderNavHighlight'
 import { PayloadImage } from '@/components/media/PayloadImage'
-import { formatLocation, formatTripDates } from '@/lib/media'
+import { formatLocation, formatPublishedAt, formatTripDates } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 type ArticleCardProps = {
@@ -14,7 +14,9 @@ type ArticleCardProps = {
 export function ArticleCard({ article, className }: ArticleCardProps) {
   const location = formatLocation(article.location)
   const dates = formatTripDates(article.tripDates)
+  const published = formatPublishedAt(article.publishedAt)
   const image = article.coverImage || article.heroImage
+  const metaLabel = [location, dates, published].filter(Boolean).join(' · ')
 
   return (
     <article className={cn('group flex flex-col gap-4', className)}>
@@ -37,11 +39,9 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
         )}
       </Link>
       <div className="flex flex-col gap-2">
-        {(location || dates) && (
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">
-            {[location, dates].filter(Boolean).join(' · ')}
-          </p>
-        )}
+        {metaLabel ? (
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">{metaLabel}</p>
+        ) : null}
         <h2 className="font-display text-xl font-semibold tracking-tight">
           <HeaderNavHighlightLink
             href={`/articles/${article.slug}`}

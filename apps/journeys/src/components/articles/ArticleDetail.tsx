@@ -5,7 +5,14 @@ import { PayloadImage } from '@/components/media/PayloadImage'
 import { HeroMediaPreviewTrigger } from '@/components/travels/HeroMediaPreviewTrigger'
 import { TravelDetailGallery } from '@/components/travels/TravelDetailGallery'
 import { TravelRichText } from '@/components/travels/TravelRichText'
-import { formatLocation, formatTripDates, getMediaAlt, getMediaUrl, isMedia } from '@/lib/media'
+import {
+  formatLocation,
+  formatPublishedAt,
+  formatTripDates,
+  getMediaAlt,
+  getMediaUrl,
+  isMedia,
+} from '@/lib/media'
 
 type ArticleDetailProps = {
   article: Article
@@ -19,13 +26,15 @@ function getTagLabel(tag: string | Tag): string | null {
 export function ArticleDetail({ article }: ArticleDetailProps) {
   const location = formatLocation(article.location)
   const dates = formatTripDates(article.tripDates)
+  const published = formatPublishedAt(article.publishedAt)
   const hero = article.heroImage || article.coverImage
   const heroPreviewUrl = isMedia(hero) ? getMediaUrl(hero, 'large') : null
   const heroPreviewAlt = isMedia(hero) ? getMediaAlt(hero, article.title) : article.title
   const tagLabels = (article.tags ?? [])
     .map(getTagLabel)
     .filter((label): label is string => Boolean(label))
-  const heroMeta = [location, dates].filter(Boolean).join(' · ') || tagLabels.join(' · ')
+  const heroMeta =
+    [location, dates, published].filter(Boolean).join(' · ') || tagLabels.join(' · ')
 
   return (
     <article>
