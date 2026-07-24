@@ -9,7 +9,9 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { galleryMediaField } from '../../fields/galleryMedia'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { galleryFolderFilterOptions } from '../../utilities/galleryFolder'
 import { revalidateDelete, revalidateGalleryCollection } from './hooks/revalidateGalleryCollection'
 import { validateGalleryFolder } from './hooks/validateGalleryFolder'
 
@@ -78,54 +80,14 @@ export const GalleryCollections: CollectionConfig = {
                 description:
                   'Optional cover for listing cards and detail hero. Leave empty to use the first image in the collection.',
               },
-              filterOptions: async ({ req }) => {
-                const settings = await req.payload.findGlobal({
-                  slug: 'gallery-settings',
-                  depth: 0,
-                  overrideAccess: true,
-                })
-                const folder = settings?.folder
-                const folderId = typeof folder === 'object' ? folder?.id : folder
-                if (!folderId) return false
-                return { folder: { equals: folderId } }
-              },
+              filterOptions: galleryFolderFilterOptions,
             },
-            {
+            galleryMediaField({
               name: 'images',
-              type: 'array',
-              labels: { singular: 'Image', plural: 'Images' },
-              admin: {
-                description:
-                  'Images must belong to the gallery folder configured in Gallery Settings.',
-              },
-              fields: [
-                {
-                  name: 'media',
-                  type: 'upload',
-                  relationTo: 'media',
-                  required: true,
-                  filterOptions: async ({ req }) => {
-                    const settings = await req.payload.findGlobal({
-                      slug: 'gallery-settings',
-                      depth: 0,
-                      overrideAccess: true,
-                    })
-                    const folder = settings?.folder
-                    const folderId = typeof folder === 'object' ? folder?.id : folder
-                    if (!folderId) return false
-                    return { folder: { equals: folderId } }
-                  },
-                },
-                {
-                  name: 'alt',
-                  type: 'text',
-                  admin: {
-                    description: 'Optional override; defaults to media alt text.',
-                  },
-                },
-                { name: 'caption', type: 'text' },
-              ],
-            },
+              label: 'Images',
+              description:
+                'Select existing media from the Gallery folder, or upload new files into that folder first. All images must belong to the folder configured in Gallery Settings.',
+            }),
             {
               name: 'description',
               type: 'richText',

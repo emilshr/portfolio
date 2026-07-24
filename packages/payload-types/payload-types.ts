@@ -782,17 +782,10 @@ export interface Article {
     start?: string | null;
     end?: string | null;
   };
-  gallery?:
-    | {
-        media: string | Media;
-        /**
-         * Optional override; defaults to media alt text.
-         */
-        alt?: string | null;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Select existing media from the Gallery folder, or upload new files into that folder (Media library → Gallery folder), then select them here.
+   */
+  gallery?: (string | Media)[] | null;
   content: {
     root: {
       type: string;
@@ -866,19 +859,9 @@ export interface GalleryCollection {
    */
   coverImage?: (string | null) | Media;
   /**
-   * Images must belong to the gallery folder configured in Gallery Settings.
+   * Select existing media from the Gallery folder, or upload new files into that folder first. All images must belong to the folder configured in Gallery Settings.
    */
-  images?:
-    | {
-        media: string | Media;
-        /**
-         * Optional override; defaults to media alt text.
-         */
-        alt?: string | null;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  images?: (string | Media)[] | null;
   /**
    * Full description shown on the gallery collection detail page.
    */
@@ -930,17 +913,10 @@ export interface Vehicle {
    * Current odometer reading in kilometers.
    */
   odometer: number;
-  gallery?:
-    | {
-        media: string | Media;
-        /**
-         * Optional override; defaults to media alt text.
-         */
-        alt?: string | null;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Select existing media from the Gallery folder, or upload new files into that folder (Media library → Gallery folder), then select them here.
+   */
+  gallery?: (string | Media)[] | null;
   details: {
     root: {
       type: string;
@@ -1632,14 +1608,7 @@ export interface ArticlesSelect<T extends boolean = true> {
         start?: T;
         end?: T;
       };
-  gallery?:
-    | T
-    | {
-        media?: T;
-        alt?: T;
-        caption?: T;
-        id?: T;
-      };
+  gallery?: T;
   content?: T;
   meta?:
     | T
@@ -1677,14 +1646,7 @@ export interface GalleryCollectionsSelect<T extends boolean = true> {
   title?: T;
   excerpt?: T;
   coverImage?: T;
-  images?:
-    | T
-    | {
-        media?: T;
-        alt?: T;
-        caption?: T;
-        id?: T;
-      };
+  images?: T;
   description?: T;
   meta?:
     | T
@@ -1708,14 +1670,7 @@ export interface VehiclesSelect<T extends boolean = true> {
   name?: T;
   coverImage?: T;
   odometer?: T;
-  gallery?:
-    | T
-    | {
-        media?: T;
-        alt?: T;
-        caption?: T;
-        id?: T;
-      };
+  gallery?: T;
   details?: T;
   mods?:
     | T
@@ -2188,7 +2143,7 @@ export interface FeaturedTravelsBlock {
 export interface GallerySetting {
   id: string;
   /**
-   * Choose the Media folder used by the /gallery page.
+   * Media folder used for Gallery Collection and article/vehicle gallery pickers. Files in this folder can be selected (or uploaded here first) when building galleries.
    */
   folder: string | FolderInterface;
   meta?: {

@@ -31,7 +31,10 @@ export default async function GalleryPage() {
           ))}
         </div>
       ) : (
-        <p className="text-muted-foreground">No gallery collections yet.</p>
+        <p className="text-muted-foreground">
+          No published gallery collections yet. Create one in the CMS and add media from the Gallery
+          folder.
+        </p>
       )}
     </div>
   )

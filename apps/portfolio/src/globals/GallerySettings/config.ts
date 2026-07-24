@@ -42,7 +42,8 @@ export const GallerySettings: GlobalConfig = {
                 },
               },
               admin: {
-                description: 'Choose the Media folder used by the /gallery page.',
+                description:
+                  'Media folder used for Gallery Collection and article/vehicle gallery pickers. Files in this folder can be selected (or uploaded here first) when building galleries.',
               },
               required: true,
             },

@@ -14,7 +14,9 @@ import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { MediaPlayerBlock } from '../../blocks/MediaPlayer/config'
+import { galleryMediaField } from '../../fields/galleryMedia'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { validateGalleryMediaInFolder } from '../../hooks/validateGalleryMediaInFolder'
 import { generateJourneysPreviewPath } from '../../utilities/generateJourneysPreviewPath'
 import { revalidateDelete, revalidateVehicle } from './hooks/revalidateVehicle'
 
@@ -98,27 +100,7 @@ export const Vehicles: CollectionConfig = {
         description: 'Current odometer reading in kilometers.',
       },
     },
-    {
-      name: 'gallery',
-      type: 'array',
-      labels: { singular: 'Media Item', plural: 'Gallery Media' },
-      fields: [
-        {
-          name: 'media',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-        {
-          name: 'alt',
-          type: 'text',
-          admin: {
-            description: 'Optional override; defaults to media alt text.',
-          },
-        },
-        { name: 'caption', type: 'text' },
-      ],
-    },
+    galleryMediaField(),
     {
       name: 'details',
       type: 'richText',
@@ -230,7 +212,7 @@ export const Vehicles: CollectionConfig = {
   ],
   hooks: {
     afterChange: [revalidateVehicle],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [populatePublishedAt, validateGalleryMediaInFolder({ fieldName: 'gallery' })],
     afterDelete: [revalidateDelete],
   },
   versions: {
