@@ -10,9 +10,9 @@ import {
 } from '@payloadcms/richtext-lexical'
 import {
   JSXConvertersFunction,
-  LinkJSXConverter,
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
+import { PreviewableLink } from '@repo/ui/previewable-link'
 
 import type { CodeBlockProps } from '@/blocks/Code/Component'
 
@@ -50,17 +50,44 @@ type NodeTypes =
     >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
-  const { value, relationTo } = linkNode.fields.doc!
-  if (typeof value !== 'object') {
-    throw new Error('Expected value to be an object')
+  const doc = linkNode.fields.doc
+  if (!doc || typeof doc.value !== 'object' || doc.value === null) {
+    return '#'
   }
-  const slug = value.slug
-  return relationTo === 'posts' ? `/${slug}` : `/${slug === 'home' ? '' : slug}`
+  const slug = 'slug' in doc.value && typeof doc.value.slug === 'string' ? doc.value.slug : ''
+  if (!slug) return '#'
+  return doc.relationTo === 'posts' ? `/${slug}` : `/${slug === 'home' ? '' : slug}`
 }
+
+const linkFields = (newTab: boolean | null | undefined) => ({
+  rel: newTab ? ('noopener noreferrer' as const) : undefined,
+  target: newTab ? ('_blank' as const) : undefined,
+})
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
-  ...LinkJSXConverter({ internalDocToHref }),
+  autolink: ({ node, nodesToJSX }) => {
+    const children = nodesToJSX({ nodes: node.children })
+    const { rel, target } = linkFields(node.fields.newTab)
+    return (
+      <PreviewableLink href={node.fields.url ?? '#'} rel={rel} target={target}>
+        {children}
+      </PreviewableLink>
+    )
+  },
+  link: ({ node, nodesToJSX }) => {
+    const children = nodesToJSX({ nodes: node.children })
+    const { rel, target } = linkFields(node.fields.newTab)
+    const href =
+      node.fields.linkType === 'internal'
+        ? internalDocToHref({ linkNode: node })
+        : (node.fields.url ?? '#')
+    return (
+      <PreviewableLink href={href} rel={rel} target={target}>
+        {children}
+      </PreviewableLink>
+    )
+  },
   blocks: {
     alertBanner: ({ node }) => <AlertBannerBlockComponent {...node.fields} />,
     banner: ({ node }) => <BannerBlock {...node.fields} />,

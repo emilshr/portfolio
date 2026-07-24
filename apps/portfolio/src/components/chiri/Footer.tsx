@@ -1,4 +1,5 @@
 import type { SiteSettingsData } from '@/utilities/getSiteSettings'
+import { PreviewableLink } from '@repo/ui/previewable-link'
 
 import { ThemeToggle } from './ThemeToggle'
 
@@ -22,9 +23,12 @@ export function Footer({ settings }: Props) {
         </div>
         <div className="powered-by">
           Built with{' '}
-          <a href="https://payloadcms.com" className="text-(--text-secondary) no-underline">
+          <PreviewableLink
+            href="https://payloadcms.com"
+            className="text-(--text-secondary) no-underline"
+          >
             Payload
-          </a>
+          </PreviewableLink>
         </div>
       </div>
     </footer>

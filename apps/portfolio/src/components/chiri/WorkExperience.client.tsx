@@ -2,6 +2,7 @@
 
 import { ExternalLink } from 'lucide-react'
 import { useState } from 'react'
+import { PreviewableLink } from '@repo/ui/previewable-link'
 
 import RichText from '@/components/RichText'
 import {
@@ -103,7 +104,7 @@ export function WorkExperienceClient({ experiences, settings, heading = 'Work' }
                 <DialogTitle className="max-md:text-center">{selected.title}</DialogTitle>
                 <DialogDescription asChild>
                   <p className="m-0 text-left text-(length:--font-size-s) text-(--text-secondary) max-md:text-center">
-                    <a
+                    <PreviewableLink
                       href={selected.url}
                       className="inline-flex items-center gap-1 text-(--text-primary) underline underline-offset-2 hover:opacity-85"
                       target="_blank"
@@ -115,7 +116,7 @@ export function WorkExperienceClient({ experiences, settings, heading = 'Work' }
                         aria-hidden="true"
                       />
                       <span className="sr-only"> (opens in new tab)</span>
-                    </a>
+                    </PreviewableLink>
                     <span className="text-(--text-secondary)">
                       {' '}
                       · {selected.from} – {selected.to}

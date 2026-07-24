@@ -9,6 +9,8 @@
     "./tooltip": "./src/components/tooltip.tsx",
     "./bento-grid": "./src/components/bento-grid.tsx",
     "./tooltip-card": "./src/components/tooltip-card.tsx",
+    "./link-preview": "./src/components/link-preview.tsx",
+    "./previewable-link": "./src/components/previewable-link.tsx",
     "./media-preview": "./src/components/media-preview.tsx",
     "./media-player": "./src/components/media-player.tsx",
     "./media-player-block-view": "./src/components/media-player-block-view.tsx",
@@ -27,6 +29,7 @@
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "catalog:",
+    "@radix-ui/react-hover-card": "catalog:",
     "@radix-ui/react-select": "catalog:",
     "@radix-ui/react-separator": "catalog:",
     "@radix-ui/react-slider": "catalog:",
@@ -36,6 +39,8 @@
     "clsx": "catalog:",
     "lucide-react": "catalog:",
     "media-chrome": "^4.19.0",
+    "motion": "catalog:",
+    "qss": "catalog:",
     "radix-ui": "^1.4.3",
     "tailwind-merge": "catalog:"
   },

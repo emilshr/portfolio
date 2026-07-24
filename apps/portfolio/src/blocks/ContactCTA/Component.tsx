@@ -1,4 +1,5 @@
 import type { ContactCTABlock as ContactCTABlockProps } from '@repo/payload-types'
+import { PreviewableLink } from '@repo/ui/previewable-link'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 import { sectionHeading } from '@/components/chiri/classNames'
@@ -47,6 +48,12 @@ const icons = {
   ),
 }
 
+type ContactLink = {
+  label: string
+  url: string
+  icon: keyof typeof icons
+}
+
 export const ContactCTABlockComponent: React.FC<ContactCTABlockProps> = async ({
   heading = 'Connect',
   useGlobalLinks = true,
@@ -54,19 +61,27 @@ export const ContactCTABlockComponent: React.FC<ContactCTABlockProps> = async ({
 }) => {
   const settings = await getSiteSettings()
 
-  const contactLinks = useGlobalLinks
-    ? [
-        { label: 'Schedule a call', url: settings.contactLinks.calCom, icon: 'calendar' as const },
-        { label: 'LinkedIn', url: settings.contactLinks.linkedin, icon: 'linkedin' as const },
-        { label: 'GitHub', url: settings.contactLinks.github, icon: 'github' as const },
-      ].filter((l) => l.url)
-    : (links ?? [])
-        .map((l) => ({
-          label: l.label,
-          url: l.link?.url || '#',
-          icon: 'calendar' as const,
-        }))
-        .filter((l) => l.url)
+  const contactLinks: ContactLink[] = useGlobalLinks
+    ? (
+        [
+          {
+            label: 'Schedule a call',
+            url: settings.contactLinks.calCom,
+            icon: 'calendar' as const,
+          },
+          { label: 'LinkedIn', url: settings.contactLinks.linkedin, icon: 'linkedin' as const },
+          { label: 'GitHub', url: settings.contactLinks.github, icon: 'github' as const },
+        ] satisfies Array<{
+          label: string
+          url: string | null | undefined
+          icon: ContactLink['icon']
+        }>
+      ).flatMap((link) => (link.url ? [{ ...link, url: link.url }] : []))
+    : (links ?? []).flatMap((link) => {
+        const url = link.link?.url
+        if (!url) return []
+        return [{ label: link.label, url, icon: 'calendar' as const }]
+      })
 
   return (
     <section className="contact-cta">
@@ -74,15 +89,15 @@ export const ContactCTABlockComponent: React.FC<ContactCTABlockProps> = async ({
       <ul className="m-0 flex list-none gap-4 p-0">
         {contactLinks.map((link) => (
           <li key={link.label}>
-            <a
-              href={link.url!}
+            <PreviewableLink
+              href={link.url}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2.5 text-(length:--font-size-s) text-(--text-secondary) no-underline"
             >
-              {icons[link.icon as keyof typeof icons]}
+              {icons[link.icon]}
               <span>{link.label}</span>
-            </a>
+            </PreviewableLink>
           </li>
         ))}
       </ul>
