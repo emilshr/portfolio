@@ -122,7 +122,7 @@ export function TravelDetailGallery({ travelTitle, items }: TravelDetailGalleryP
                 type="button"
                 onClick={() => setPreviewIndex(index)}
                 className={cn(
-                  'group relative h-full w-full overflow-hidden',
+                  'group relative h-full w-full cursor-pointer overflow-hidden',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                 )}
                 aria-label={`Open ${item.alt || 'media'} in fullscreen`}
