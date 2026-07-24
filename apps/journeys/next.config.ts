@@ -67,6 +67,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/gallery/:slug',
+        destination: '/gallery',
+        permanent: true,
+      },
+      {
         source: '/:slug((?!gallery|articles|vehicles|api|_next)[^/]+)',
         destination: '/articles/:slug',
         permanent: true,

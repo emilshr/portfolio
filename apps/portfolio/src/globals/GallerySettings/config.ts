@@ -43,7 +43,7 @@ export const GallerySettings: GlobalConfig = {
               },
               admin: {
                 description:
-                  'Media folder used for Gallery Collection and article/vehicle gallery pickers. Files in this folder can be selected (or uploaded here first) when building galleries.',
+                  'Media folder that powers the public /gallery page and article/vehicle gallery pickers. Upload photos here to show them on /gallery; the same folder scopes gallery field selections.',
               },
               required: true,
             },

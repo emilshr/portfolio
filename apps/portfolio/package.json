@@ -22,6 +22,7 @@
     "migrate:pub-date": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/migrate-pubdate-to-published-at.ts",
     "migrate:travels-to-articles": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/migrate-travels-to-articles.ts",
     "migrate:gallery-has-many": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/migrate-gallery-has-many.ts",
+    "delete:archive-gallery": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/delete-archive-gallery.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",

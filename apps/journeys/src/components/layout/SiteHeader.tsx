@@ -37,11 +37,9 @@ export function SiteHeader({ menuItems }: SiteHeaderProps) {
   const topLevelSegment = pathname.replace(/^\//, '')
   const isTopLevelRoute = topLevelSegment.length > 0 && !topLevelSegment.includes('/')
   const isArticleDetail = pathname.startsWith('/articles/') && pathname !== '/articles'
-  const isGalleryDetail = pathname.startsWith('/gallery/') && pathname !== '/gallery'
   const isOverlayHeroRoute =
     isHome ||
     isArticleDetail ||
-    isGalleryDetail ||
     (isTopLevelRoute && !nonArticleDetailTopLevelRoutes.has(topLevelSegment))
   const [pastCover, setPastCover] = useState(false)
   const { resolvedTheme } = useTheme()

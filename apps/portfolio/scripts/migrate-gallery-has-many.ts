@@ -1,9 +1,11 @@
 /**
- * One-time migration:
- * 1. Convert article/vehicle/gallery-collection gallery arrays from `{ media }` rows → media ID arrays
- * 2. If no gallery collections exist, seed a published "Archive" collection from Gallery Settings folder media
+ * One-time migration: convert article/vehicle/gallery-collection gallery arrays
+ * from `{ media }` rows → media ID arrays.
  *
  *   pnpm migrate:gallery-has-many
+ *
+ * To remove a previously seeded Archive collection:
+ *   pnpm delete:archive-gallery
  */
 import { config as dotenvConfig } from 'dotenv'
 import path from 'path'
@@ -99,72 +101,6 @@ async function migrateCollectionField({
   return migrated
 }
 
-async function seedArchiveCollection(
-  payload: Awaited<ReturnType<typeof getPayload>>,
-): Promise<boolean> {
-  const { totalDocs } = await payload.count({
-    collection: 'gallery-collections',
-    overrideAccess: true,
-  })
-
-  if (totalDocs > 0) {
-    payload.logger.info(`Skipping Archive seed: ${totalDocs} gallery collection(s) already exist`)
-    return false
-  }
-
-  const settings = await payload.findGlobal({
-    slug: 'gallery-settings',
-    depth: 0,
-    overrideAccess: true,
-  })
-
-  const folder = settings?.folder
-  const folderId = typeof folder === 'object' && folder !== null ? folder.id : folder
-
-  if (!folderId) {
-    payload.logger.warn('Skipping Archive seed: Gallery Settings folder is not configured')
-    return false
-  }
-
-  const { docs: media } = await payload.find({
-    collection: 'media',
-    depth: 0,
-    limit: 500,
-    pagination: false,
-    overrideAccess: true,
-    where: {
-      folder: { equals: folderId },
-    },
-    sort: '-createdAt',
-  })
-
-  if (media.length === 0) {
-    payload.logger.warn('Skipping Archive seed: no media in Gallery Settings folder')
-    return false
-  }
-
-  const mediaIds = media.map((item) => item.id)
-  const coverImage = mediaIds[0]
-
-  await payload.create({
-    collection: 'gallery-collections',
-    data: {
-      title: 'Archive',
-      slug: 'archive',
-      excerpt: 'Photographs from trips and expeditions.',
-      coverImage,
-      images: mediaIds,
-      publishedAt: new Date().toISOString(),
-      _status: 'published',
-    },
-    overrideAccess: true,
-    context: { disableRevalidate: true },
-  })
-
-  payload.logger.info(`Seeded published Gallery Collection "Archive" with ${mediaIds.length} media`)
-  return true
-}
-
 async function migrate() {
   const { default: config } = await import('../src/payload.config.js')
   const payload = await getPayload({ config })
@@ -185,10 +121,8 @@ async function migrate() {
     fieldName: 'images',
   })
 
-  const seeded = await seedArchiveCollection(payload)
-
   payload.logger.info(
-    `Done. articles=${articlesMigrated}, vehicles=${vehiclesMigrated}, gallery-collections=${collectionsMigrated}, archiveSeeded=${seeded}`,
+    `Done. articles=${articlesMigrated}, vehicles=${vehiclesMigrated}, gallery-collections=${collectionsMigrated}`,
   )
 
   process.exit(0)

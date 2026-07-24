@@ -8,9 +8,13 @@ import {
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
-import { useLocalMediaStorage } from '../storage'
+import { anyone } from '../../access/anyone'
+import { authenticated } from '../../access/authenticated'
+import { useLocalMediaStorage } from '../../storage'
+import {
+  revalidateGalleryFolderMedia,
+  revalidateGalleryFolderMediaDelete,
+} from './hooks/revalidateGalleryFolderMedia'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,6 +27,10 @@ export const Media: CollectionConfig = {
     delete: authenticated,
     read: anyone,
     update: authenticated,
+  },
+  hooks: {
+    afterChange: [revalidateGalleryFolderMedia],
+    afterDelete: [revalidateGalleryFolderMediaDelete],
   },
   fields: [
     {
@@ -41,7 +49,9 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    ...(useLocalMediaStorage ? { staticDir: path.resolve(dirname, '../../public/media') } : {}),
+    ...(useLocalMediaStorage
+      ? { staticDir: path.resolve(dirname, '../../../public/media') }
+      : {}),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     imageSizes: [

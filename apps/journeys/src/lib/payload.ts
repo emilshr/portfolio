@@ -2,7 +2,6 @@ import { PayloadSDK } from '@payloadcms/sdk'
 import type {
   Article,
   Config,
-  GalleryCollection,
   GallerySetting,
   JourneysSetting,
   Media,
@@ -12,7 +11,7 @@ import { unstable_cache } from 'next/cache'
 import { cache } from 'react'
 
 import { getPayloadApiUrl, isProductionDeploy } from '@/lib/env'
-import { getMediaUrl, isMedia } from '@/lib/media'
+import { getMediaUrl } from '@/lib/media'
 
 export type HeaderMenuItem = {
   id: string
@@ -77,16 +76,6 @@ const vehicleListSelect = {
   coverImage: true,
   details: true,
   meta: true,
-  updatedAt: true,
-  createdAt: true,
-} as const
-
-const galleryCollectionListSelect = {
-  title: true,
-  slug: true,
-  coverImage: true,
-  images: true,
-  publishedAt: true,
   updatedAt: true,
   createdAt: true,
 } as const
@@ -372,130 +361,107 @@ export const getLatestVehicleForMetadata = unstable_cache(
   { tags: ['vehicles'] },
 )
 
-export function resolveGalleryCollectionCover(
-  collection: GalleryCollection,
-): Media | string | null {
-  if (isMedia(collection.coverImage)) {
-    return collection.coverImage
-  }
+export const GALLERY_PAGE_LIMIT = 24
 
-  const firstImage = collection.images?.[0]
-  if (isMedia(firstImage)) {
-    return firstImage
-  }
-  if (typeof firstImage === 'string') {
-    return firstImage
-  }
-
-  // Legacy array-row shape `{ media }` before hasMany migration
-  if (firstImage && typeof firstImage === 'object' && 'media' in firstImage) {
-    const media = (firstImage as { media?: Media | string | null }).media
-    if (isMedia(media)) return media
-    if (typeof media === 'string') return media
-  }
-
-  return null
-}
-
-export const getPublishedGalleryCollections = unstable_cache(
-  async () => {
-    const sdk = getSDK()
-    if (!sdk) return [] as GalleryCollection[]
-
-    return safePayloadFetch(
-      'getPublishedGalleryCollections',
-      [] as GalleryCollection[],
-      async () => {
-        const result = await sdk.find({
-          collection: 'gallery-collections',
-          depth: 1,
-          limit: 100,
-          select: galleryCollectionListSelect,
-          ...publishedAndSorted,
-        })
-        return result.docs as GalleryCollection[]
-      },
-    )
-  },
-  ['published-gallery-collections'],
-  { tags: ['gallery', 'gallery-collections'] },
-)
-
-export function getGalleryCollectionBySlug(slug: string): Promise<GalleryCollection | null> {
-  return unstable_cache(
-    async () => {
-      const sdk = getSDK()
-      if (!sdk) return null
-
-      return safePayloadFetch('getGalleryCollectionBySlug', null, async () => {
-        const result = await sdk.find({
-          collection: 'gallery-collections',
-          depth: 1,
-          limit: 1,
-          select: galleryCollectionListSelect,
-          where: {
-            and: [publishedWhere, { slug: { equals: slug } }],
-          },
-        })
-        return (result.docs[0] as GalleryCollection | undefined) ?? null
-      })
-    },
-    [`gallery-collection-${slug}`],
-    { tags: ['gallery', 'gallery-collections', `gallery-collection:${slug}`] },
-  )()
-}
-
-export type GalleryCollectionImageItem = {
+export type GalleryFolderMediaItem = {
   id: string
   url: string
   thumbnailUrl: string
   alt: string
-  caption?: string | null
   kind: 'image' | 'video'
   mimeType: string | null
 }
 
-export function mapGalleryCollectionImages(
-  collection: GalleryCollection,
-): GalleryCollectionImageItem[] {
-  const items: GalleryCollectionImageItem[] = []
+export type GalleryFolderMediaPage = {
+  items: GalleryFolderMediaItem[]
+  hasNextPage: boolean
+  page: number
+  totalDocs: number
+}
 
-  for (const entry of collection.images ?? []) {
-    let media: Media | null = null
-    let altOverride: string | null | undefined
-    let captionOverride: string | null | undefined
+function resolveGalleryFolderId(folder: GallerySetting['folder'] | null | undefined): string | null {
+  if (!folder) return null
+  return typeof folder === 'object' ? folder.id : folder
+}
 
-    if (isMedia(entry)) {
-      media = entry
-    } else if (entry && typeof entry === 'object' && 'media' in entry) {
-      // Legacy array-row shape `{ media, alt, caption }`
-      const legacy = entry as {
-        media?: Media | string | null
-        alt?: string | null
-        caption?: string | null
-      }
-      media = isMedia(legacy.media) ? legacy.media : null
-      altOverride = legacy.alt
-      captionOverride = legacy.caption
-    }
+function mapMediaToGalleryItem(media: Media): GalleryFolderMediaItem | null {
+  const url = getMediaUrl(media, 'large')
+  if (!url) return null
 
-    if (!media) continue
-    const url = getMediaUrl(media, 'large')
-    if (!url) continue
-    const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
-    const mimeType = media.mimeType ?? null
-    const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
+  const thumbnailUrl = getMediaUrl(media, 'card') || getMediaUrl(media, 'medium') || url
+  const mimeType = media.mimeType ?? null
+  const kind = mimeType?.startsWith('video/') ? 'video' : 'image'
 
-    items.push({
-      id: media.id,
-      url,
-      thumbnailUrl,
-      alt: altOverride || media.alt || collection.title,
-      caption: captionOverride || null,
-      kind,
-      mimeType,
+  return {
+    id: media.id,
+    url,
+    thumbnailUrl,
+    alt: media.alt || '',
+    kind,
+    mimeType,
+  }
+}
+
+const emptyGalleryFolderMediaPage = (page: number): GalleryFolderMediaPage => ({
+  items: [],
+  hasNextPage: false,
+  page,
+  totalDocs: 0,
+})
+
+async function fetchGalleryFolderMediaPage({
+  page,
+  limit,
+}: {
+  page: number
+  limit: number
+}): Promise<GalleryFolderMediaPage> {
+  const sdk = getSDK()
+  if (!sdk) return emptyGalleryFolderMediaPage(page)
+
+  return safePayloadFetch('getGalleryFolderMediaPage', emptyGalleryFolderMediaPage(page), async () => {
+    const settings = await getGallerySettings()
+    const folderId = resolveGalleryFolderId(settings?.folder)
+    if (!folderId) return emptyGalleryFolderMediaPage(page)
+
+    const result = await sdk.find({
+      collection: 'media',
+      depth: 0,
+      limit,
+      page,
+      sort: '-createdAt',
+      where: {
+        folder: { equals: folderId },
+      },
     })
+
+    const items = (result.docs as Media[])
+      .map(mapMediaToGalleryItem)
+      .filter((item): item is GalleryFolderMediaItem => item !== null)
+
+    return {
+      items,
+      hasNextPage: Boolean(result.hasNextPage),
+      page: result.page ?? page,
+      totalDocs: result.totalDocs ?? items.length,
+    }
+  })
+}
+
+export function getGalleryFolderMediaPage({
+  page,
+  limit = GALLERY_PAGE_LIMIT,
+}: {
+  page: number
+  limit?: number
+}): Promise<GalleryFolderMediaPage> {
+  if (page === 1 && limit === GALLERY_PAGE_LIMIT) {
+    return unstable_cache(
+      () => fetchGalleryFolderMediaPage({ page: 1, limit: GALLERY_PAGE_LIMIT }),
+      ['gallery-folder-media-page-1'],
+      { tags: ['gallery', 'gallery-settings'] },
+    )()
   }
 
-  return items
+  return fetchGalleryFolderMediaPage({ page, limit })
 }
