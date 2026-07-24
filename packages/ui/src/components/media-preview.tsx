@@ -104,7 +104,7 @@ export function MediaPreview({
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-white hover:bg-white/10"
+          className="cursor-pointer text-white hover:bg-white/10"
           aria-label="Close preview"
         >
           <X className="h-5 w-5" />
@@ -120,7 +120,7 @@ export function MediaPreview({
             variant="ghost"
             size="icon"
             onClick={goPrev}
-            className="absolute left-2 z-10 text-white hover:bg-white/10 md:left-4"
+            className="absolute left-2 z-10 cursor-pointer text-white hover:bg-white/10 md:left-4"
             aria-label="Previous media"
           >
             <ChevronLeft className="h-6 w-6" />
@@ -153,7 +153,7 @@ export function MediaPreview({
             variant="ghost"
             size="icon"
             onClick={goNext}
-            className="absolute right-2 z-10 text-white hover:bg-white/10 md:right-4"
+            className="absolute right-2 z-10 cursor-pointer text-white hover:bg-white/10 md:right-4"
             aria-label="Next media"
           >
             <ChevronRight className="h-6 w-6" />
@@ -177,7 +177,7 @@ export function MediaPreview({
                   aria-current={active ? "true" : undefined}
                   onClick={() => onIndexChange(thumbIndex)}
                   className={cn(
-                    "relative h-14 w-14 shrink-0 overflow-hidden rounded-md border-2 transition-all",
+                    "relative h-14 w-14 shrink-0 cursor-pointer overflow-hidden rounded-md border-2 transition-all",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white",
                     active ? "border-white opacity-100" : "border-transparent opacity-60 grayscale",
                   )}

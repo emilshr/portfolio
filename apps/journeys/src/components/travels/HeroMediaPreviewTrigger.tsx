@@ -30,7 +30,7 @@ export function HeroMediaPreviewTrigger({ url, alt }: HeroMediaPreviewTriggerPro
         type="button"
         onClick={() => setPreviewIndex(0)}
         aria-label="Open hero image in fullscreen"
-        className="absolute inset-0 z-[5]"
+        className="absolute inset-0 z-[5] cursor-pointer"
       />
       <MediaPreview
         items={items}
