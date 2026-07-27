@@ -84,7 +84,7 @@ catalog:
   feed: 5.2.1
   graphql: 16.14.0
   gray-matter: 4.0.3
-  markdown-it: 14.2.0
+  markdown-it: 14.3.0
   next-sitemap: 4.2.3
   prism-react-renderer: 2.4.1
   react-hook-form: 7.71.1
